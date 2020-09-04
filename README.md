@@ -58,3 +58,6 @@ http://relation-graph.com
 ![RUNOOB 图标](doc/relation-graph-simple.png)
 *更多效果及使用方法：*
 http://relation-graph.com
+
+*源代码正在整理中，后续会提交，敬请期待*
+
