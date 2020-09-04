@@ -20,4 +20,5 @@ selenium-debug.log
 *.local
 package-lock.json
 yarn.lock
+syncSrc.sh
 /src/
