@@ -3,6 +3,8 @@
 node_modules/
 /src
 src/
+/doc
+doc/
 package-lock.json
 webpack.config.js
 syncSrc.sh
