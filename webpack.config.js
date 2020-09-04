@@ -1,71 +1,92 @@
-const path = require('path')
 const webpack = require('webpack')
-const uglify = require('uglifyjs-webpack-plugin')
+const path = require('path')
+const { merge } = require('webpack-merge')
 
-module.exports = {
-  entry: './index.js', // 入口文件，就是在src目录下的index.js文件，
+module.exports = merge({
+  // devtool: 'source-map',
+  entry: {
+    'relation-graph': './src/index.js'
+  },
   output: {
-    path: path.resolve(__dirname, './dist'), // 输出路径dist目录
+    path: path.resolve(__dirname, './dist'),
+    filename: 'relation-graph.min.js',
     publicPath: '/dist/',
-    filename: 'relation-graph.min.js', // 打包后输出的文件名字,这里需要和package.json文件下main应该写为:'dist/toast.min.js'
-    libraryTarget: 'umd', // libraryTarget：为了支持多种使用场景，我们需要选择合适的打包格式。libraryTarget 属性。这是可以控制 library 如何以不同方式暴露的选项。
+    library: 'relation-graph',
+    libraryTarget: 'umd',
     umdNamedDefine: true
   },
-  // 这里我们可以剔除掉一些通用包,自己的包不打包这些类库,需要用户环境来提供
   externals: {
-    vue: 'vue',
-    vuex: 'vuex'
+    vue: {
+      root: 'Vue',
+      commonjs: 'vue',
+      commonjs2: 'vue',
+      amd: 'vue'
+    },
+    vuex: {
+      root: 'Vuex',
+      commonjs: 'vuex',
+      commonjs2: 'vuex',
+      amd: 'vuex'
+    }
+  },
+  resolve: {
+    extensions: ['.js', '.vue']
   },
   module: {
-    rules: [
-      {
-        test: /\.vue$/,
-        loader: 'vue-loader'
-      },
-      {
-        test: /\.scss$/,
-        use: [
-          {
-            loader: 'style-loader'
-          },
-          {
-            loader: 'css-loader'
-          },
-          {
-            loader: 'scss-loader'
-          }
-        ]
-      },
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader' // babel的相关配置在.babelrc文件里
-      },
-      {
-        test: /\.(png|jpg|gif|ttf|svg|woff|eot)$/,
-        loader: 'url-loader',
-        query: {
-          limit: 30000 // 把一些小图片打包为base64
+    loaders: [{
+      test: /\.vue$/,
+      loader: 'vue-loader',
+      options: {
+        loaders: {
+          css: 'vue-style-loader!css-loader',
+          sass: 'vue-style-loader!css-loader!sass-loader'
+        },
+        postLoaders: {
+          html: 'babel-loader'
         }
-      },
-      {
-        test: /\.vue$/,
-        exclude: /node_modules/,
-        use: 'vue-loader'
       }
-    ]
+    }, {
+      test: /\.js$/,
+      loader: 'babel-loader',
+      exclude: /node_modules/
+    }, {
+      test: /\.css$/,
+      use: [
+        'style-loader',
+        'css-loader',
+        'autoprefixer-loader'
+      ]
+    }, {
+      test: /\.(gif|jpg|png|woff|svg|eot|ttf)\??.*$/,
+      loader: 'url-loader?limit=8192'
+    }]
   },
   plugins: [
-    // 压缩js代码
-    new webpack.optimize.UglifyJsPlugin({
-      // 输出不显示警告
-      compress: {
-        warnings: false // 默认值
-      },
-      // 输出去掉注释
-      output: {
-        comments: false // 默认值
-      }
-    })
+    new webpack.optimize.ModuleConcatenationPlugin()
   ]
-}
+}, {
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: '"production"'
+      }
+    }),
+    //new webpack.optimize.OccurrenceOrderPlugin(),
+    // new webpack.optimize.UglifyJsPlugin({
+    //   uglifyOptions: {
+    //     ie8: false,
+    //     output: {
+    //       comments: false,
+    //       beautify: false,
+    //     },
+    //     mangle: {
+    //       keep_fnames: true
+    //     },
+    //     compress: {
+    //       warnings: false,
+    //       drop_console: true
+    //     }
+    //   }
+    // })
+  ]
+})
