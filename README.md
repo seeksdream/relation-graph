@@ -5,6 +5,8 @@ http://relation-graph.com
 ---
 *快速使用：*
 ---
+npm install --save relation-graph
+---
 ```vue
 <template>
    <div>
