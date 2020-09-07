@@ -1,3 +1,7 @@
+*relation-graph*
+---
+Vue关系图谱组件，可以展示如组织机构图谱、股权架构图谱、集团关系图谱等知识图谱，可提供多种图谱布局，包括树状布局、中心布局、力学布局自动布局等。
+---
 *详细使用方法和在线demo，以及可视化的配置工具：*
 
 http://relation-graph.com
@@ -11,7 +15,7 @@ npm install --save relation-graph
 <template>
    <div>
      <div style="height:calc(100vh - 50px);">
-       <RelationGraph ref="seeksRelationGraph" :options="graphOptions" />
+        <RelationGraph ref="seeksRelationGraph" :options="graphOptions" :on-node-click="onNodeClick" :on-line-click="onLineClick" />
      </div>
    </div>
  </template>
@@ -24,7 +28,8 @@ npm install --save relation-graph
    data() {
      return {
        graphOptions: {
- 
+         allowSwitchLineShape: true
+         // 这里可以参考"Graph 图谱"中的参数进行设置
        }
      }
    },
@@ -48,9 +53,16 @@ npm install --save relation-graph
            { from: 'b', to: 'e', color: '#67C23A' }
          ]
        }
+       // 以上数据中的node和link可以参考"Node节点"和"Link关系"中的参数进行配置 
        this.$refs.seeksRelationGraph.setJsonData(__graph_json_data, (seeksRGGraph) => {
          // Called when the relation-graph is completed 
        })
+     },
+     onNodeClick(nodeObject, $event) {
+       console.log('onNodeClick:', nodeObject)
+     },
+     onLineClick(lineObject, $event) {
+       console.log('onLineClick:', lineObject)
      }
    }
  }
