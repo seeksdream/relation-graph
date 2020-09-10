@@ -4,7 +4,9 @@ node_modules/
 /src
 src/
 /doc
+/web
 doc/
+web/
 package-lock.json
 webpack.config.js
 syncSrc.sh

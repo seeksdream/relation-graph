@@ -28,7 +28,9 @@ npm install --save relation-graph
    data() {
      return {
        graphOptions: {
-         allowSwitchLineShape: true
+         allowSwitchLineShape: true,
+         allowSwitchJunctionPoint: true,
+         defaultJunctionPoint: 'border'
          // 这里可以参考"Graph 图谱"中的参数进行设置
        }
      }
@@ -72,6 +74,9 @@ npm install --save relation-graph
 ![RUNOOB 图标](doc/relation-graph-simple.png)
 *更多效果及使用方法：*
 http://relation-graph.com
+---
+这个项目使用典型的vue编程方式，代码简单易懂，如果需要实现一些高级功能，建议直接使用源码作为一个component放到你的项目中去用，如果有一些优化或者新特性，欢迎提交pull request
+---
+有问题可以加QQ：3235808353，提bug、提建议、一起交流分享前端开发心得。
 
-*源代码正在整理中，后续会提交，敬请期待*
 
