@@ -5,7 +5,7 @@
         <el-radio-button label="横向树状图谱"></el-radio-button>
         <el-radio-button label="纵向树状图谱" ></el-radio-button>
       </el-radio-group>
-      <el-button style="float: right;" type="success" @click="isShowCodePanel=true">查看代码</el-button>
+      <el-button type="success" class="c-show-code-button"><el-link href="https://github.com/seeksdream/relation-graph/blob/master/doc/demo/Demo4LayoutTree2.vue" target="_blank" style="color: #ffffff;">查看代码</el-link></el-button>
     </div>
     <div style="height:calc(100vh - 100px);">
       <RelationGraph
@@ -15,17 +15,6 @@
         :on-line-click="onLineClick"
       />
     </div>
-    <el-drawer
-      title="node option:"
-      direction="rtl"
-      size="50%"
-      custom-class="c-drawer-window"
-      :modal="false"
-      :visible.sync="isShowCodePanel"
-      :with-header="false"
-    >
-      <iframe src="/relation-graph-codes/Demo4Logo.html" width="100%" height="100%" frameborder="0" scrolling="auto" style="" />
-    </el-drawer>
   </div>
 </template>
 

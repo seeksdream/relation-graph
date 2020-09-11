@@ -8,18 +8,7 @@
         :on-line-click="onLineClick"
       />
     </div>
-    <el-button type="success" class="c-show-code-button" @click="isShowCodePanel=true">查看代码</el-button>
-    <el-drawer
-      title="node option:"
-      direction="rtl"
-      size="50%"
-      custom-class="c-drawer-window"
-      :modal="false"
-      :visible.sync="isShowCodePanel"
-      :with-header="false"
-    >
-      <iframe src="/relation-graph-codes/Demo4Logo.html" width="100%" height="100%" frameborder="0" scrolling="auto" style="" />
-    </el-drawer>
+    <el-button type="success" class="c-show-code-button"><el-link href="https://github.com/seeksdream/relation-graph/blob/master/doc/demo/Demo4LayoutCenter.vue" target="_blank" style="color: #ffffff;">查看代码</el-link></el-button>
   </div>
 </template>
 

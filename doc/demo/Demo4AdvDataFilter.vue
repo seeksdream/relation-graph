@@ -1,7 +1,7 @@
 <template>
   <div>
     <div style="height:110px;padding-top:6px;padding-left: 30px;padding-right:30px;border-bottom: #efefef solid 1px;color: #555555;font-size: 12px;">
-      <el-button style="float: right;" type="success" @click="isShowCodePanel=true">查看代码</el-button>
+      <el-button type="success" class="c-show-code-button"><el-link href="https://github.com/seeksdream/relation-graph/blob/master/doc/demo/Demo4AdvDataFilter.vue" target="_blank" style="color: #ffffff;">查看代码</el-link></el-button>
       <div style="">
         <div style="line-height: 20px;">节点筛选：</div>
         <el-radio-group v-model="checked_sex" size="mini" @change="doFilter">

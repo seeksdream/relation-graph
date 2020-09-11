@@ -3,7 +3,7 @@
     <div style="height:50px;padding-top:6px;padding-left: 30px;padding-right:30px;border-bottom: #efefef solid 1px;">
       <el-button :disabled="level2DataIsloaded" type="success" @click="loadNextLevel2Data">加载第2层数据</el-button>
       <el-button :disabled="level3DataIsloaded" type="success" @click="loadNextLevel3Data">加载第3层数据</el-button>
-      <el-button style="float: right;" type="success" @click="isShowCodePanel=true">查看代码</el-button>
+      <el-button type="success" class="c-show-code-button"><el-link href="https://github.com/seeksdream/relation-graph/blob/master/doc/demo/Demo4AdvDynamicData.vue" target="_blank" style="color: #ffffff;">查看代码</el-link></el-button>
     </div>
     <div style="height:calc(100vh - 50px);">
       <RelationGraph

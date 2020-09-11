@@ -1,7 +1,7 @@
 <template>
   <div>
     <div style="height:110px;padding-top:6px;padding-left: 30px;padding-right:30px;border-bottom: #efefef solid 1px;color: #555555;font-size: 12px;">
-      <el-button style="float: right;" type="success" @click="isShowCodePanel=true">查看代码</el-button>
+      <el-button type="success" class="c-show-code-button"><el-link href="https://github.com/seeksdream/relation-graph/blob/master/doc/demo/Demo4AdvEffect.vue" target="_blank" style="color: #ffffff;">查看代码</el-link></el-button>
       <div style="">
         <el-button @click="doAction1()">定位到祁同伟</el-button>
         <el-button @click="doAction2()">让高育良变透明</el-button>
