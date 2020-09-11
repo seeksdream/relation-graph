@@ -1,6 +1,5 @@
 .DS_Store
 node_modules/
-src/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
@@ -21,4 +20,3 @@ selenium-debug.log
 package-lock.json
 yarn.lock
 syncSrc.sh
-/src/
