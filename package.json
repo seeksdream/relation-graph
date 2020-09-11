@@ -1,7 +1,7 @@
 {
   "name": "relation-graph",
   "version": "1.0.5",
-  "description": "Vue 关联关系图谱组件，可以展示如组织机构图谱、股权架构图谱、集团关系图谱等知识图谱，可提供多种图谱布局，包括树状布局、中心布局、力学布局自动布局等。Vue component for relationship graph , which can display knowledge graphs, such as organization graph, equity structure graph, group relationship graph, etc.",
+  "description": "relation-graph，Vue 关联关系图谱组件，可以展示如组织机构图谱、股权架构图谱、集团关系图谱等知识图谱，可提供多种图谱布局，包括树状布局、中心布局、力学布局自动布局等。Vue component for relationship graph , which can display knowledge graphs, such as organization graph, equity structure graph, group relationship graph, etc.",
   "main": "dist/relation-graph.min.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
