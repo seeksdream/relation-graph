@@ -75,7 +75,7 @@ npm install --save relation-graph
 *更多效果及使用方法：*
 http://relation-graph.com
 ---
-这个项目使用典型的vue编程方式，代码简单易懂，如果需要实现一些高级功能，建议直接使用源码作为一个component放到你的项目中去用，如果有一些优化或者新特性，欢迎提交pull request
+这个项目使用典型的vue编程方式，代码简单易懂，如果需要实现一些高级功能，你还可以直接使用源码作为一个component放到你的项目中去用，如果有一些优化或者新特性，欢迎提交pull request
 ---
 有问题可以加QQ：3235808353，提bug、提建议、一起交流分享前端开发心得。
 
