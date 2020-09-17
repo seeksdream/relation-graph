@@ -71,7 +71,21 @@ npm install --save relation-graph
  </script>
 ```
 *上面代码的效果：*
-![RUNOOB 图标](doc/relation-graph-simple.png)
+![简单示例效果图](doc/relation-graph-simple.png)
+![简单示例效果图](doc/images/d1.png)
+![简单示例效果图](doc/images/d2.png)
+![简单示例效果图](doc/images/d3.png)
+![简单示例效果图](doc/images/d4.png)
+![简单示例效果图](doc/images/d5.png)
+![简单示例效果图](doc/images/d6.png)
+![简单示例效果图](doc/images/d7.png)
+![简单示例效果图](doc/images/d8.png)
+![简单示例效果图](doc/images/d9.png)
+![简单示例效果图](doc/images/d10.png)
+![简单示例效果图](doc/images/d11.png)
+![简单示例效果图](doc/images/d12.png)
+![简单示例效果图](doc/images/d13.png)
+
 *更多效果及使用方法：*
 http://relation-graph.com
 
