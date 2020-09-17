@@ -74,9 +74,12 @@ npm install --save relation-graph
 ![RUNOOB 图标](doc/relation-graph-simple.png)
 *更多效果及使用方法：*
 http://relation-graph.com
----
-这个项目使用典型的vue编程方式，代码简单易懂，如果需要实现一些高级功能，你还可以直接使用源码作为一个component放到你的项目中去用，如果有一些优化或者新特性，欢迎提交pull request
----
+
+
+这个项目使用典型的vue编程方式，代码简单易懂，如果需要实现一些高级功能，你还可以直接使用源码作为一个component放到你的项目中去用，如果有一些优化或者新特性，欢迎提交pull request。
+
+如果这个项目能帮到大家，有更多的人关注，后续我会开发用于小程序、react、angular的版本，以及基于canvas的实现。
+
 有问题可以加QQ：3235808353，提bug、提建议、一起交流分享前端开发心得。
 
 
