@@ -166,6 +166,16 @@ export default {
       default: () => { return () => {} },
       type: Function
     },
+    onNodeExpand: {
+      mustUseProp: false,
+      default: () => { return () => {} },
+      type: Function
+    },
+    onNodeCollapse: {
+      mustUseProp: false,
+      default: () => { return () => {} },
+      type: Function
+    },
     onLineClick: {
       mustUseProp: false,
       default: () => { return () => {} },
@@ -1074,6 +1084,18 @@ export default {
     },
     getLines() {
       return this.lineViewList
+    },
+    onNodeExpandEvent(node, e) {
+      console.log('onNodeExpand:', node)
+      if (this.onNodeExpand) {
+        this.onNodeExpand(node, e)
+      }
+    },
+    onNodeCollapseEvent(node, e) {
+      console.log('onNodeCollapse:', node)
+      if (this.onNodeCollapse) {
+        this.onNodeCollapse(node, e)
+      }
     },
     printGraphJsonData() {
       var _nodes = []

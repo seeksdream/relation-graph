@@ -9,7 +9,7 @@
     @mouseout.stop="onMouseOut($event)"
     @click.stop="onclick($event)"
   >
-    <div v-if="(nodeProps.expandHolderPosition||graphSetting.defaultExpandHolderPosition)!=='hide'&&nodeProps.lot.childs&&nodeProps.lot.childs.length>0" :class="[('c-expand-positon-'+(nodeProps.expandHolderPosition||graphSetting.defaultExpandHolderPosition))]" class="c-btn-open-close">
+    <div v-if="(nodeProps.expandHolderPosition&&nodeProps.expandHolderPosition!=='hide')||(graphSetting.defaultExpandHolderPosition&&graphSetting.defaultExpandHolderPosition!=='hide'&&nodeProps.lot.childs&&nodeProps.lot.childs.length>0)" :class="[('c-expand-positon-'+(nodeProps.expandHolderPosition||graphSetting.defaultExpandHolderPosition))]" class="c-btn-open-close">
       <span :style="{'background-color':(nodeProps.color||graphSetting.defaultNodeColor)}">
         <i v-if="nodeProps.expanded===false" class="el-icon-plus" @click.stop="expandNode" />
         <i v-if="nodeProps.expanded!==false" class="el-icon-minus" @click.stop="closeNode" />
@@ -152,17 +152,19 @@ export default {
       // return _num_l + '/' + _num_c
       // return this.nodeProps.text
     },
-    expandNode() {
+    expandNode(e) {
       this.nodeProps.expanded = true
       this.nodeProps.lot.childs.forEach(thisNode => {
         thisNode.isShow = true
       })
+      this.$parent.onNodeExpandEvent(this.nodeProps, e)
     },
-    closeNode() {
+    closeNode(e) {
       this.nodeProps.expanded = false
       this.nodeProps.lot.childs.forEach(thisNode => {
         thisNode.isShow = false
       })
+      this.$parent.onNodeCollapseEvent(this.nodeProps, e)
     },
     onDragStart(e) {
       this.dragging = true
@@ -412,8 +414,8 @@ export default {
   .c-expand-positon-bottom{
     height:100%;
     width:100%;
-    margin-top:5px;
-    margin-left:-6px;
+    margin-top:7px;
+    margin-left:-8px;
     align-items: flex-end;
     justify-content: center;
   }
