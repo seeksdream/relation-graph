@@ -42,6 +42,10 @@ npm install --save relation-graph
    },
    methods: {
      showSeeksGraph(query) {
+       /**
+         图谱数据__graph_json_data不要放在Vue data()中，也不要引用Vue data()中的变量，否则在当前版本中会有问题，以后版本会解决这个问题。
+         如果需要__graph_json_data是一个全局变量，暂时的解决方法是把他放在 export default之前，具体问题可以加我QQ:3235808353
+       **/
        var __graph_json_data = {
          rootId: 'a',
          nodes: [
@@ -98,6 +102,8 @@ http://relation-graph.com
 * 4，默认关闭组件中的打印信息，只有在设置debug时打印信息
 * 5，提供getJsonNodes和getJsonLinks方法，获取图谱中当前所有节点和关系的json数据
 * 6，提供更多新特性，如禁用节点拖拽的设置、禁用画布缩放的设置、连线长度的设置等
+
+
 最近较忙，预计会在11月中旬发布
 
 
