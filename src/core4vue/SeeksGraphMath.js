@@ -328,6 +328,7 @@ var SeeksGraphMath = {
               newLevelNodes.push(thisTarget)
               __thisNode_child_size++
             } else {
+              thisNode.lot.childs.push(thisTarget)
               // console.log('hide node:', thisTarget.name, 'from:', thisNode.text)
             }
           }
@@ -406,6 +407,7 @@ var SeeksGraphMath = {
               newLevelNodes.push(thisTarget)
               __thisNode_child_size++
             } else {
+              thisNode.lot.childs.push(thisTarget)
               // console.log('hide node:', thisTarget.text, 'from:', thisNode.text)
             }
           } else {
@@ -429,6 +431,7 @@ var SeeksGraphMath = {
               newLevelNodes.push(thisTarget)
               __thisNode_child_size++
             } else {
+              thisNode.lot.childs.push(thisTarget)
               // console.log('hide node:', thisTarget.name, 'from:', thisNode.text)
             }
           }
@@ -450,6 +453,7 @@ var SeeksGraphMath = {
               newLevelNodes.push(thisTarget)
               __thisNode_child_size++
             } else {
+              thisNode.lot.childs.push(thisTarget)
               // console.log('hide node:', thisTarget.name, 'from:', thisNode.text)
             }
           }

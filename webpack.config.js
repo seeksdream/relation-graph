@@ -5,7 +5,7 @@ const { merge } = require('webpack-merge')
 module.exports = merge({
   // devtool: 'source-map',
   entry: {
-    'relation-graph': './src/index.js'
+    'relation-graph': ['babel-polyfill', './src/index.js']
   },
   output: {
     path: path.resolve(__dirname, './dist'),

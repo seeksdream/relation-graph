@@ -62,7 +62,7 @@ var SeeksRGUtils = {
   }
 }
 SeeksRGUtils.json2Node = function(jsonData) {
-  if (jsonData.id === undefined) throw Error('link must has option[id]:', jsonData)
+  if (jsonData.id === undefined) throw Error('node must has option[id]:', jsonData)
   if (jsonData.text === undefined) jsonData.text = jsonData.name || ''
   if (jsonData.type === undefined) jsonData.type = 'node'
   if (jsonData.isShow === undefined) jsonData.isShow = true // 通过此属性被隐藏后其子节点也将被隐藏

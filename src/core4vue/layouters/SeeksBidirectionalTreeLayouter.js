@@ -12,7 +12,7 @@ function SeeksBidirectionalTreeLayouter(layoutSetting, graphSetting) {
   this.allNodes = []
   this.__origin_nodes = []
   this.refresh = function() {
-    console.log('SeeksBidirectionalTreeLayouter:refresh')
+    console.log('SeeksBidirectionalTreeLayouter:refresh:nodes:', this.__origin_nodes.length)
     this.placeNodes(this.__origin_nodes, this.rootNode)
   }
   this.analysisNodes4Didirectional = function(willLayoutNodes, thisLevelNodes, thisDeep, analyticResult, levelDirect) {
@@ -57,6 +57,7 @@ function SeeksBidirectionalTreeLayouter(layoutSetting, graphSetting) {
               newLevelNodes.push(thisTarget)
               __thisNode_child_size++
             } else {
+              thisNode.lot.childs.push(thisTarget)
               // console.log('hide node:', thisTarget.name, 'from:', thisNode.text)
             }
           }
@@ -78,6 +79,7 @@ function SeeksBidirectionalTreeLayouter(layoutSetting, graphSetting) {
               newLevelNodes.push(thisTarget)
               __thisNode_child_size++
             } else {
+              thisNode.lot.childs.push(thisTarget)
               // console.log('hide node:', thisTarget.name, 'from:', thisNode.text)
             }
           }

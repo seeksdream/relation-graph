@@ -22,12 +22,14 @@
       :style="{'background-color':(nodeProps.color===undefined?graphSetting.defaultNodeColor:nodeProps.color),'color':(nodeProps.fontColor===undefined?graphSetting.defaultNodeFontColor:nodeProps.fontColor),'border': (nodeProps.borderColor || graphSetting.defaultNodeBorderColor) + ' solid '+(nodeProps.borderWidth || graphSetting.defaultNodeBorderWidth)+'px', 'width':(nodeProps.width || graphSetting.defaultNodeWidth)+'px', 'height':(nodeProps.height||graphSetting.defaultNodeHeight)+'px'}"
       class="rel-node"
     >
-      <slot v-if="!(graphSetting.hideNodeContentByZoom === true && graphSetting.canvasZoom<40)" :node="nodeProps" name="node">
-        <div v-if="!nodeProps.innerHTML" :style="{'color':(nodeProps.fontColor || graphSetting.defaultNodeFontColor)}" class="c-node-text">
+      <template v-if="!(graphSetting.hideNodeContentByZoom === true && graphSetting.canvasZoom<40)">
+        <slot v-if="$parent.$slots.node" :node="nodeProps" name="node">
+        </slot>
+        <div v-else-if="!nodeProps.innerHTML" :style="{'color':(nodeProps.fontColor || graphSetting.defaultNodeFontColor)}" class="c-node-text">
           <span v-html="getNodeName()" />
         </div>
         <div v-else v-html="nodeProps.innerHTML" />
-      </slot>
+      </template>
     </div>
   </div>
 </template>
@@ -69,9 +71,9 @@ export default {
   // computed: mapState({
   //   graphSetting: () => _parent.graphSetting
   // }),
-  show() {
-    console.log('node show:', this.nodeProps.text)
-  },
+  // show() {
+  //
+  // },
   watch: {
     // 'nodeProps.isShow': function(v) {
     //   console.log('nodeProps.isShow:', v)
@@ -89,6 +91,7 @@ export default {
   mounted() {
     this.refreshNodeProperties()
     // this.leave(this.$refs.seeksRGNode)
+    // console.log('node show:', this.nodeProps.text, this.$parent.$slots.node)
   },
   beforeDestroy() {
     const elx = this.$refs.seeksRGNode

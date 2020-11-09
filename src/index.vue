@@ -194,6 +194,7 @@ export default {
   },
   data() {
     return {
+      version: '1.0.8',
       el: {
         offsetWidth: 500,
         offsetHeight: 500,
@@ -244,6 +245,13 @@ export default {
     this.SeeksRGStore = SeeksRGStore.createNewStore(this.options || {}, Vuex)
     this.graphSetting = this.SeeksRGStore.state.graphSetting
     this.graphSetting.instanceId = 'SRG' + parseInt(Math.random() * 100000)
+    console.log(
+      `%c relation-graph %c Version v${this.version} %c More info: https://github.com/seeksdream/relation-graph %c`,
+      'background:#35495e ; padding: 1px; border-radius: 3px 0 0 3px;  color: #fff',
+      'background:#41b883 ; padding: 1px; border-radius: 0 3px 3px 0;  color: #fff',
+      'background:#fff ; padding: 1px; border-radius: 0 3px 3px 0;  color: #41b883',
+      'background:transparent'
+    )
   },
   mounted() {
     this.init()
