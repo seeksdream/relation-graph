@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import RelationGraph from '../../../components/SeeksRelationGraph'
+import RelationGraph from 'relation-graph'
 export default {
   name: 'Demo',
   components: { RelationGraph },
