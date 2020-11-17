@@ -1,23 +1,23 @@
 <template>
   <div>
     <div ref="myPage" style="height:calc(100vh - 50px);" @click="isShowNodeMenuPanel = false">
-      <RelationGraph
+      <SeeksRelationGraph
         ref="seeksRelationGraph"
         :options="graphOptions"
         :on-node-click="onNodeClick"
         :on-line-click="onLineClick">
         <div slot="node" slot-scope="{node}">
           <div style="height:64px;line-height: 64px;border-radius: 32px;cursor: pointer;" @click="showNodeMenus(node, $event)">
-            <i style="font-size: 30px;" :class="node.myicon" />
+            <i style="font-size: 30px;" :class="node.data.myicon" />
           </div>
           <div style="color: forestgreen;font-size: 16px;position: absolute;width: 160px;height:25px;line-height: 25px;margin-top:5px;margin-left:-48px;text-align: center;background-color: rgba(66,187,66,0.2);">
-            {{ node.myicon }}
+            {{ node.data.myicon }}
           </div>
         </div>
         <div slot="bottomPanel" style="border-top:#efefef solid 1px;height:60px;line-height: 60px;text-align: center;font-size: 18px;background-color: #ffffff;">
           这里是底部插槽 slot="bottomPanel",可以自定义这里的内容
         </div>
-      </RelationGraph>
+      </SeeksRelationGraph>
     </div>
     <div v-show="isShowNodeMenuPanel" :style="{left: nodeMenuPanelPosition.x + 'px', top: nodeMenuPanelPosition.y + 'px' }" style="z-index: 999;padding:10px;background-color: #ffffff;border:#eeeeee solid 1px;box-shadow: 0px 0px 8px #cccccc;position: absolute;">
       <div style="line-height: 25px;padding-left: 10px;color: #888888;font-size: 12px;">对这个节点进行操作：</div>
@@ -31,10 +31,10 @@
 </template>
 
 <script>
-import RelationGraph from 'relation-graph'
+import SeeksRelationGraph from 'relation-graph'
 export default {
   name: 'Demo',
-  components: { RelationGraph },
+  components: { SeeksRelationGraph },
   data() {
     return {
       isShowCodePanel: false,
@@ -56,30 +56,31 @@ export default {
       var __graph_json_data = {
         rootId: '2',
         nodes: [
-          { id: '1', name: '节点-1', myicon: 'el-icon-star-on' },
-          { id: '2', name: '节点-2', myicon: 'el-icon-setting' },
-          { id: '3', name: '节点-3', myicon: 'el-icon-setting' },
-          { id: '4', name: '节点-4', myicon: 'el-icon-star-on' },
-          { id: '6', name: '节点-6', myicon: 'el-icon-setting' },
-          { id: '7', name: '节点-7', myicon: 'el-icon-setting' },
-          { id: '8', name: '节点-8', myicon: 'el-icon-star-on' },
-          { id: '9', name: '节点-9', myicon: 'el-icon-headset' },
-          { id: '71', name: '节点-71', myicon: 'el-icon-headset' },
-          { id: '72', name: '节点-72', myicon: 'el-icon-s-tools' },
-          { id: '73', name: '节点-73', myicon: 'el-icon-star-on' },
-          { id: '81', name: '节点-81', myicon: 'el-icon-s-promotion' },
-          { id: '82', name: '节点-82', myicon: 'el-icon-s-promotion' },
-          { id: '83', name: '节点-83', myicon: 'el-icon-star-on' },
-          { id: '84', name: '节点-84', myicon: 'el-icon-s-promotion' },
-          { id: '85', name: '节点-85', myicon: 'el-icon-sunny' },
-          { id: '91', name: '节点-91', myicon: 'el-icon-sunny' },
-          { id: '92', name: '节点-82', myicon: 'el-icon-sunny' },
-          { id: '51', name: '节点-51', myicon: 'el-icon-sunny' },
-          { id: '52', name: '节点-52', myicon: 'el-icon-sunny' },
-          { id: '53', name: '节点-53', myicon: 'el-icon-sunny' },
-          { id: '54', name: '节点-54', myicon: 'el-icon-sunny' },
-          { id: '55', name: '节点-55', myicon: 'el-icon-sunny' },
-          { id: '5', name: '节点-5', myicon: 'el-icon-sunny' }
+          // 注意：在节点配置信息中，你的自定义属性需要像下面这样放到data标签中，否则数据会丢失
+          { id: '1', name: '节点-1', data: { myicon: 'el-icon-star-on' } },
+          { id: '2', name: '节点-2', data: { myicon: 'el-icon-setting' } },
+          { id: '3', name: '节点-3', data: { myicon: 'el-icon-setting' } },
+          { id: '4', name: '节点-4', data: { myicon: 'el-icon-star-on' } },
+          { id: '6', name: '节点-6', data: { myicon: 'el-icon-setting' } },
+          { id: '7', name: '节点-7', data: { myicon: 'el-icon-setting' } },
+          { id: '8', name: '节点-8', data: { myicon: 'el-icon-star-on' } },
+          { id: '9', name: '节点-9', data: { myicon: 'el-icon-headset' } },
+          { id: '71', name: '节点-71', data: { myicon: 'el-icon-headset' } },
+          { id: '72', name: '节点-72', data: { myicon: 'el-icon-s-tools' } },
+          { id: '73', name: '节点-73', data: { myicon: 'el-icon-star-on' } },
+          { id: '81', name: '节点-81', data: { myicon: 'el-icon-s-promotion' } },
+          { id: '82', name: '节点-82', data: { myicon: 'el-icon-s-promotion' } },
+          { id: '83', name: '节点-83', data: { myicon: 'el-icon-star-on' } },
+          { id: '84', name: '节点-84', data: { myicon: 'el-icon-s-promotion' } },
+          { id: '85', name: '节点-85', data: { myicon: 'el-icon-sunny' } },
+          { id: '91', name: '节点-91', data: { myicon: 'el-icon-sunny' } },
+          { id: '92', name: '节点-82', data: { myicon: 'el-icon-sunny' } },
+          { id: '51', name: '节点-51', data: { myicon: 'el-icon-sunny' } },
+          { id: '52', name: '节点-52', data: { myicon: 'el-icon-sunny' } },
+          { id: '53', name: '节点-53', data: { myicon: 'el-icon-sunny' } },
+          { id: '54', name: '节点-54', data: { myicon: 'el-icon-sunny' } },
+          { id: '55', name: '节点-55', data: { myicon: 'el-icon-sunny' } },
+          { id: '5', name: '节点-5', data: { myicon: 'el-icon-sunny' } }
         ],
         links: [
           { from: '7', to: '71', text: '投资' },

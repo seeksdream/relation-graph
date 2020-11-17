@@ -1,7 +1,9 @@
 <template>
   <div ref="miniView" class="c-mini-graph">
     <div :style="{width:(100 * zoom) + 'px',height:(graphSetting.canvasNVInfo.height * 100/graphSetting.canvasNVInfo.width * zoom)+'px'}" class="c-mini-canvas">
-      <div v-for="thisNode in $parent.nodeViewList" v-if="isAllowShowNode(thisNode)" :key="thisNode.id" :style="{'margin-left':(thisNode.x * 100/graphSetting.canvasSize.width * zoom)+'px','margin-top':(thisNode.y * 100/graphSetting.canvasSize.width * zoom)+'px'}" class="c-mini-node" />
+      <template v-for="thisNode in $parent.nodeViewList">
+        <div v-if="isAllowShowNode(thisNode)" :key="thisNode.id" :style="{'margin-left':(thisNode.x * 100/graphSetting.canvasSize.width * zoom)+'px','margin-top':(thisNode.y * 100/graphSetting.canvasSize.width * zoom)+'px'}" class="c-mini-node" />
+      </template>
     </div>
     <div :style="getPositionData()" class="c-mini-view">
       <i class="el-icon-view" />

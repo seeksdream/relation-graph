@@ -1,5 +1,5 @@
 <template>
-  <div ref="seeksRelationGraph" :style="{width: '100%',height : '100%'}" @resize="refreshNVAnalysisInfo()">
+  <div ref="seeksRelationGraph" :style="{width: '100%',height : '100%'}" style="box-sizing:border-box;" @resize="refreshNVAnalysisInfo()">
     <GraphSettingPanel v-if="graphSetting.allowShowSettingPanel" :graph-setting="graphSetting">
       <div slot="settingPanelPlus" slot-scope="{setting}">
         <slot :setting="setting" name="settingPanelPlus" />
@@ -9,7 +9,8 @@
     <graph-mini-tool-bar v-show="graphSetting.allowShowMiniToolBar===true" :graph-setting="graphSetting" />
     <graph-mini-view v-if="graphSetting.allowShowMiniView===true" :graph-setting="graphSetting" />
     <slot :graph="this" name="graphPlug" />
-    <div :style="{width: '100%',height : '100%', 'background-image': 'url('+graphSetting.backgrounImage+')'}" :class="[graphSetting.layoutClassName, (graphSetting.backgrounImageNoRepeat?'rel-map-background-norepeat':'')]" class="rel-map" @mousedown.left.stop="onDragStart($event)" @mousewheel.stop.prevent="mouseListener">
+<!--    <div :style="{width: '100%',height : '100%', 'background-image': 'url('+graphSetting.backgrounImage+')'}" :class="[graphSetting.layoutClassName, (graphSetting.backgrounImageNoRepeat?'rel-map-background-norepeat':'')]" class="rel-map" @mousedown.left.stop="onDragStart($event)" @mousewheel.stop.prevent="mouseListener">-->
+    <div :style="{width: '100%',height : '100%', 'background-image': 'url('+graphSetting.backgrounImage+')'}" :class="[graphSetting.layoutClassName, (graphSetting.backgrounImageNoRepeat?'rel-map-background-norepeat':'')]" class="rel-map" @mousedown.left.stop="onDragStart($event)" @mousewheel="mouseListener">
       <div ref="seeksRGCanvas" :style="getCanvasSizeAndPosition()" class="rel-map-canvas">
         <!--<div v-if="isShowZoomCenter" :style="{'margin-left': zoomCenter2.x + 'px','margin-top': zoomCenter2.y + 'px'}" style="position: absolute;z-index: 9999;width:50px;height:50px;background-color: blue;border-radius: 50%;line-height: 50px;text-align: center;color: #ffffff;">+</div>-->
         <!--<div v-if="isShowZoomCenter" :style="{'margin-left': zoomCenter.x + 'px','margin-top': zoomCenter.y + 'px'}" style="position: absolute;z-index: 9999;width:50px;height:50px;background-color: red;border-radius: 50%;line-height: 50px;text-align: center;color: #ffffff;opacity: 0.6;">+</div>-->
@@ -137,7 +138,7 @@
 </template>
 
 <script>
-import Vuex from 'vuex'
+import Vue from 'vue'
 import screenfull from 'screenfull'
 import html2canvas from 'html2canvas'
 import SeeksRGLayouters from './core4vue/SeeksRGLayouters'
@@ -150,8 +151,6 @@ import GraphMiniView from './GraphMiniView'
 import GraphMiniToolBar from './GraphMiniToolBar'
 import GraphMiniNameFilter from './GraphMiniNameFilter'
 import GraphBottomPanel from './GraphBottomPanel'
-// import { mapState } from 'vuex'
-// var seeksStoreInstance = SeeksRGStore.createNewStore()
 export default {
   name: 'SeeksRelationGraph',
   components: { GraphBottomPanel, GraphMiniNameFilter, GraphMiniToolBar, GraphMiniView, SeeksRGNode, SeeksRGLink, GraphSettingPanel },
@@ -193,8 +192,21 @@ export default {
     }
   },
   data() {
+    var wheelEvent = {}
+    // console.log('this.options.disableZoom:', this.options.disableZoom)
+    // if (this.options.disableZoom) {
+    //   wheelEvent = {
+    //     'mousewheel':this.mouseListener
+    //   }
+    // } else {
+    //   wheelEvent = {
+    //     'mousewheel':this.mouseListener
+    //   }
+    //   console.log('wheelEvent:', wheelEvent)
+    // }
     return {
-      version: '1.0.8',
+      wheelEvent,
+      version: '1.0.9',
       el: {
         offsetWidth: 500,
         offsetHeight: 500,
@@ -228,12 +240,10 @@ export default {
       debugPanelPosition: true,
       zoomCenter_of_newSize: { x: 0, y: 0 },
       currentZoomSet: null,
-      newZoomSet: null
+      newZoomSet: null,
+      alive: true
     }
   },
-  // computed: mapState({
-  //   graphSetting: () => SeeksRGStore.createNewStore().state.graphSetting
-  // }),
   watch: {
     'graphSetting.fullscreen': function(newV, oldV) {
       if (oldV === true || oldV === false) {
@@ -242,8 +252,8 @@ export default {
     }
   },
   created() {
-    this.SeeksRGStore = SeeksRGStore.createNewStore(this.options || {}, Vuex)
-    this.graphSetting = this.SeeksRGStore.state.graphSetting
+    this.SeeksRGStore = SeeksRGStore.createNewStore(this.options || {})
+    this.graphSetting = this.SeeksRGStore.graphSetting
     this.graphSetting.instanceId = 'SRG' + parseInt(Math.random() * 100000)
     console.log(
       `%c relation-graph %c Version v${this.version} %c More info: https://github.com/seeksdream/relation-graph %c`,
@@ -252,6 +262,9 @@ export default {
       'background:#fff ; padding: 1px; border-radius: 0 3px 3px 0;  color: #41b883',
       'background:transparent'
     )
+    if (Vue.version.substring(0,4) === '2.5.') {
+      console.log('注意：当你使用的vue版本低于2.6时，你只能通过插槽slot[node]来显示节点内容，示例请参考：http://relation-graph.com/#/demo/adv-slot')
+    }
   },
   mounted() {
     this.init()
@@ -263,6 +276,7 @@ export default {
     // }.bind(this), 1000)
   },
   beforeDestroy() {
+    this.alive = false
     const elx = this.$refs.seeksRelationGraph
     elx.remove()
   },
@@ -276,16 +290,29 @@ export default {
       this.$refs.rgCanvas.style.setProperty('--stroke', 'url(\'#' + this.graphSetting.instanceId + '-lineStyle\')')
       this.$refs.rgCanvas.style.setProperty('--markerEnd', 'url(\'#' + this.graphSetting.instanceId + '-arrow-default\')')
       this.$refs.rgCanvas.style.setProperty('--markerEndChecked', 'url(\'#' + this.graphSetting.instanceId + '-arrow-checked\')')
-      this.graphSetting.viewSize.width = this.$refs.seeksRelationGraph.getBoundingClientRect().width
-      this.graphSetting.viewSize.height = this.$refs.seeksRelationGraph.getBoundingClientRect().height
-      console.log('#############Seeks graph viewSize:', this.graphSetting.viewSize.width, this.graphSetting.viewSize.height)
+      // console.log('#############Seeks graph viewSize:', this.graphSetting.viewSize.width, this.graphSetting.viewSize.height)
+      this.cycleTask()
       this.resetViewSize()
       this.refreshNVAnalysisInfo()
       this.syncToolsPosition()
     },
+    cycleTask() {
+      if (this.alive) {
+        var _box = this.$refs.seeksRelationGraph.getBoundingClientRect()
+        if (_box.width !== this.graphSetting.viewSize.width || _box.height !== this.graphSetting.viewSize.height) {
+          this.graphSetting.viewSize.width = _box.width
+          this.graphSetting.viewSize.height = _box.height
+          this.refreshNVAnalysisInfo()
+          this.wow()
+        }
+        setTimeout(() => {
+          this.cycleTask()
+        }, 1000)
+      }
+    },
     setOptions(options, callback) {
-      this.SeeksRGStore = SeeksRGStore.createNewStore(options, Vuex)
-      this.graphSetting = this.SeeksRGStore.state.graphSetting
+      this.SeeksRGStore = SeeksRGStore.createNewStore(options)
+      this.graphSetting = this.SeeksRGStore.graphSetting
       this.graphSetting.instanceId = 'SRG' + parseInt(Math.random() * 100000)
       this.init()
       callback(this)
@@ -303,10 +330,27 @@ export default {
         // 'transform-origin': (this.graphSetting.canvasOffset.zoom_buff_x * 100).toFixed(2) + '% ' + (this.graphSetting.canvasOffset.zoom_buff_y * 100).toFixed(2) + '%'
       }
     },
+    mouseListenerEmpty() {
+      console.log('mouseListenerEmpty')
+    },
     mouseListener(e) {
       // if (e.target !== this.$refs.seeksRGCanvas) {
       //   return
       // }
+      // e.stopPropagation()
+      // console.log('mouseListenerEmpty:', e)
+      // console.log('mouseListener')
+      if (this.graphSetting.disableZoom) {
+        e.cancelBubble = false
+        return true
+      }
+      try{
+        e.cancelBubble = true
+        e.preventDefault()
+        e.stopPropagation()
+      }catch (e) {
+        // xxx
+      }
       var userZoomCenter = {
         x: e.clientX,
         y: e.clientY
@@ -319,29 +363,30 @@ export default {
       } else {
         this.zoom(-5 * _zoomDirection, userZoomCenter)
       }
+
     },
     getPositionOfCanvas(e) {
       var userZoomCenter = {
         x: e.offsetX,
         y: e.offsetY
       }
-      console.log('[F]', userZoomCenter.x, userZoomCenter.y)
+      if (window.SeeksGraphDebug) console.log('[F]', userZoomCenter.x, userZoomCenter.y)
       var currentNode = e.target.parentNode
       for (var i = 0; i < 8; i++) {
         if (i > 6) {
-          console.log('getPositionOfCanvas error', e)
+          if (window.SeeksGraphDebug) console.log('getPositionOfCanvas error', e)
         }
         if (currentNode.classList.contains('rel-map-canvas')) {
-          console.log('[S]', currentNode.tagName + '.' + currentNode.className)
+          if (window.SeeksGraphDebug) console.log('[S]', currentNode.tagName + '.' + currentNode.className)
           break
         } else {
           userZoomCenter.x += currentNode.offsetLeft || 0
           userZoomCenter.y += currentNode.offsetTop || 0
-          console.log('[' + i + ']', currentNode.tagName + '.' + currentNode.className, ':', currentNode.offsetLeft, currentNode.offsetTop)
+          if (window.SeeksGraphDebug) console.log('[' + i + ']', currentNode.tagName + '.' + currentNode.className, ':', currentNode.offsetLeft, currentNode.offsetTop)
           currentNode = currentNode.parentNode
         }
       }
-      console.log('[F]', userZoomCenter.x, userZoomCenter.y)
+      if (window.SeeksGraphDebug) console.log('[F]', userZoomCenter.x, userZoomCenter.y)
       return userZoomCenter
     },
     zoom(buff, userZoomCenter) {
@@ -490,11 +535,11 @@ export default {
       return result
     },
     syncToolsPosition() {
-      console.log('on scroll...')
+      if (window.SeeksGraphDebug) console.log('on scroll...')
       if (!this.$refs.seeksRelationGraph) return
       const windowHeight = this.getWindowHeight()
       var _box_info = this.$refs.seeksRelationGraph.getBoundingClientRect()
-      console.log('syncToolsPosition...')
+      if (window.SeeksGraphDebug) console.log('syncToolsPosition...')
       // console.log('change layout:', __top, this.$refs.seeksRelationGraph.offsetHeight)
       // console.log(_box_info.top, this.viewOffset.positionTop, (this.viewOffset.windowHeight - this.viewOffset.top))
       var __top = _box_info.top
@@ -535,19 +580,21 @@ export default {
       return node.offsetLeft + (node.parentNode ? this.getNodePositionLeft(node.parentNode) : 0)
     },
     resetViewSize() {
+      this.graphSetting.viewSize.width = this.$refs.seeksRelationGraph.getBoundingClientRect().width
+      this.graphSetting.viewSize.height = this.$refs.seeksRelationGraph.getBoundingClientRect().height
       this.graphSetting.canvasZoom = 100
-      this.SeeksRGStore.commit('resetViewSize')
+      this.SeeksRGStore.resetViewSize()
       this.refreshNVAnalysisInfo()
     },
     loadNodes(_nodes) {
-      _nodes.forEach(thisNode => {
+      _nodes.forEach(thisNodeJson => {
+        let thisNode = SeeksRGUtils.json2Node(thisNodeJson)
         let __isNew = false
         if (this.graphData.nodes_map[thisNode.id]) {
           thisNode = this.graphData.nodes_map[thisNode.id]
         } else {
           __isNew = true
         }
-        thisNode = SeeksRGUtils.json2Node(thisNode)
         if (__isNew) {
           this.graphData.nodes_map[thisNode.id] = thisNode
           this.graphData.nodes.push(thisNode)
@@ -660,7 +707,7 @@ export default {
     },
     loadGraphJsonData(jsonData) {
       this.loadNodes(jsonData.nodes)
-      console.log('节点预处理完毕')
+      if (window.SeeksGraphDebug) console.log('节点预处理完毕')
       if (!jsonData.links) jsonData.links = jsonData.lines
       if (!jsonData.links) jsonData.links = jsonData.relations
       this.loadLinks(jsonData.links)
@@ -677,7 +724,7 @@ export default {
       this.resetViewSize()
       if (this.graphSetting.layouts && this.graphSetting.layouts.length > 0) {
         var _defaultLayoutSetting = this.graphSetting.layouts[0]
-        console.log('创建默认布局器：', this.graphSetting.layoutName)
+        if (window.SeeksGraphDebug) console.log('创建默认布局器：', this.graphSetting.layoutName)
         if (_defaultLayoutSetting.layouter) {
           this.graphSetting.layouter = _defaultLayoutSetting.layouter
         } else {
@@ -688,7 +735,7 @@ export default {
       }
       var __root_id = jsonData['rootId']
       this.loadGraphJsonData(jsonData)
-      console.log('graphData:', this.graphData)
+      // console.log('graphData:', this.graphData)
       if (__root_id) {
         this.graphData.rootNode = this.graphData.nodes_map[__root_id]
       }
@@ -754,13 +801,13 @@ export default {
       this.refreshNVAnalysisInfo()
     },
     addEventClick() {
-      window.addEventListener('click', this.graphOnClick)
+      // window.addEventListener('click', this.graphOnClick)
     },
-    graphOnClick(evt) {
-      console.log('click graph')
-    },
-    wow(evt) {
-      console.log('wow.....')
+    // graphOnClick(evt) {
+    //   console.log('click graph')
+    // },
+    wow() {
+      if (window.SeeksGraphDebug) console.log('wow.....')
       this.graphSetting.canvasOffset.x = this.graphSetting.canvasOffset.x + 1
       this.graphSetting.canvasOffset.y = this.graphSetting.canvasOffset.y + 1
       this.graphSetting.canvasOffset.x = this.graphSetting.canvasOffset.x - 1
@@ -822,6 +869,9 @@ export default {
           })
           // thisNode.isShow = false
           this.nodeViewList.splice(i, 1)
+          delete this.graphData.nodes_map[thisNode.id]
+          const d_i = this.graphData.nodes.findIndex(k => k.id === thisNode.id);
+          this.graphData.nodes.splice(d_i, 1)
           __removed_nodes++
           break
         }
@@ -1021,7 +1071,7 @@ export default {
       var _speed_x = parseInt(_distance_x / _allStepNum)
       var _speed_y = parseInt(_distance_y / _allStepNum)
       var _perDelay = _allTime / _allStepNum
-      this.animateStepAction(0, _perDelay, _allStepNum, (stepIndex, allStepNum) => {
+      this.animateStepAction(0, _perDelay, _allStepNum, () => {
         this.graphSetting.canvasOffset.x += _speed_x
         this.graphSetting.canvasOffset.y += _speed_y
       }, () => {
@@ -1035,7 +1085,7 @@ export default {
       var _allStepNum = 5
       var _speed = parseInt(_zoom_distance / _allStepNum)
       var _perDelay = _allTime / _allStepNum
-      this.animateStepAction(0, _perDelay, _allStepNum, (stepIndex, allStepNum) => {
+      this.animateStepAction(0, _perDelay, _allStepNum, () => {
         this.zoom(_speed)
       }, () => {
         console.log('分解完毕....')
@@ -1052,40 +1102,6 @@ export default {
       } else {
         finalCallback()
       }
-    },
-    transNodeToJson(node, nodes) {
-      if (!node) return
-      nodes.push({
-        color: node.color,
-        data: node.data,
-        id: node.id,
-        nodeShape: node.nodeShape,
-        styleClass: node.styleClass,
-        text: node.text,
-        type: node.type,
-        x: node.x,
-        y: node.y
-      })
-    },
-    transLineToJson(line, links) {
-      if (!line) return
-      // var _id_from = line.fromNode.id
-      // var _id_to = line.toNode.id
-      line.relations.forEach(thisRelation => {
-        links.push(thisRelation)
-        // links.push({
-        //   from: thisRelation.isReverse ? _id_to : _id_from,
-        //   to: thisRelation.isReverse ? _id_from : _id_to,
-        //   color: thisRelation.color,
-        //   data: thisRelation.data,
-        //   fontColor: thisRelation.fontColor,
-        //   lineDirection: thisRelation.lineDirection,
-        //   lineShape: thisRelation.lineShape,
-        //   reverseText: thisRelation.reverseText,
-        //   styleClass: thisRelation.text,
-        //   text: thisRelation.text
-        // })
-      })
     },
     getNodes() {
       return this.nodeViewList
@@ -1105,20 +1121,27 @@ export default {
         this.onNodeCollapse(node, e)
       }
     },
-    printGraphJsonData() {
+    getGraphJsonData() {
       var _nodes = []
       var _links = []
       this.graphData.nodes.forEach(thisNode => {
-        this.transNodeToJson(thisNode, _nodes)
+        SeeksRGUtils.transNodeToJson(thisNode, _nodes)
       })
       this.graphData.lines.forEach(thisLine => {
-        this.transLineToJson(thisLine, _links)
+        SeeksRGUtils.transLineToJson(thisLine, _links)
       })
-      console.log(JSON.stringify({
+      return {
         rootId: this.graphData.rootNode ? this.graphData.rootNode.id : '',
         nodes: _nodes,
         links: _links
-      }))
+      }
+    },
+    getGraphJsonOptions() {
+      return this.SeeksRGStore.getOptions()
+    },
+    printGraphJsonData() {
+      console.log('graph options:', JSON.stringify(this.getGraphJsonOptions()))
+      console.log('graph json data:', JSON.stringify(this.getGraphJsonData()))
     }
   }
 }

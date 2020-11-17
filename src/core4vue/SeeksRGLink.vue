@@ -58,7 +58,6 @@ export default {
     }
   },
   show() {
-    console.log('line show.....')
     this.isShow = true
   },
   watch: {
@@ -209,8 +208,8 @@ export default {
         // var __buff_type_x = __end.x > __start.x ? 1 : -1
         const __buff_type_y = __end.y > __start.y ? 1 : -1
         const _base = Math.abs(__buff_x) + Math.abs(__buff_y)
-        relationData.textPositon.x = __end.x - ((__buff_x) / _base * 60) - 20
-        relationData.textPositon.y = __end.y - ((__buff_y) / _base * 60) - 20 * __buff_type_y
+        relationData.textPositon.x = parseInt(__end.x - ((__buff_x) / _base * 60) - 20)
+        relationData.textPositon.y = parseInt(__end.y - ((__buff_y) / _base * 60) - 20 * __buff_type_y)
         const distanceRate = ((1 / (this.lineProps.relations.length + 1)) * (ri + 1)) - 0.5 + 0.5
         if (__lineDirection === 'v') {
           __path = 'M' + fx + ',' + fy + ' c' + (0) + ',' + (__buff_type * 30) + ' ' + (__buff_x * distanceRate) + ',' + (__buff_type * -10) + ' ' + __buff_x + ',' + __buff_y
@@ -221,8 +220,8 @@ export default {
         // const __buff_type_x = __end.x > __start.x ? 1 : -1
         const __buff_type_y = __end.y > __start.y ? 1 : -1
         const _base = Math.abs(__buff_x) + Math.abs(__buff_y)
-        relationData.textPositon.x = __end.x - ((__buff_x) / _base * 60) - 20
-        relationData.textPositon.y = __end.y - ((__buff_y) / _base * 60) - 20 * __buff_type_y
+        relationData.textPositon.x = parseInt(__end.x - ((__buff_x) / _base * 60) - 20)
+        relationData.textPositon.y = parseInt(__end.y - ((__buff_y) / _base * 60) - 20 * __buff_type_y)
         if (__lineDirection === 'v') {
           __path = 'M' + fx + ',' + fy + ' c' + (0) + ',' + (__buff_y / 2) + ' ' + (__buff_x) + ',' + (__buff_y / 2) + ' ' + __buff_x + ',' + __buff_y
         } else {
@@ -265,8 +264,8 @@ export default {
         var _xxx = (_angle_type === 2 || _angle_type === 4) ? -1 : 1
         var _x = (__buff_y === 0 ? -50 : Math.sin(Math.atan(__buff_x / __buff_y)) * 10 / Math.sin(90)) * _xxx
         var _y = (__buff_x === 0 ? -50 : Math.sin(Math.atan(__buff_y / __buff_x)) * 10 / Math.sin(90))
-        relationData.textPositon.x = __start.x + __buff_x / 2 - _x
-        relationData.textPositon.y = __start.y + __buff_y / 2 - _y
+        relationData.textPositon.x = parseInt(__start.x + __buff_x / 2 - _x)
+        relationData.textPositon.y = parseInt(__start.y + __buff_y / 2 - _y)
         if (isNaN(relationData.textPositon.rotate)) {
           relationData.textPositon.rotate = 0
           console.log('NaN rotate:', relationData)
@@ -290,7 +289,7 @@ export default {
         this.onLineClick(this.lineProps, e)
       }
     },
-    isAllowShowNode: function(thisNode, derict) {
+    isAllowShowNode: function(thisNode) {
       const _r = thisNode.isShow !== false && thisNode.isHide !== true && (!thisNode.lot.parent || this.isAllowShowNode(thisNode.lot.parent, false) === true)
       // if (derict !== false && _r === false) console.log('be hide node:', thisNode.text)
       return _r

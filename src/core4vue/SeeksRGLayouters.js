@@ -2,6 +2,7 @@ import SeeksBidirectionalTreeLayouter from './layouters/SeeksBidirectionalTreeLa
 import SeeksCenterLayouter from './layouters/SeeksCenterLayouter'
 import SeeksCircleLayouter from './layouters/SeeksCircleLayouter'
 import SeeksAutoLayouter from './layouters/SeeksAutoLayouter'
+import SeeksFixedLayouter from './layouters/SeeksFixedLayouter'
 
 var SeeksRGLayouters = {
   createLayout(layoutSetting, _graphSetting) {
@@ -37,6 +38,8 @@ var SeeksRGLayouters = {
       _layout = new SeeksCircleLayouter(layoutSetting, _graphSetting)
     } else if (layoutSetting.layoutName === 'SeeksAutoLayouter' || layoutSetting.layoutName === 'force') {
       _layout = new SeeksAutoLayouter(layoutSetting, _graphSetting)
+    } else if (layoutSetting.layoutName === 'SeeksFixedLayouter' || layoutSetting.layoutName === 'fixed') {
+      _layout = new SeeksFixedLayouter(layoutSetting, _graphSetting)
     }
     _graphSetting.isNeedShowAutoLayoutButton = layoutSetting.allowAutoLayoutIfSupport !== false && _layout.autoLayout !== undefined
     return _layout

@@ -95,13 +95,20 @@ npm install --save relation-graph
 *更多效果及使用方法：*
 http://relation-graph.com
 
-*即将修改的问题：*
-* 1，vue2.5及更低版本下节点名称不显示的问题
-* 2，IE11的兼容性问题
-* 3，剔除项目中使用到的el-ui元素（主要是图标、按钮）
-* 4，默认关闭组件中的打印信息，只有在设置debug时打印信息
-* 5，提供getJsonNodes和getJsonLinks方法，获取图谱中当前所有节点和关系的json数据
-* 6，提供更多新特性，如禁用节点拖拽的设置、禁用画布缩放的设置、连线长度的设置等
+*最新版本修改的问题：*
+v1.0.9主要修改的问题：
+* 1，解决了当使用者没有使用element-ui时图谱工具栏样式异常的问题
+* 2，默认关闭组件中的打印信息，只有在设置debug时打印信息
+* 3，解决了_graph.removeNodeById方法的bug
+* 4，解决了当图谱大小调整后调用refresh方法无法让图谱位置居中的问题
+* 5，解决了当调整图谱大小后工具栏位置不自动调整的问题
+* 6，解决了无法将图谱数据放在Vue data()中的问题
+
+v1.0.9新特性：
+* 1，提供一种新布局：固定位置布局《fixed/固定坐标布局》，介绍：http://relation-graph.com/#/docs/layout  示例：http://relation-graph.com/#/demo/layout-diy
+* 2，提供getGraphJsonData和getGraphJsonOptions方法，获取图谱中当前所有数据和配置信息的json数据
+* 3，提供图谱配置：禁用图谱缩放、禁用工具栏缩放按钮的配置
+* 4，提供节点配置：禁用节点拖拽、禁用节点点击的默认选中效果
 
 
 最近较忙，预计会在11月中旬发布

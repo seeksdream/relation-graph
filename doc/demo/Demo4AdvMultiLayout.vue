@@ -1,7 +1,7 @@
 <template>
   <div>
     <div style="height:calc(100vh - 50px);">
-      <RelationGraph
+      <SeeksRelationGraph
         ref="seeksRelationGraph"
         :options="graphOptions"
         :on-node-click="onNodeClick"
@@ -24,10 +24,10 @@
 </template>
 
 <script>
-import RelationGraph from 'relation-graph'
+import SeeksRelationGraph from 'relation-graph'
 export default {
   name: 'Demo',
-  components: { RelationGraph },
+  components: { SeeksRelationGraph },
   data() {
     return {
       isShowCodePanel: false,

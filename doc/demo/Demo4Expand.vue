@@ -12,7 +12,7 @@
 </template>
 
 <script>
-  import SeeksRelationGraph from 'relation-graph'
+import SeeksRelationGraph from 'relation-graph'
 
   export default {
     name: 'SeeksRelationGraphDemo',

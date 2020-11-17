@@ -159,7 +159,7 @@ export default {
       }
     },
     switchLayout() {
-      console.log('change layout:', this.currentLayoutName)
+      if (window.SeeksGraphDebug) console.log('change layout:', this.currentLayoutName)
       SeeksRGLayouters.switchLayout(this.currentLayoutName, this.graphSetting)
       this.refresh()
     },

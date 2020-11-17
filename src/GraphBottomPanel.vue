@@ -27,7 +27,7 @@ export default {
   mounted() {
     this.$nextTick(() => {
       this.height = this.$slots['bottomPanel'][0].elm.offsetHeight
-      console.log('SeeksGraph bootomPanel height:', this.height)
+      if (window.SeeksGraphDebug) console.log('SeeksGraph bootomPanel height:', this.height)
     })
   },
   methods: {

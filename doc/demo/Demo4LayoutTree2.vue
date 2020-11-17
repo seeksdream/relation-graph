@@ -8,7 +8,7 @@
       <el-button type="success" class="c-show-code-button"><el-link href="https://github.com/seeksdream/relation-graph/blob/master/doc/demo/Demo4LayoutTree2.vue" target="_blank" style="color: #ffffff;">查看代码</el-link></el-button>
     </div>
     <div style="height:calc(100vh - 100px);">
-      <RelationGraph
+      <SeeksRelationGraph
         ref="seeksRelationGraph"
         :options="graphOptions"
         :on-node-click="onNodeClick"
@@ -19,10 +19,10 @@
 </template>
 
 <script>
-import RelationGraph from 'relation-graph'
+import SeeksRelationGraph from 'relation-graph'
 export default {
   name: 'Demo',
-  components: { RelationGraph },
+  components: { SeeksRelationGraph },
   data() {
     return {
       currentCase: '纵向树状图谱',

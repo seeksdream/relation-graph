@@ -1,6 +1,6 @@
-import "babel-polyfill"
 import RelationGraph from './index.vue'
-// RelationGraph.install = function(Vue) {
-//     Vue.component(RelationGraph.name, RelationGraph);
-// };
+RelationGraph.install = function(Vue) {
+    Vue.component('relation-graph', RelationGraph);
+    Vue.component('seeks-relation-graph', RelationGraph);
+};
 export default RelationGraph

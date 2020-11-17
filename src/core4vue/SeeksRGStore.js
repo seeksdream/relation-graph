@@ -2,9 +2,11 @@ const SeeksStoreManager = {
   createDefaultConfig(userGraphSetting) {
     var _graphSetting = {
       instanceId: 'SeeksGraph',
-      debug: false,
+      debug: true,
       allowShowSettingPanel: false,
       backgrounImage: '',
+      disableZoom: false,
+      allowShowZoomMenu: true,
       backgrounImageNoRepeat: false,
       allowShowMiniToolBar: true,
       allowShowMiniView: false,
@@ -89,29 +91,31 @@ const SeeksStoreManager = {
         config.canvasOffset.y = config.viewNVInfo.height / 2 - 100
       }
     }
-    console.log('Seeks store instance graphSetting:', _graphSetting)
-    console.log('user instance graphSetting:', userGraphSetting)
+    var _debug = userGraphSetting.debug !== true ? false : true
+    if (_debug) console.log('user instance graphSetting:', userGraphSetting)
+    if (window) {
+      window.SeeksGraphDebug = _debug
+    }
     if (userGraphSetting) {
       Object.keys(userGraphSetting).forEach(key => {
         var _thisUserValue = userGraphSetting[key]
         if (typeof _thisUserValue === 'object') {
-          console.log('user setting object:', key)
+          if (window.SeeksGraphDebug) console.log('user setting object:', key)
           var _objectValue = _graphSetting[key]
           if (_objectValue && !Array.isArray(_objectValue) && _thisUserValue) {
             Object.keys(_objectValue).forEach(l2Key => {
-              console.log('user setting:', key + '.' + l2Key, _thisUserValue[l2Key])
+              if (window.SeeksGraphDebug) console.log('user setting:', key + '.' + l2Key, _thisUserValue[l2Key])
               _objectValue[l2Key] = _thisUserValue[l2Key]
             })
           } else {
-            console.log('user setting:', key, _thisUserValue)
+            if (window.SeeksGraphDebug) console.log('user setting:', key, _thisUserValue)
             _graphSetting[key] = _thisUserValue
           }
         } else {
-          console.log('user setting:', key, _thisUserValue)
+          if (window.SeeksGraphDebug) console.log('user setting:', key, _thisUserValue)
           _graphSetting[key] = _thisUserValue
         }
       })
-      console.log('Graph final config:', _graphSetting)
     }
     if (!_graphSetting.layouts || _graphSetting.layouts.length === 0) {
       _graphSetting.layouts = [{
@@ -191,28 +195,34 @@ const SeeksStoreManager = {
       if (thisLayout.from === 'top' || thisLayout.from === 'bottom') thisLayout.layoutDirection = 'v'
     }
   },
-  createNewStore(userGraphSetting, Vuex) {
-    console.log('创建一个新的Graph store...')
+  createNewStore(userGraphSetting) {
+    if (window.SeeksGraphDebug) console.log('Create new GraphSetting:')
     var _graphSetting = SeeksStoreManager.createDefaultConfig(userGraphSetting)
-    return new Vuex.Store({
-      state: {
-        index: 0,
-        graphSetting: _graphSetting
-      },
-      getters: {
-      },
-      mutations: {
-        resetViewSize: (state, currentLineId) => {
-          // state.graphSetting.canvasOffset.x = parseInt(state.graphSetting.viewSize.width - state.graphSetting.canvasSize.width) / 2
-          // state.graphSetting.canvasOffset.y = parseInt(state.graphSetting.viewSize.height - state.graphSetting.canvasSize.height) / 2
-          state.graphSetting.canvasOffset.x = 0 // state.graphSetting.viewNVInfo.width / 2 - 100
-          state.graphSetting.canvasOffset.y = 0 // state.graphSetting.viewNVInfo.height / 2 - 100
-          // console.log('resetViewSize:', state.graphSetting.viewSize.width, state.graphSetting.canvasSize.width, state.graphSetting.canvasZoom / 100, state.graphSetting.canvasSize.width * (state.graphSetting.canvasZoom / 100), state.graphSetting.canvasOffset.x)
-        }
-      },
-      actions: {
+    return new SeeksRGStore(_graphSetting)
+  }
+}
+function SeeksRGStore(_graphSetting) {
+  this.graphSetting = _graphSetting
+  this.resetViewSize = function() {
+    // state.graphSetting.canvasOffset.x = parseInt(state.graphSetting.viewSize.width - state.graphSetting.canvasSize.width) / 2
+    // state.graphSetting.canvasOffset.y = parseInt(state.graphSetting.viewSize.height - state.graphSetting.canvasSize.height) / 2
+    this.graphSetting.canvasOffset.x = 0 // state.graphSetting.viewNVInfo.width / 2 - 100
+    this.graphSetting.canvasOffset.y = 0 // state.graphSetting.viewNVInfo.height / 2 - 100
+    // console.log('resetViewSize:', state.graphSetting.viewSize.width, state.graphSetting.canvasSize.width, state.graphSetting.canvasZoom / 100, state.graphSetting.canvasSize.width * (state.graphSetting.canvasZoom / 100), state.graphSetting.canvasOffset.x)
+  }
+  this.getOptions = function() {
+    var _options = {}
+    var _ignore = [
+        'layouter', 'autoLayouting', 'canvasNVInfo', 'canvasOffset', 'canvasZoom', 'fullscreen', 'instanceId', 'layoutClassName', 'layoutDirection',
+        'layoutLabel', 'layoutName', 'resetViewSize', 'viewELSize', 'viewNVInfo', 'viewSize', 'canvasSize'
+    ]
+    Object.keys(this.graphSetting).forEach(thisKey => {
+      if (_ignore.indexOf(thisKey) === -1) {
+        _options[thisKey] = this.graphSetting[thisKey]
       }
     })
+    return _options
   }
+  console.log('relation-graph instance full option:', this.getOptions())
 }
 export default SeeksStoreManager

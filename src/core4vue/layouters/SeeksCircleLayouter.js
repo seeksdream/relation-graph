@@ -73,7 +73,7 @@ function SeeksCenterLayouter(layoutSetting, setting) {
       thisNode.lot.childs_size = __thisNode_child_size
       __thisLevel_index++
     })
-    console.log('next level nodes:', newLevelNodes.length)
+    // console.log('next level nodes:', newLevelNodes.length)
     if (newLevelNodes.length > 0) {
       // console.log('thisLevelNodes.length:', thisLevelNodes, thisLevelNodes.length)
       this.checkMaxDeepAndLength(newLevelNodes, thisDeep + 1)

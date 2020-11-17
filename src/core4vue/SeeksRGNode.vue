@@ -23,12 +23,12 @@
       class="rel-node"
     >
       <template v-if="!(graphSetting.hideNodeContentByZoom === true && graphSetting.canvasZoom<40)">
-        <slot v-if="$parent.$slots.node" :node="nodeProps" name="node">
+        <slot :node="nodeProps" name="node">
+          <div v-if="!nodeProps.innerHTML" :style="{'color':(nodeProps.fontColor || graphSetting.defaultNodeFontColor)}" class="c-node-text">
+            <span v-html="getNodeName()" />
+          </div>
+          <div v-else v-html="nodeProps.innerHTML" />
         </slot>
-        <div v-else-if="!nodeProps.innerHTML" :style="{'color':(nodeProps.fontColor || graphSetting.defaultNodeFontColor)}" class="c-node-text">
-          <span v-html="getNodeName()" />
-        </div>
-        <div v-else v-html="nodeProps.innerHTML" />
       </template>
     </div>
   </div>
@@ -87,6 +87,7 @@ export default {
     // }
   },
   created() {
+    // Vue.version
   },
   mounted() {
     this.refreshNodeProperties()
@@ -99,8 +100,8 @@ export default {
   },
   methods: {
     refreshNodeProperties() {
-      // console.log('node 挂载 el:', this.nodeProps.text)
       this.nodeProps.el = this.$refs.seeksRGNode
+      // console.log('node 挂载 el:', this.nodeProps.text, this.nodeProps.el.offsetWidth, this.nodeProps.el.offsetHeight)
       // this.$nextTick(() => {
       //   this.nodeProps.el.offsetWidth = this.$refs.seeksRGNode.offsetWidth
       //   this.nodeProps.el.offsetHeight = this.$refs.seeksRGNode.offsetHeight
@@ -170,6 +171,9 @@ export default {
       this.$parent.onNodeCollapseEvent(this.nodeProps, e)
     },
     onDragStart(e) {
+      if (this.nodeProps.disableDrag) {
+        return
+      }
       this.dragging = true
       this.hovering = false
       SeeksRGUtils.startDrag(e, this.nodeProps, this.onNodeDraged)
@@ -183,7 +187,7 @@ export default {
       }
       if (Math.abs(x) + Math.abs(y) > 6) {
         setTimeout(function() {
-          console.log('delay end dragging', this.dragging)
+          if (window.SeeksGraphDebug) console.log('delay end dragging', this.dragging)
           this.dragging = false
         }.bind(this), 100)
       } else {
@@ -203,12 +207,14 @@ export default {
       if (this.dragging) {
         return
       }
-      this.graphSetting.checkedNodeId = this.nodeProps.id
+      if (!this.nodeProps.disableDefaultClickEffect) {
+        this.graphSetting.checkedNodeId = this.nodeProps.id
+      }
       if (this.onNodeClick) {
         this.onNodeClick(this.nodeProps, e)
       }
     },
-    isAllowShow: function(thisNode, derict) {
+    isAllowShow: function(thisNode) {
       const _r = thisNode.isShow !== false && thisNode.isHide !== true && (!thisNode.lot.parent || this.isAllowShow(thisNode.lot.parent, false) === true)
       // if (derict !== false && _r === false) console.log('be hide node:', thisNode.text)
       return _r
@@ -234,7 +240,7 @@ export default {
     //   //   opacity: 0
     //   // }, { complete: done })
     // },
-    getLightColor(col, amt) {
+    getLightColor(col) {
       // if (this.borderColor !== '') {
       //   return this.borderColor
       // }
@@ -248,7 +254,7 @@ export default {
           parseInt(_s[2] + '' + _s[3], 16),
           parseInt(_s[4] + '' + _s[5], 16)
         ]
-        console.log('getLightColor1:', col, ':', _rgb_arr.join(','))
+        if (window.SeeksGraphDebug) console.log('getLightColor1:', col, ':', _rgb_arr.join(','))
         col = 'rgb(' + _rgb_arr.join(',') + ')'
       }
       var _st = col.substring(col.indexOf('(') + 1)
@@ -261,7 +267,7 @@ export default {
           parseInt(parseInt(_rgb_string[1]) * 0.9),
           parseInt(parseInt(_rgb_string[2]) * 0.9)
         ]
-        console.log('getLightColor2:', col, ':', _rgb_number.join(','))
+        if (window.SeeksGraphDebug) console.log('getLightColor2:', col, ':', _rgb_number.join(','))
         this.borderColor = 'rgb(' + _rgb_number.join(',') + ', 0.3)'
         return this.borderColor
       } else {

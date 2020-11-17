@@ -1,55 +1,109 @@
 <template>
   <div :style="{'margin-left':(graphSetting.viewELSize.width-50)+'px','margin-top':(graphSetting.viewELSize.height-260)/2+'px'}" class="c-mini-toolbar">
-    <div class="c-mb-button" style="margin-top: 0px;" @click="graphSetting.fullscreen = !graphSetting.fullscreen"><i class="el-icon-full-screen" /><span class="c-mb-text">{{ graphSetting.fullscreen?'退出':'全屏' }}</span></div>
-    <div class="c-mb-button" @click="$parent.zoom(20)"><i class="el-icon-zoom-in" /><span class="c-mb-text">放大</span></div>
-    <div style="float:left;margin-top:0px;height:20px;width:40px;border-top:0px;border-bottom:0px;background-color: #ffffff;color: #262626;font-size: 10px;background-color: #efefef;text-align: center;line-height: 20px;" @click="printGraphJsonData">{{ graphSetting.canvasZoom }}%</div>
+    <div class="c-mb-button" style="margin-top: 0px;" @click="graphSetting.fullscreen = !graphSetting.fullscreen">
+      <svg class="icon" aria-hidden="true"><use xlink:href="#icon-resize-"></use></svg>
+      <span class="c-mb-text">{{ graphSetting.fullscreen?'退出':'全屏' }}</span>
+    </div>
+    <div v-if="graphSetting.allowShowZoomMenu" class="c-mb-button" @click="$parent.zoom(20)">
+      <svg class="icon" aria-hidden="true"><use xlink:href="#icon-fangda"></use></svg>
+      <span class="c-mb-text">放大</span>
+    </div>
+    <div v-if="graphSetting.allowShowZoomMenu" style="float:left;margin-top:0px;height:20px;width:40px;border-top:0px;border-bottom:0px;background-color: #ffffff;color: #262626;font-size: 10px;background-color: #efefef;text-align: center;line-height: 20px;" @click="printGraphJsonData">{{ graphSetting.canvasZoom }}%</div>
     <!--<div style="float:left;margin-top:0px;height:20px;width:40px;border-top:0px;border-bottom:0px;background-color: #ffffff;color: #262626;font-size: 10px;background-color: #efefef;text-align: center;line-height: 20px;">{{ hits }}</div>-->
-    <div class="c-mb-button" style="margin-top:0px;" @click="$parent.zoom(-20)"><i class="el-icon-zoom-out" /><span class="c-mb-text">缩小</span></div>
+    <div v-if="graphSetting.allowShowZoomMenu" class="c-mb-button" style="margin-top:0px;" @click="$parent.zoom(-20)">
+      <svg class="icon" aria-hidden="true"><use xlink:href="#icon-suoxiao"></use></svg>
+      <span class="c-mb-text">缩小</span>
+    </div>
     <div v-if="graphSetting.layouts.length > 1" class="c-mb-button">
-      <i class="el-icon-s-help" /><span class="c-mb-text">布局</span>
+      <svg class="icon" aria-hidden="true"><use xlink:href="#icon-yuanquanfenxiang"></use></svg>
+      <span class="c-mb-text">布局</span>
       <div :style="{width:(graphSetting.layouts.length * 70 + 6)+'px','margin-left':(graphSetting.layouts.length * -70 - 7)+'px'}" class="c-mb-child-panel">
         <div v-for="thisLayoutSetting in graphSetting.layouts" :key="thisLayoutSetting.label" class="c-mb-button c-mb-button-c" :class="{'c-mb-button-on':graphSetting.layoutLabel===thisLayoutSetting.label}" style="width: 70px;" @click="switchLayout(thisLayoutSetting)">
-          <i class="el-icon-s-help" /><span class="c-mb-text">{{ thisLayoutSetting.label }}</span>
+          <svg class="icon" aria-hidden="true"><use xlink:href="#icon-yuanquanfenxiang"></use></svg>
+          <span class="c-mb-text">{{ thisLayoutSetting.label }}</span>
         </div>
       </div>
     </div>
     <div v-if="graphSetting.allowSwitchLineShape" class="c-mb-button">
-      <i class="el-icon-s-help" /><span class="c-mb-text">线条</span>
+      <svg class="icon" aria-hidden="true"><use xlink:href="#icon-hj2"></use></svg>
+      <span class="c-mb-text">线条</span>
       <div class="c-mb-child-panel" style="width:256px;margin-left:-257px;">
-        <div :class="{'c-mb-button-on':graphSetting.defaultLineShape===1}" class="c-mb-button c-mb-button-c" style="width: 50px;" @click="graphSetting.defaultLineShape=1"><i class="el-icon-s-help" /><span class="c-mb-text">直线</span></div>
-        <div :class="{'c-mb-button-on':graphSetting.defaultLineShape===2}" class="c-mb-button c-mb-button-c" style="width: 50px;" @click="graphSetting.defaultLineShape=2"><i class="el-icon-s-help" /><span class="c-mb-text">简洁</span></div>
-        <div :class="{'c-mb-button-on':graphSetting.defaultLineShape===6}" class="c-mb-button c-mb-button-c" style="width: 50px;" @click="graphSetting.defaultLineShape=6"><i class="el-icon-s-help" /><span class="c-mb-text">生动</span></div>
-        <div :class="{'c-mb-button-on':graphSetting.defaultLineShape===5}" class="c-mb-button c-mb-button-c" style="width: 50px;" @click="graphSetting.defaultLineShape=5"><i class="el-icon-s-help" /><span class="c-mb-text">鱼尾</span></div>
-        <div :class="{'c-mb-button-on':graphSetting.defaultLineShape===4}" class="c-mb-button c-mb-button-c" style="width: 50px;" @click="graphSetting.defaultLineShape=4"><i class="el-icon-s-help" /><span class="c-mb-text">折线</span></div>
+        <div :class="{'c-mb-button-on':graphSetting.defaultLineShape===1}" class="c-mb-button c-mb-button-c" style="width: 50px;" @click="graphSetting.defaultLineShape=1">
+          <svg class="icon" aria-hidden="true"><use xlink:href="#icon-hj2"></use></svg>
+          <span class="c-mb-text">直线</span>
+        </div>
+        <div :class="{'c-mb-button-on':graphSetting.defaultLineShape===2}" class="c-mb-button c-mb-button-c" style="width: 50px;" @click="graphSetting.defaultLineShape=2">
+          <svg class="icon" aria-hidden="true"><use xlink:href="#icon-lianjieliu"></use></svg>
+          <span class="c-mb-text">简洁</span>
+        </div>
+        <div :class="{'c-mb-button-on':graphSetting.defaultLineShape===6}" class="c-mb-button c-mb-button-c" style="width: 50px;" @click="graphSetting.defaultLineShape=6">
+          <svg class="icon" aria-hidden="true"><use xlink:href="#icon-lianjieliu"></use></svg>
+          <span class="c-mb-text">生动</span>
+        </div>
+        <div :class="{'c-mb-button-on':graphSetting.defaultLineShape===5}" class="c-mb-button c-mb-button-c" style="width: 50px;" @click="graphSetting.defaultLineShape=5">
+          <svg class="icon" aria-hidden="true"><use xlink:href="#icon-lianjieliu"></use></svg>
+          <span class="c-mb-text">鱼尾</span>
+        </div>
+        <div :class="{'c-mb-button-on':graphSetting.defaultLineShape===4}" class="c-mb-button c-mb-button-c" style="width: 50px;" @click="graphSetting.defaultLineShape=4">
+          <svg class="icon" aria-hidden="true"><use xlink:href="#icon-hj2"></use></svg>
+          <span class="c-mb-text">折线</span>
+        </div>
       </div>
     </div>
     <div v-if="graphSetting.allowSwitchJunctionPoint" class="c-mb-button">
-      <i class="el-icon-s-help" /><span class="c-mb-text">连接点</span>
+      <svg class="icon" aria-hidden="true"><use xlink:href="#icon-lianjie_connecting5"></use></svg>
+      <span class="c-mb-text">连接点</span>
       <div class="c-mb-child-panel" style="width:206px;margin-left:-207px;">
-        <div :class="{'c-mb-button-on':graphSetting.defaultJunctionPoint==='border'}" class="c-mb-button c-mb-button-c" style="width: 50px;" @click="graphSetting.defaultJunctionPoint='border'"><i class="el-icon-s-help" /><span class="c-mb-text">边缘</span></div>
-        <div :class="{'c-mb-button-on':graphSetting.defaultJunctionPoint==='ltrb'}" class="c-mb-button c-mb-button-c" style="width: 50px;" @click="graphSetting.defaultJunctionPoint='ltrb'"><i class="el-icon-s-help" /><span class="c-mb-text">四点</span></div>
-        <div :class="{'c-mb-button-on':graphSetting.defaultJunctionPoint==='tb'}" class="c-mb-button c-mb-button-c" style="width: 50px;" @click="graphSetting.defaultJunctionPoint='tb'"><i class="el-icon-s-help" /><span class="c-mb-text">上下</span></div>
-        <div :class="{'c-mb-button-on':graphSetting.defaultJunctionPoint==='lr'}" class="c-mb-button c-mb-button-c" style="width: 50px;" @click="graphSetting.defaultJunctionPoint='lr'"><i class="el-icon-s-help" /><span class="c-mb-text">左右</span></div>
+        <div :class="{'c-mb-button-on':graphSetting.defaultJunctionPoint==='border'}" class="c-mb-button c-mb-button-c" style="width: 50px;" @click="graphSetting.defaultJunctionPoint='border'">
+          <svg class="icon" aria-hidden="true"><use xlink:href="#icon-lianjie_connecting5"></use></svg>
+          <span class="c-mb-text">边缘</span>
+        </div>
+        <div :class="{'c-mb-button-on':graphSetting.defaultJunctionPoint==='ltrb'}" class="c-mb-button c-mb-button-c" style="width: 50px;" @click="graphSetting.defaultJunctionPoint='ltrb'">
+          <svg class="icon" aria-hidden="true"><use xlink:href="#icon-lianjie_connecting5"></use></svg>
+          <span class="c-mb-text">四点</span>
+        </div>
+        <div :class="{'c-mb-button-on':graphSetting.defaultJunctionPoint==='tb'}" class="c-mb-button c-mb-button-c" style="width: 50px;" @click="graphSetting.defaultJunctionPoint='tb'">
+          <svg class="icon" aria-hidden="true"><use xlink:href="#icon-lianjie_connecting5"></use></svg>
+          <span class="c-mb-text">上下</span>
+        </div>
+        <div :class="{'c-mb-button-on':graphSetting.defaultJunctionPoint==='lr'}" class="c-mb-button c-mb-button-c" style="width: 50px;" @click="graphSetting.defaultJunctionPoint='lr'">
+          <svg class="icon" aria-hidden="true"><use xlink:href="#icon-lianjie_connecting5"></use></svg>
+          <span class="c-mb-text">左右</span>
+        </div>
       </div>
     </div>
     <div v-if="graphSetting.isNeedShowAutoLayoutButton" :title="graphSetting.autoLayouting?'点击停止自动布局':'点击开始自动调整布局'" :class="{'c-mb-button-on':graphSetting.autoLayouting}" class="c-mb-button" @click="toggleAutoLayout">
-      <i v-if="!graphSetting.autoLayouting" class="el-icon-magic-stick" />
-      <i v-else class="el-icon-loading" />
+      <svg v-if="!graphSetting.autoLayouting" class="icon" aria-hidden="true"><use xlink:href="#icon-zidong"></use></svg>
+      <svg v-else class="c-loading-icon icon" aria-hidden="true"><use xlink:href="#icon-lianjiezhong"></use></svg>
       <span class="c-mb-text">自动</span>
     </div>
-    <div class="c-mb-button" @click="refresh"><i class="el-icon-refresh" /><span class="c-mb-text">刷新</span></div>
+    <div class="c-mb-button" @click="refresh">
+      <svg class="icon" aria-hidden="true"><use xlink:href="#icon-ico_reset"></use></svg>
+      <span class="c-mb-text">刷新</span>
+    </div>
     <div class="c-mb-button">
-      <i class="el-icon-download" /><span class="c-mb-text">下载</span>
+      <svg class="icon" aria-hidden="true"><use xlink:href="#icon-ziyuan"></use></svg>
+      <span class="c-mb-text">下载</span>
       <div :style="{width:downloadPanelWidth+'px','margin-left':(downloadPanelWidth*-1-1)+'px'}" class="c-mb-child-panel">
-        <div class="c-mb-button c-mb-button-c" style="width: 50px;" @click="$parent.downloadAsImage('png')"><i class="el-icon-picture-outline" /><span class="c-mb-text">PNG</span></div>
-        <div class="c-mb-button c-mb-button-c" style="width: 50px;" @click="$parent.downloadAsImage('jpg')"><i class="el-icon-picture-outline" /><span class="c-mb-text">JPG</span></div>
-        <div v-if="typeof $parent.onDownloadExcel === 'function'" class="c-mb-button c-mb-button-c" style="width: 50px;" @click="$parent.onDownloadExcel()"><i class="el-icon-s-grid" /><span class="c-mb-text">Excel</span></div>
+        <div class="c-mb-button c-mb-button-c" style="width: 50px;" @click="$parent.downloadAsImage('png')">
+          <svg class="icon" aria-hidden="true"><use xlink:href="#icon-tupian"></use></svg>
+          <span class="c-mb-text">PNG</span>
+        </div>
+        <div class="c-mb-button c-mb-button-c" style="width: 50px;" @click="$parent.downloadAsImage('jpg')">
+          <svg class="icon" aria-hidden="true"><use xlink:href="#icon-tupian"></use></svg>
+          <span class="c-mb-text">JPG</span>
+        </div>
+        <div v-if="typeof $parent.onDownloadExcel === 'function'" class="c-mb-button c-mb-button-c" style="width: 50px;" @click="$parent.onDownloadExcel()">
+          <svg class="icon" aria-hidden="true"><use xlink:href="#icon-ziyuan"></use></svg>
+          <span class="c-mb-text">Excel</span>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import './core4vue/SeeksGraphIconfont'
 import SeeksRGLayouters from './core4vue/SeeksRGLayouters'
 export default {
   name: 'GraphMiniToolBar',
@@ -87,7 +141,7 @@ export default {
       this.$parent.refresh()
     },
     switchLayout(layoutConfig) {
-      console.log('change layout:', layoutConfig)
+      if (window.SeeksGraphDebug) console.log('change layout:', layoutConfig)
       SeeksRGLayouters.switchLayout(layoutConfig, this.graphSetting)
       this.refresh()
     },
@@ -108,12 +162,12 @@ export default {
         }
       }
     },
-    printGraphJsonData(e) {
+    printGraphJsonData() {
       this.hits++
       setTimeout(() => {
         if (this.hits > 0) this.hits--
       }, 2000)
-      if (this.hits > 8) {
+      if (this.hits > 5) {
         this.hits = 0
         this.$parent.printGraphJsonData()
       }
@@ -123,8 +177,15 @@ export default {
 </script>
 
 <style scoped>
+  .icon {
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.15em;
+    fill: currentColor;
+    overflow: hidden;
+  }
   .c-mini-toolbar{
-    width:42px;
+    width:44px;
     position: absolute;
     margin-top:170px;
     margin-right:10px;
@@ -132,14 +193,15 @@ export default {
     border: #bbbbbb solid 1px;
     background-color: #ffffff;
     box-shadow: 0px 0px 8px #cccccc;
+    box-sizing:border-box;
   }
   .c-fixedLayout{
     position: fixed;
     top:100px;
   }
   .c-mb-button{
-    height:40px;
-    width:40px;
+    height:44px;
+    width:42px;
     margin-top:0px;
     background-color: #ffffff;
     border-top: #efefef solid 1px;
@@ -150,43 +212,45 @@ export default {
     color: #999999;
     font-size: 18px;
     float: left;
+    box-sizing:border-box;
+    line-height: 21px;
   }
   .c-mb-button .c-mb-text{
     display: inline-block;
     height:14px;
-    width:40px;
+    width:42px;
     font-size: 12px;
     line-height: 12px;
-    margin-top:20px;
+    margin-top:24px;
     margin-left:-28px;
     position: absolute;
     color: #262626;
   }
   .c-mb-button-on{
     background-color: #2E74B5;
-    border: #2E4E8F solid 1px;
+    border-top: #2E4E8F solid 1px;
     color: #ffffff;
   }
   .c-mb-button:hover{
     background-color: #2E4E8F;
-    border: #2E4E8F solid 1px;
+    border-top: #2E4E8F solid 1px;
     color: #ffffff;
   }
   .c-mb-button:hover .c-mb-text,.c-mb-button-on .c-mb-text{
     color: #ffffff;
   }
   .c-mb-button .c-mb-child-panel{
-    height:40px;position: absolute;margin-top: -24px;background-color: #ffffff;
-    border: #DEDEDE solid 1px;
+    height:46px;position: absolute;margin-top: -26px;background-color: #ffffff;
     display: none;
     border: #bbbbbb solid 1px;
     box-shadow: 0px 0px 8px #cccccc;
+    box-sizing:border-box;
   }
   .c-mb-button:hover .c-mb-child-panel{
     display: block;
   }
   .c-mb-button .c-mb-button{
-    height:38px;
+    height:44px;
     width: 42px;
     margin:0px;
     border: none;
@@ -196,5 +260,15 @@ export default {
   }
   .c-mb-button-c:hover .c-mb-text,.c-mb-button-on .c-mb-text{
     color: #ffffff !important;
+  }
+  .c-loading-icon{
+    animation:turn 1s linear infinite;
+  }
+  @keyframes turn{
+    0%{-webkit-transform:rotate(0deg);}
+    25%{-webkit-transform:rotate(90deg);}
+    50%{-webkit-transform:rotate(180deg);}
+    75%{-webkit-transform:rotate(270deg);}
+    100%{-webkit-transform:rotate(360deg);}
   }
 </style>

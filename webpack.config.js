@@ -1,19 +1,22 @@
 const webpack = require('webpack')
 const path = require('path')
 const { merge } = require('webpack-merge')
-
+// var VueLoaderPlugin = require('vue-loader/lib/plugin');
 module.exports = merge({
   // devtool: 'source-map',
   entry: {
-    'relation-graph': ['babel-polyfill', './src/index.js']
+    'relation-graph': ['./src/index.js']
+    // 'relation-graph': ['babel-polyfill', './src/index.js']
   },
   output: {
     path: path.resolve(__dirname, './dist'),
     filename: 'relation-graph.min.js',
     publicPath: '/dist/',
     library: 'relation-graph',
+    libraryExport: 'default',
     libraryTarget: 'umd',
-    umdNamedDefine: true
+    umdNamedDefine: true,
+    // globalObject: 'typeof self !== \'undefined\' ? self : this'
   },
   externals: {
     vue: {
@@ -27,6 +30,18 @@ module.exports = merge({
       commonjs: 'vuex',
       commonjs2: 'vuex',
       amd: 'vuex'
+    },
+    html2canvas: {
+      root: 'html2canvas',
+      commonjs: 'html2canvas',
+      commonjs2: 'html2canvas',
+      amd: 'html2canvas'
+    },
+    screenfull: {
+      root: 'screenfull',
+      commonjs: 'screenfull',
+      commonjs2: 'screenfull',
+      amd: 'screenfull'
     }
   },
   resolve: {
@@ -57,6 +72,9 @@ module.exports = merge({
         'autoprefixer-loader'
       ]
     }, {
+      test: /\.less$/,
+      loader: 'style-loader!css-loader!less-loader'
+    }, {
       test: /\.(gif|jpg|png|woff|svg|eot|ttf)\??.*$/,
       loader: 'url-loader?limit=8192'
     }]
@@ -66,6 +84,7 @@ module.exports = merge({
   ]
 }, {
   plugins: [
+    // new VueLoaderPlugin(),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: '"production"'

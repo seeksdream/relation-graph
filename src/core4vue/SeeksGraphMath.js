@@ -84,7 +84,7 @@ var SeeksGraphMath = {
       return { x: x1 - 5, y: y1 + n1h / 2 }
     }
   },
-  getRectHJoinPoint: function(x1, y1, x2, y2, n1w, n1h, n2w, n2h) {
+  getRectHJoinPoint: function(x1, y1, x2, y2, n1w, n1h, n2w) {
     var _hH = n1h / 2
     // var _hW = n1w / 2
     if ((x1 + n1w) < x2) {
@@ -186,7 +186,7 @@ var SeeksGraphMath = {
     // alert(this.h+","+this.s+","+this.c+","+this.l+","+this.v+","+this.t);
     return { x: tx + this.v, y: ty + this.t }
   },
-  getCirclePointPlus: function(x1, y1, x2, y2, n1w, n1h, n2w, n2h, radius) {
+  getCirclePointPlus: function(x1, y1, x2, y2, n1w, n1h, n2w, n2h) {
     var fx = x1 + n1w / 2
     var fy = y1 + n1h / 2
     var tx = x2 + n2w / 2
@@ -236,7 +236,7 @@ var SeeksGraphMath = {
     // if (tan > 90 && tan < 270) {
     //   tan = 0
     // }
-    return tan
+    return parseInt(tan)
   },
   getTreePointFromTop: function(c_x, c_y, c_height, c_i, c_n, sizehelper) {
     if (!c_x) { // if root
@@ -344,7 +344,7 @@ var SeeksGraphMath = {
     if (__thisLOT_subling.all_strength > analyticResult.max_strength) {
       analyticResult.max_strength = __thisLOT_subling.all_strength
     }
-    console.log(thisDeep, 'next level nodes:', newLevelNodes.length)
+    // console.log(thisDeep, 'next level nodes:', newLevelNodes.length)
     if (newLevelNodes.length > 0) {
       // console.log('thisLevelNodes.length:', thisLevelNodes, thisLevelNodes.length)
       this.analysisNodes(willLayoutNodes, newLevelNodes, thisDeep + 1, analyticResult, config)
@@ -469,7 +469,7 @@ var SeeksGraphMath = {
     if (__thisLOT_subling.all_strength > analyticResult.max_strength) {
       analyticResult.max_strength = __thisLOT_subling.all_strength
     }
-    console.log(thisDeep, 'next level nodes:', newLevelNodes.length)
+    // console.log(thisDeep, 'next level nodes:', newLevelNodes.length)
     if (newLevelNodes.length > 0) {
       // console.log('thisLevelNodes.length:', thisLevelNodes, thisLevelNodes.length)
       SeeksGraphMath.analysisNodes4Didirectional(willLayoutNodes, newLevelNodes, thisDeep + (levelDirect === -1 ? -1 : 1), analyticResult, levelDirect)
@@ -516,7 +516,7 @@ var SeeksGraphMath = {
         currentLevelStrengthWidthChilds += thisNode.lot.strengthWithChilds
       }
     })
-    console.log(thisDeep, 'next level nodes:', newLevelNodes.length)
+    // console.log(thisDeep, 'next level nodes:', newLevelNodes.length)
     if (newLevelNodes.length > 0) {
       this.analysisDataTree(newLevelNodes, thisDeep + levelDirect, levelDirect)
     }
@@ -533,7 +533,7 @@ var SeeksGraphMath = {
   //     return _sum
   //   }
   // },
-  isAllowShowNode: function(thisNode, derict) {
+  isAllowShowNode: function(thisNode) {
     const _r = thisNode.isShow !== false && thisNode.isHide !== true && (!thisNode.lot.parent || this.isAllowShowNode(thisNode.lot.parent, false) === true)
     // if (derict !== false && _r === false) console.log('hide node by:', thisNode.isShow !== false, thisNode.isHide !== true)
     return _r

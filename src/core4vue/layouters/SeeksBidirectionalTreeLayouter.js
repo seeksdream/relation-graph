@@ -95,7 +95,7 @@ function SeeksBidirectionalTreeLayouter(layoutSetting, graphSetting) {
     if (__thisLOT_subling.all_strength > analyticResult.max_strength) {
       analyticResult.max_strength = __thisLOT_subling.all_strength
     }
-    console.log(thisDeep, 'next level nodes:', newLevelNodes.length)
+    // console.log(thisDeep, 'next level nodes:', newLevelNodes.length)
     if (newLevelNodes.length > 0) {
       // console.log('thisLevelNodes.length:', thisLevelNodes, thisLevelNodes.length)
       this.analysisNodes4Didirectional(willLayoutNodes, newLevelNodes, thisDeep + levelDirect, analyticResult, levelDirect)
@@ -183,7 +183,6 @@ function SeeksBidirectionalTreeLayouter(layoutSetting, graphSetting) {
     //     this.graphSetting.viewSize.height = analyticResult.max_deep * 500 + 300
     //   }
     // }
-    // this.graphSetting.resetViewSize(this.graphSetting)
     // this.graphSetting.canvasOffset.x = this.graphSetting.viewNVInfo.width / 2 - 100
     // this.graphSetting.canvasOffset.y = this.graphSetting.viewNVInfo.height / 2 - 100
   }
@@ -195,9 +194,9 @@ function SeeksBidirectionalTreeLayouter(layoutSetting, graphSetting) {
     // this.graphSetting.canvasOffset.y = 0
     var __offsetX = rootNode.offset_x || 0
     var __offsetY = rootNode.offset_y || 0
-    console.log('#############Seeks graph viewSize:Tree layout:', this.graphSetting.viewSize.width, this.graphSetting.viewSize.height)
-    console.log('[layout canvasOffset]', __mapHeight, this.graphSetting, this.graphSetting.canvasSize, this.config)
-    console.log('[Layout:AnalyticResult]', analyticResult)
+    // console.log('#############Seeks graph viewSize:Tree layout:', this.graphSetting.viewSize.width, this.graphSetting.viewSize.height)
+    // console.log('[layout canvasOffset]', __mapHeight, this.graphSetting, this.graphSetting.canvasSize, this.config)
+    // console.log('[Layout:AnalyticResult]', analyticResult)
     if (rootNode.fixed !== true) {
       var _center_offset_x = parseInt(this.config.centerOffset_x) || 0
       var _center_offset_y = parseInt(this.config.centerOffset_y) || 0

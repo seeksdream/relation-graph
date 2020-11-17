@@ -14,7 +14,7 @@ function SeeksAutoLayouter(layoutSetting, graphSetting) {
       console.log('root is null:', rootNode)
       return
     } else {
-      console.log('layout by root:', rootNode)
+      if (window.SeeksGraphDebug) console.log('layout by root:', rootNode)
     }
     this.__origin_nodes = allNodes
     this.rootNode = rootNode
@@ -42,7 +42,7 @@ function SeeksAutoLayouter(layoutSetting, graphSetting) {
     //   var __suitableHeight = analyticResult.max_deep * 2 * 300 + 500
     //   this.graphSetting.viewSize.height = __suitableHeight
     // }
-    console.log('调整画布大小')
+    if (window.SeeksGraphDebug) console.log('调整画布大小')
     // var __per_width = parseInt((__mapWidth - 10) / (analyticResult.max_deep + 2))
     // var __per_height = parseInt((__mapHeight - 10) / (analyticResult.max_length + 1))
     // console.log('per:', __per_width, __per_height)
@@ -65,7 +65,7 @@ function SeeksAutoLayouter(layoutSetting, graphSetting) {
     // if (this.rootNode.lot.y > 400) {
     //   this.rootNode.lot.y = 400
     // }
-    console.log('[layout canvasOffset]', this.graphSetting.viewSize, this.graphSetting.canvasSize)
+    if (window.SeeksGraphDebug) console.log('[layout canvasOffset]', this.graphSetting.viewSize, this.graphSetting.canvasSize)
     this.placeRelativePosition(this.rootNode)
     this.allNodes.forEach(thisNode => {
       if (thisNode.fixed === true) return
@@ -96,7 +96,7 @@ function SeeksAutoLayouter(layoutSetting, graphSetting) {
     //     })
     //   }
     // })
-    console.log('Start Auto Layout.....')
+    if (window.SeeksGraphDebug) console.log('Start Auto Layout.....')
     this.autoLayout(true)
     // console.log('layout from root:', analyticResult.max_deep, analyticResult.max_length)
     // rootNode.x = (this.graphSetting.canvasSize.width - this.graphSetting.nodeSize.width) / 2
@@ -137,7 +137,7 @@ function SeeksAutoLayouter(layoutSetting, graphSetting) {
     if (forceLayout) {
       this.layoutTimes = 0
     }
-    console.log('this.layoutTimes:', this.layoutTimes)
+    if (window.SeeksGraphDebug) console.log('this.layoutTimes:', this.layoutTimes)
     if (this.layoutTimes > 300) {
       this.graphSetting.autoLayouting = false
       return
@@ -232,7 +232,7 @@ function SeeksAutoLayouter(layoutSetting, graphSetting) {
     if (level < 0)level = 0
     return (8 - level) / 8
   }
-  this.addFtoNode = function(node, x, y, type) {
+  this.addFtoNode = function(node, x, y) {
     // console.log('Add F:', node.text, type, parseInt(x), parseInt(y))
     if (isNaN(x) || isNaN(y)) {
       return

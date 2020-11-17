@@ -39,7 +39,6 @@ export default {
   }
 }
 </script>
-
 <style scoped>
   .c-mini-namefilter{
     height:60px;

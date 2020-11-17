@@ -19,7 +19,7 @@ var SeeksRGUtils = {
     __tmp_positionModel.x = e.clientX + __tmp_basePosition.x
     __tmp_positionModel.y = e.clientY + __tmp_basePosition.y
   },
-  onNodeDragend(e) {
+  onNodeDragend() {
     // console.log('onNodeDragend', __tmp_positionModel.x - __start_info.x, __tmp_positionModel.y - __start_info.y)
     document.body.removeEventListener('mousemove', SeeksRGUtils.onNodeMove)
     document.body.removeEventListener('mouseup', SeeksRGUtils.onNodeDragend)
@@ -27,7 +27,7 @@ var SeeksRGUtils = {
       __ondraged(__tmp_positionModel.x - __start_info.x, __tmp_positionModel.y - __start_info.y)
     }
   },
-  transName4Circle(name, width) {
+  transName4Circle(name) {
     var _thisLevel = 0
     var _thisLevelCharsArr = []
     var result = []
@@ -61,62 +61,73 @@ var SeeksRGUtils = {
     return color
   }
 }
-SeeksRGUtils.json2Node = function(jsonData) {
-  if (jsonData.id === undefined) throw Error('node must has option[id]:', jsonData)
-  if (jsonData.text === undefined) jsonData.text = jsonData.name || ''
-  if (jsonData.type === undefined) jsonData.type = 'node'
-  if (jsonData.isShow === undefined) jsonData.isShow = true // 通过此属性被隐藏后其子节点也将被隐藏
-  if (jsonData.isHide === undefined) jsonData.isHide = false // 通过此属性被隐藏后其子节点不受影响
-  if (jsonData.expanded === undefined) jsonData.expanded = true
-  if (jsonData.selected === undefined) jsonData.selected = false
-  if (jsonData.styleClass === undefined) jsonData.styleClass = ''
-  if (jsonData.targetNodes === undefined) jsonData.targetNodes = []
-  if (jsonData.targetFrom === undefined) jsonData.targetFrom = []
-  if (jsonData.targetTo === undefined) jsonData.targetTo = []
-  if (jsonData.nodeShape === undefined) jsonData.nodeShape = undefined
-  if (jsonData.borderWidth === undefined) jsonData.borderWidth = undefined
-  if (jsonData.borderColor === undefined) jsonData.borderColor = undefined
-  if (jsonData.fontColor === undefined) jsonData.fontColor = undefined
-  if (jsonData.color === undefined) jsonData.color = undefined
-  if (jsonData.opacity === undefined) jsonData.opacity = 1
-  if (jsonData.fixed === undefined) jsonData.fixed = false
-  if (jsonData.x === undefined) jsonData.x = 0
-  if (jsonData.y === undefined) jsonData.y = 0
-  if (jsonData.Fx === undefined) jsonData.Fx = 0
-  if (jsonData.Fy === undefined) jsonData.Fy = 0
-  if (jsonData.lot === undefined) jsonData.lot = { childs: [], parent: undefined, eached: false, strength: 0 }
-  if (jsonData.lot.childs === undefined) jsonData.lot.childs = []
-  if (jsonData.lot.parent === undefined) jsonData.lot.parent = undefined
-  if (jsonData.lot.eached === undefined) jsonData.lot.eached = false
-  if (jsonData.lot.strength === undefined) jsonData.lot.strength = 0
-  if (jsonData.el === undefined) jsonData.el = { offsetWidth: 50, offsetHeight: 50 }
-  if (jsonData.width !== undefined) jsonData.el.offsetWidth = jsonData.width
-  if (jsonData.height !== undefined) jsonData.el.offsetHeight = jsonData.height
-  if (jsonData.offset_x === undefined) jsonData.offset_x = 0
-  if (jsonData.offset_y === undefined) jsonData.offset_y = 0
-  if (jsonData.expandHolderPosition === undefined) jsonData.expandHolderPosition = undefined
-  if (jsonData.innerHTML === undefined) jsonData.innerHTML = undefined
-  if (jsonData.html === undefined) jsonData.html = undefined
+SeeksRGUtils.json2Node = function(originData) {
+  if (originData.id === undefined) throw Error('node must has option[id]:', originData)
+  originData.text = originData.text || originData.name || originData.id
+  var jsonData = {
+    id: originData.id,
+    text: originData.text !== undefined ? originData.text : '',
+    type: originData.type !== undefined ? originData.type : 'node',
+    isShow: originData.isShow !== undefined ? originData.isShow : true,
+    isHide: originData.isHide !== undefined ? originData.isHide : false,
+    expanded: originData.expanded !== undefined ? originData.expanded : true,
+    selected: originData.selected !== undefined ? originData.selected : false,
+    styleClass: originData.styleClass !== undefined ? originData.styleClass : '',
+    targetNodes: originData.targetNodes !== undefined ? originData.targetNodes : [],
+    targetFrom: originData.targetFrom !== undefined ? originData.targetFrom : [],
+    targetTo: originData.targetTo !== undefined ? originData.targetTo : [],
+    nodeShape: originData.nodeShape !== undefined ? originData.nodeShape : undefined,
+    borderWidth: originData.borderWidth !== undefined ? originData.borderWidth : undefined,
+    borderColor: originData.borderColor !== undefined ? originData.borderColor : undefined,
+    fontColor: originData.fontColor !== undefined ? originData.fontColor : undefined,
+    color: originData.color !== undefined ? originData.color : undefined,
+    opacity: originData.opacity !== undefined ? originData.opacity : 1,
+    fixed: originData.fixed !== undefined ? originData.fixed : false,
+    width: originData.width !== undefined ? originData.width : undefined,
+    height: originData.height !== undefined ? originData.height : undefined,
+    x: originData.x !== undefined ? originData.x : 0,
+    y: originData.y !== undefined ? originData.y : 0,
+    Fx: originData.Fx !== undefined ? originData.Fx : 0,
+    Fy: originData.Fy !== undefined ? originData.Fy : 0,
+    offset_x: originData.offset_x !== undefined ? originData.offset_x : 0,
+    offset_y: originData.offset_y !== undefined ? originData.offset_y : 0,
+    expandHolderPosition: originData.expandHolderPosition !== undefined ? originData.expandHolderPosition : undefined,
+    innerHTML: originData.innerHTML !== undefined ? originData.innerHTML : undefined,
+    html: originData.html !== undefined ? originData.html : undefined,
+    disableDefaultClickEffect: originData.disableDefaultClickEffect !== undefined ? originData.disableDefaultClickEffect : undefined,
+    disableDrag: originData.disableDrag !== undefined ? originData.disableDrag : false,
+    data: originData.data !== undefined ? originData.data : {}
+  }
+  if(jsonData.lot === undefined) jsonData.lot = { childs: [], parent: undefined, eached: false, strength: 0 }
+  if(jsonData.lot.childs === undefined) jsonData.lot.childs = []
+  if(jsonData.lot.parent === undefined) jsonData.lot.parent = undefined
+  if(jsonData.lot.eached === undefined) jsonData.lot.eached = false
+  if(jsonData.lot.strength === undefined) jsonData.lot.strength = 0
+  if(jsonData.el === undefined) jsonData.el = { offsetWidth: 50, offsetHeight: 50 }
+  if(jsonData.width !== undefined) jsonData.el.offsetWidth = jsonData.width
+  if(jsonData.height !== undefined) jsonData.el.offsetHeight = jsonData.height
   return jsonData
 }
-SeeksRGUtils.json2Link = function(jsonData) {
-  if (jsonData.from === undefined) throw Error('error,link must has option[from]:', jsonData)
-  if (jsonData.to === undefined) throw Error('error,link must has option[to]:', jsonData)
-  if (typeof jsonData.from !== 'string') throw Error('error link from, must be string:', jsonData)
-  if (typeof jsonData.to !== 'string') throw Error('error link to, must be string:', jsonData)
-  if (jsonData.text === undefined) jsonData.text = ''
-  if (jsonData.color === undefined) jsonData.color = undefined
-  if (jsonData.fontColor === undefined) jsonData.fontColor = undefined
-  if (jsonData.lineWidth === undefined) jsonData.lineWidth = undefined
-  if (jsonData.lineShape === undefined) jsonData.lineShape = undefined
-  if (jsonData.styleClass === undefined) jsonData.styleClass = undefined
-  if (jsonData.isHide === undefined) jsonData.isHide = false
-  if (jsonData.arrow === undefined) jsonData.arrow = undefined
-  if (jsonData.isHideArrow === undefined) jsonData.isHideArrow = undefined
-  if (jsonData.hidden === undefined) jsonData.hidden = false
-  if (jsonData.lineDirection === undefined) jsonData.lineDirection = undefined
-  if (jsonData.reverseText === undefined) jsonData.reverseText = undefined
-  if (jsonData.data === undefined) jsonData.data = {}
+SeeksRGUtils.json2Link = function(originData) {
+  if (originData.from === undefined) throw Error('error,link must has option[from]:', originData)
+  if (originData.to === undefined) throw Error('error,link must has option[to]:', originData)
+  if (typeof originData.from !== 'string') throw Error('error link from, must be string:', originData)
+  if (typeof originData.to !== 'string') throw Error('error link to, must be string:', originData)
+  var jsonData = {
+    text: originData.text !== undefined ? originData.text : '',
+    color: originData.color !== undefined ? originData.color : undefined,
+    fontColor: originData.fontColor !== undefined ? originData.fontColor : undefined,
+    lineWidth: originData.lineWidth !== undefined ? originData.lineWidth : undefined,
+    lineShape: originData.lineShape !== undefined ? originData.lineShape : undefined,
+    styleClass: originData.styleClass !== undefined ? originData.styleClass : undefined,
+    isHide: originData.isHide !== undefined ? originData.isHide : false,
+    arrow: originData.arrow !== undefined ? originData.arrow : undefined,
+    isHideArrow: originData.isHideArrow !== undefined ? originData.isHideArrow : undefined,
+    hidden: originData.hidden !== undefined ? originData.hidden : false,
+    lineDirection: originData.lineDirection !== undefined ? originData.lineDirection : undefined,
+    reverseText: originData.reverseText !== undefined ? originData.reverseText : undefined,
+    data: originData.data !== undefined ? originData.data : {},
+  }
   return jsonData
 }
 
@@ -125,6 +136,34 @@ SeeksRGUtils.getPosition = function(el) {
     return SeeksRGUtils.getPosition(el.parentElement) + el.offsetTop
   }
   return el.offsetTop
+}
+var _ignore_node_keys = [ 'Fx', 'Fy', 'appended', 'el', 'targetFrom', 'targetNodes', 'targetTo', 'type', 'lot', 'seeks_id' ]
+SeeksRGUtils.transNodeToJson = function(node, nodes) {
+  if (!node) return
+  var _node_json = {}
+  Object.keys(node).forEach(thisKey => {
+    if (_ignore_node_keys.indexOf(thisKey) === -1) {
+      if (node[thisKey] !== undefined) {
+        _node_json[thisKey] = node[thisKey]
+      }
+    }
+  })
+  nodes.push(_node_json)
+}
+var _ignore_link_keys = [ 'arrow', 'id', 'reverseText', 'isReverse' ]
+SeeksRGUtils.transLineToJson = function(line, links) {
+  if (!line) return
+  line.relations.forEach(thisRelation => {
+    var _link_json = {}
+    Object.keys(thisRelation).forEach(thisKey => {
+      if (_ignore_link_keys.indexOf(thisKey) === -1) {
+        if (thisRelation[thisKey] !== undefined) {
+          _link_json[thisKey] = thisRelation[thisKey]
+        }
+      }
+    })
+    links.push(_link_json)
+  })
 }
 var circle_node_text_set = [4, 5, 6, 4, 2, 100]
 export default SeeksRGUtils

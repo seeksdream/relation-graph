@@ -7,16 +7,16 @@ function SeeksCenterLayouter(layoutSetting, graphSetting) {
   this.allNodes = []
   this.__origin_nodes = []
   this.refresh = function() {
-    console.log('SeeksCenterLayouter:refresh')
+    if (window.SeeksGraphDebug) console.log('SeeksCenterLayouter:refresh')
     this.placeNodes(this.__origin_nodes, this.rootNode)
   }
   this.placeNodes = function(allNodes, rootNode) {
-    console.log('SeeksCenterLayouter:placeNodes')
+    if (window.SeeksGraphDebug) console.log('SeeksCenterLayouter:placeNodes')
     if (!rootNode) {
       console.log('root is null:', rootNode)
       return
     } else {
-      console.log('layout by root:', rootNode)
+      if (window.SeeksGraphDebug) console.log('layout by root:', rootNode)
     }
     this.__origin_nodes = allNodes
     this.rootNode = rootNode
@@ -44,7 +44,7 @@ function SeeksCenterLayouter(layoutSetting, graphSetting) {
     //   var __suitableHeight = analyticResult.max_deep * 2 * 300 + 500
     //   this.graphSetting.viewSize.height = __suitableHeight
     // }
-    console.log('调整画布大小')
+    if (window.SeeksGraphDebug) console.log('调整画布大小')
     // var __per_width = parseInt((__mapWidth - 10) / (analyticResult.max_deep + 2))
     // var __per_height = parseInt((__mapHeight - 10) / (analyticResult.max_length + 1))
     // console.log('per:', __per_width, __per_height)
@@ -67,7 +67,7 @@ function SeeksCenterLayouter(layoutSetting, graphSetting) {
     // if (this.rootNode.lot.y > 400) {
     //   this.rootNode.lot.y = 400
     // }
-    console.log('[layout canvasOffset]', this.graphSetting.viewSize, this.graphSetting.canvasSize)
+    // console.log('[layout canvasOffset]', this.graphSetting.viewSize, this.graphSetting.canvasSize)
     this.placeRelativePosition(this.rootNode)
     this.allNodes.forEach(thisNode => {
       if (thisNode.fixed === true) return
@@ -236,7 +236,7 @@ function SeeksCenterLayouter(layoutSetting, graphSetting) {
     if (level < 0)level = 0
     return (8 - level) / 8
   }
-  this.addFtoNode = function(node, x, y, type) {
+  this.addFtoNode = function(node, x, y) {
     // console.log('Add F:', node.text, type, parseInt(x), parseInt(y))
     if (isNaN(x) || isNaN(y)) {
       return
