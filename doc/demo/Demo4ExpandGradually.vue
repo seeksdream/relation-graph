@@ -5,7 +5,7 @@
       </SeeksRelationGraph>
     </div>
     <el-button type="success" class="c-show-code-button">
-      <el-link href="https://github.com/seeksdream/relation-graph/blob/master/doc/demo/Demo4Expand.vue" target="_blank" style="color: #ffffff;">查看代码
+      <el-link href="https://github.com/seeksdream/relation-graph/blob/master/doc/demo/Demo4ExpandGradually.vue" target="_blank" style="color: #ffffff;">查看代码
       </el-link>
     </el-button>
   </div>

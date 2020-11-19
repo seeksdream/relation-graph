@@ -81,9 +81,9 @@ import SeeksRelationGraph from 'relation-graph'
             {'id': 'b2-1','text': 'b2-1'},
             {'id': 'b2-2', 'text': 'b2-2'},
             {'id': 'c', 'text': 'c-动态数据展开/关闭'},
-            {'id': 'c1', 'text': 'c1-动态获取子节点', expandHolderPosition: 'right', expanded: false, isNeedLoadDataFromRemoteServer: true },
-            {'id': 'c2', 'text': 'c2-动态获取子节点', expandHolderPosition: 'right', expanded: false, isNeedLoadDataFromRemoteServer: true },
-            {'id': 'c3','text': 'c3-动态获取子节点', expandHolderPosition: 'right', expanded: false, isNeedLoadDataFromRemoteServer: true }],
+            {'id': 'c1', 'text': 'c1-动态获取子节点', expandHolderPosition: 'right', expanded: false, data: { isNeedLoadDataFromRemoteServer: true, childrenLoaded: false } },
+            {'id': 'c2', 'text': 'c2-动态获取子节点', expandHolderPosition: 'right', expanded: false, data: { isNeedLoadDataFromRemoteServer: true, childrenLoaded: false } },
+            {'id': 'c3','text': 'c3-动态获取子节点', expandHolderPosition: 'right', expanded: false, data: { isNeedLoadDataFromRemoteServer: true, childrenLoaded: false } }],
           'links': [
             {'from': 'a', 'to': 'b'},
             {'from': 'b', 'to': 'b1'},
@@ -117,19 +117,19 @@ import SeeksRelationGraph from 'relation-graph'
       onNodeExpand(node, e) {
         console.log('onNodeExpand:', node)
         // 根据具体的业务需要决定是否需要从后台加载数据
-        if (!node.isNeedLoadDataFromRemoteServer) {
+        if (!node.data.isNeedLoadDataFromRemoteServer) {
           console.log('这个节点的子节点已经加载过了')
           this.$refs.seeksRelationGraph.refresh()
           return
         }
         //判断是否已经动态加载数据了
-        if (node.childrenLoaded) {
+        if (node.data.childrenLoaded) {
           console.log('这个节点的子节点已经加载过了')
           this.$refs.seeksRelationGraph.refresh()
           return
         }
         this.g_loading = true
-        node.childrenLoaded = true
+        node.data.childrenLoaded = true
         this.loadChildNodesFromRemoteServer(node, new_data => {
           this.g_loading = false
           this.$refs.seeksRelationGraph.appendJsonData(new_data, (seeksRGGraph) => {

@@ -1,13 +1,13 @@
 <template>
   <div>
-    <div ref="myPage" style="height:calc(100vh - 50px);" @click="isShowNodeMenuPanel = false">
+    <div ref="myPage" style="height:calc(100vh - 50px);">
       <SeeksRelationGraph
         ref="seeksRelationGraph"
         :options="graphOptions"
         :on-node-click="onNodeClick"
         :on-line-click="onLineClick">
-        <div slot="node" slot-scope="{node}">
-          <div style="height:64px;line-height: 64px;border-radius: 32px;cursor: pointer;" @click="showNodeMenus(node, $event)" @contextmenu.prevent.stop="showNodeMenus(node, $event)">
+        <div slot="node" slot-scope="{node}" @mouseover="showNodeTips(node, $event)" @mouseout="hideNodeTips(node, $event)">
+          <div style="height:64px;line-height: 64px;border-radius: 32px;cursor: pointer;">
             <i style="font-size: 30px;" :class="node.data.myicon" />
           </div>
           <div style="color: forestgreen;font-size: 16px;position: absolute;width: 160px;height:25px;line-height: 25px;margin-top:5px;margin-left:-48px;text-align: center;background-color: rgba(66,187,66,0.2);">
@@ -19,14 +19,12 @@
         </div>
       </SeeksRelationGraph>
     </div>
-    <div v-show="isShowNodeMenuPanel" :style="{left: nodeMenuPanelPosition.x + 'px', top: nodeMenuPanelPosition.y + 'px' }" style="z-index: 999;padding:10px;background-color: #ffffff;border:#eeeeee solid 1px;box-shadow: 0px 0px 8px #cccccc;position: absolute;">
-      <div style="line-height: 25px;padding-left: 10px;color: #888888;font-size: 12px;">对这个节点进行操作：</div>
-      <div class="c-node-menu-item" @click.stop="doAction('操作1')">操作1</div>
-      <div class="c-node-menu-item" @click.stop="doAction('操作1')">操作2</div>
-      <div class="c-node-menu-item" @click.stop="doAction('操作1')">操作3</div>
-      <div class="c-node-menu-item" @click.stop="doAction('操作1')">操作4</div>
+    <div v-if="isShowNodeTipsPanel" :style="{left: nodeMenuPanelPosition.x + 'px', top: nodeMenuPanelPosition.y + 'px' }" style="z-index: 999;padding:10px;background-color: #ffffff;border:#eeeeee solid 1px;box-shadow: 0px 0px 8px #cccccc;position: absolute;">
+      <div style="line-height: 25px;padding-left: 10px;color: #888888;font-size: 12px;">节点名称：{{currentNode.text}}</div>
+      <div class="c-node-menu-item">id:{{currentNode.text}}</div>
+      <div class="c-node-menu-item">图标:{{currentNode.data.myicon}}</div>
     </div>
-    <el-button type="success" class="c-show-code-button"><el-link href="https://github.com/seeksdream/relation-graph/blob/master/doc/demo/Demo4AdvSlot.vue" target="_blank" style="color: #ffffff;">查看代码</el-link></el-button>
+    <el-button type="success" class="c-show-code-button"><el-link href="https://github.com/seeksdream/relation-graph/blob/master/doc/demo/Demo4AdvNodeTips.vue" target="_blank" style="color: #ffffff;">查看代码</el-link></el-button>
   </div>
 </template>
 
@@ -38,8 +36,9 @@ export default {
   data() {
     return {
       isShowCodePanel: false,
-      isShowNodeMenuPanel: false,
+      isShowNodeTipsPanel: false,
       nodeMenuPanelPosition: { x: 0, y: 0 },
+      currentNode: {},
       graphOptions: {
         allowSwitchLineShape: true,
         allowSwitchJunctionPoint: true,
@@ -118,21 +117,16 @@ export default {
     onLineClick(lineObject, $event) {
       console.log('onLineClick:', lineObject)
     },
-    showNodeMenus(nodeObject, $event) {
+    showNodeTips(nodeObject, $event) {
       this.currentNode = nodeObject
       var _base_position = this.$refs.myPage.getBoundingClientRect()
       console.log('showNodeMenus:', $event, _base_position)
-      this.isShowNodeMenuPanel = true
-      this.nodeMenuPanelPosition.x = $event.clientX - _base_position.x
-      this.nodeMenuPanelPosition.y = $event.clientY - _base_position.y
+      this.isShowNodeTipsPanel = true
+      this.nodeMenuPanelPosition.x = $event.clientX - _base_position.x + 10
+      this.nodeMenuPanelPosition.y = $event.clientY - _base_position.y + 10
     },
-    doAction(actionName) {
-      this.$notify({
-        title: '提示',
-        message: '对节点【' + this.currentNode.text + '】进行了：' + actionName,
-        type: 'success'
-      })
-      this.isShowNodeMenuPanel = false
+    hideNodeTips(nodeObject, $event) {
+      this.isShowNodeTipsPanel = false
     }
   }
 }
