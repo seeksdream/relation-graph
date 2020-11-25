@@ -1,6 +1,6 @@
 <template>
   <div
-    v-show="isAllowShow(nodeProps)"
+    v-show="isAllowShowNode(nodeProps)"
     ref="seeksRGNode"
     :style="{'left':nodeProps.x + 'px','top':nodeProps.y + 'px', 'opacity': (nodeProps.opacity>1?nodeProps.opacity/100:nodeProps.opacity) }"
     class="rel-node-peel"
@@ -10,9 +10,7 @@
     @click.stop="onclick($event)"
   >
     <div v-if="(nodeProps.expandHolderPosition&&nodeProps.expandHolderPosition!=='hide')||(graphSetting.defaultExpandHolderPosition&&graphSetting.defaultExpandHolderPosition!=='hide'&&nodeProps.lot.childs&&nodeProps.lot.childs.length>0)" :class="[('c-expand-positon-'+(nodeProps.expandHolderPosition||graphSetting.defaultExpandHolderPosition))]" class="c-btn-open-close">
-      <span :style="{'background-color':(nodeProps.color||graphSetting.defaultNodeColor)}">
-        <i v-if="nodeProps.expanded===false" class="el-icon-plus" @click.stop="expandNode" />
-        <i v-if="nodeProps.expanded!==false" class="el-icon-minus" @click.stop="closeNode" />
+      <span :class="expandButtonClass" :style="{'background-color':(nodeProps.color||graphSetting.defaultNodeColor)}" @click.stop="expandOrCollapseNode">
       </span>
     </div>
     <div v-if="nodeProps.html" v-html="nodeProps.html" />
@@ -41,6 +39,10 @@ import SeeksRGUtils from './SeeksRGUtils'
 // import Velocity from 'velocity-animate'
 // import { mapState } from 'vuex'
 // var _parent = this.$parent
+// function isAllowShowNode(isShow, isHide, parent) {
+//   const _r = isShow !== false && isHide !== true && (!parent || isAllowShowNode(parent.isShow, parent.isHide, parent.lot.parent) === true)
+//   return _r
+// }
 export default {
   name: 'SeeksRGNode',
   components: { },
@@ -68,9 +70,11 @@ export default {
       dragging: false
     }
   },
-  // computed: mapState({
-  //   graphSetting: () => _parent.graphSetting
-  // }),
+  computed: {
+    expandButtonClass() {
+      return this.nodeProps.expanded===false ? 'c-expanded' : 'c-collapsed'
+    }
+  },
   // show() {
   //
   // },
@@ -156,22 +160,23 @@ export default {
       // return _num_l + '/' + _num_c
       // return this.nodeProps.text
     },
-    expandNode(e) {
-      this.nodeProps.expanded = true
-      this.nodeProps.lot.childs.forEach(thisNode => {
-        thisNode.isShow = true
-      })
-      this.$parent.onNodeExpandEvent(this.nodeProps, e)
-    },
-    closeNode(e) {
-      this.nodeProps.expanded = false
-      this.nodeProps.lot.childs.forEach(thisNode => {
-        thisNode.isShow = false
-      })
-      this.$parent.onNodeCollapseEvent(this.nodeProps, e)
+    expandOrCollapseNode(e) {
+      if (this.nodeProps.expanded === false) {
+        this.nodeProps.expanded = true
+        this.nodeProps.lot.childs.forEach(thisNode => {
+          thisNode.isShow = true
+        })
+        this.$parent.onNodeExpandEvent(this.nodeProps, e)
+      } else {
+        this.nodeProps.expanded = false
+        this.nodeProps.lot.childs.forEach(thisNode => {
+          thisNode.isShow = false
+        })
+        this.$parent.onNodeCollapseEvent(this.nodeProps, e)
+      }
     },
     onDragStart(e) {
-      if (this.nodeProps.disableDrag) {
+      if (this.graphSetting.disableDragNode || this.nodeProps.disableDrag) {
         return
       }
       this.dragging = true
@@ -213,11 +218,6 @@ export default {
       if (this.onNodeClick) {
         this.onNodeClick(this.nodeProps, e)
       }
-    },
-    isAllowShow: function(thisNode) {
-      const _r = thisNode.isShow !== false && thisNode.isHide !== true && (!thisNode.lot.parent || this.isAllowShow(thisNode.lot.parent, false) === true)
-      // if (derict !== false && _r === false) console.log('be hide node:', thisNode.text)
-      return _r
     },
     // beforeEnter(el) {
     //   console.log('beforeEnter')
@@ -274,12 +274,23 @@ export default {
         this.borderColor = col
         return col
       }
+    },
+    isAllowShowNode(thisNode) {
+      const _r = thisNode.isShow !== false && thisNode.isHide !== true && (!thisNode.lot.parent || this.isAllowShowNode(thisNode.lot.parent, false) === true)
+      return _r
     }
   }
 }
 </script>
 
 <style>
+  .rg-icon {
+    width: 19px;
+    height: 19px;
+    vertical-align: 0px;
+    fill: currentColor;
+    overflow: hidden;
+  }
   .el-icon-remove,.el-icon-circle-plus{
     cursor: pointer;
   }
@@ -386,7 +397,7 @@ export default {
   .c-btn-open-close{
     position: absolute;
     height:100%;
-    width:18px;
+    width:19px;
     /*border:red solid 1px;*/
     display: flex;
     align-items: center;
@@ -398,13 +409,18 @@ export default {
     height:19px;
     display: inline-block;
     text-align: center;
-    line-height: 18px;
-    font-size: 12px;
     border-radius: 15px;
-    padding-left:1px;
-    padding-top:1px;
     color: #ffffff;
     cursor: pointer;
+    font-size: 19px;
+    line-height: 16px;
+    background-size: 100% 100%;
+  }
+  .c-expanded{
+    background-image: url(data:image/svg+xml;%20charset=utf8,%3Csvg%20t=%221606310217820%22%20viewBox=%220%200%201024%201024%22%20version=%221.1%22%20xmlns=%22http://www.w3.org/2000/svg%22%20p-id=%223373%22%20width=%2232%22%20height=%2232%22%3E%3Cpath%20d=%22M853.333333%20480H544V170.666667c0-17.066667-14.933333-32-32-32s-32%2014.933333-32%2032v309.333333H170.666667c-17.066667%200-32%2014.933333-32%2032s14.933333%2032%2032%2032h309.333333V853.333333c0%2017.066667%2014.933333%2032%2032%2032s32-14.933333%2032-32V544H853.333333c17.066667%200%2032-14.933333%2032-32s-14.933333-32-32-32z%22%20p-id=%223374%22%20fill=%22white%22%3E%3C/path%3E%3C/svg%3E);
+  }
+  .c-collapsed{
+    background-image: url(data:image/svg+xml;%20charset=utf8,%3Csvg%20t=%221606310454619%22%20class=%22icon%22%20viewBox=%220%200%201024%201024%22%20version=%221.1%22%20xmlns=%22http://www.w3.org/2000/svg%22%20p-id=%223662%22%20width=%22128%22%20height=%22128%22%3E%3Cpath%20d=%22M853.333333%20554.666667H170.666667c-23.466667%200-42.666667-19.2-42.666667-42.666667s19.2-42.666667%2042.666667-42.666667h682.666666c23.466667%200%2042.666667%2019.2%2042.666667%2042.666667s-19.2%2042.666667-42.666667%2042.666667z%22%20p-id=%223663%22%20fill=%22white%22%3E%3C/path%3E%3C/svg%3E);
   }
   .c-expand-positon-left{
     margin-top:-8px;

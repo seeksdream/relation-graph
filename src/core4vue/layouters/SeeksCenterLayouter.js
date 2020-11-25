@@ -68,7 +68,7 @@ function SeeksCenterLayouter(layoutSetting, graphSetting) {
     //   this.rootNode.lot.y = 400
     // }
     // console.log('[layout canvasOffset]', this.graphSetting.viewSize, this.graphSetting.canvasSize)
-    this.placeRelativePosition(this.rootNode)
+    this.placeRelativePosition(this.rootNode, analyticResult)
     this.allNodes.forEach(thisNode => {
       if (thisNode.fixed === true) return
       if (!SeeksGraphMath.isAllowShowNode(thisNode)) return
@@ -111,12 +111,16 @@ function SeeksCenterLayouter(layoutSetting, graphSetting) {
     // newLevelNodes.push(rootNode)
     // this.setPlace(newLevelNodes, 0, rootNode)
   }
-  this.placeRelativePosition = function(rootNode) {
-    var __level1_r = 150
+  this.placeRelativePosition = function(rootNode, analyticResult) {
+    var distance_coefficient = this.config.distance_coefficient === undefined ? 1 : this.config.distance_coefficient
+    var __leve1_min_r = parseInt(((this.graphSetting.viewSize.height + this.graphSetting.viewSize.width) / analyticResult.max_deep * 0.2)) * distance_coefficient
+    if (window.SeeksGraphDebug) console.log('analyticResult:', analyticResult, __leve1_min_r, this.config.distance_coefficient)
+    if (__leve1_min_r < 150 * distance_coefficient) __leve1_min_r = 150 * distance_coefficient
+    var __level1_r = 0
     this.allNodes.forEach(thisNode => {
       if (thisNode.lot.subling.level === 1) {
-        __level1_r = thisNode.lot.subling.all_size * 50 / Math.PI / 2
-        if (__level1_r < 150)__level1_r = 150
+        __level1_r = parseInt(thisNode.lot.subling.all_size * 50 / Math.PI / 2)
+        if (__level1_r < __leve1_min_r)__level1_r = __leve1_min_r
         // if (__level1_r > 500)__level1_r = 500
         const _point = SeeksGraphMath.getOvalPoint(rootNode.lot.x, rootNode.lot.y, thisNode.lot.subling.level * __level1_r, thisNode.lot.strength_plus - (thisNode.lot.strength / 2), thisNode.lot.subling.all_strength)
         // const _point = SeeksGraphMath.getOvalPoint(this.rootNode.x, this.rootNode.y, thisNode.lot.subling.level * __level1_r, thisNode.lot.index_of_level, thisNode.lot.subling.all_size)
@@ -124,12 +128,13 @@ function SeeksCenterLayouter(layoutSetting, graphSetting) {
         thisNode.lot.y = _point.y
       }
     })
+    var __level_r = parseInt(300 * distance_coefficient)
     this.allNodes.forEach(thisNode => {
       if (thisNode.lot.subling.level > 1) {
         var __area_start = thisNode.lot.parent.lot.strength_plus - thisNode.lot.parent.lot.strength
         var __area_end = thisNode.lot.parent.lot.strength_plus
         var __buff = (__area_end - __area_start) / (thisNode.lot.parent.lot.childs_size + 1) * (thisNode.lot.index_of_parent + 1)
-        const _point = SeeksGraphMath.getOvalPoint(rootNode.lot.x, rootNode.lot.y, (thisNode.lot.subling.level - 1) * 300 + __level1_r, __area_start + __buff, thisNode.lot.parent.lot.subling.all_strength)
+        const _point = SeeksGraphMath.getOvalPoint(rootNode.lot.x, rootNode.lot.y, (thisNode.lot.subling.level - 1) * __level_r + __level1_r, __area_start + __buff, thisNode.lot.parent.lot.subling.all_strength)
         thisNode.lot.x = _point.x
         thisNode.lot.y = _point.y
       }

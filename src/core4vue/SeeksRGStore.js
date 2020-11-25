@@ -6,6 +6,9 @@ const SeeksStoreManager = {
       allowShowSettingPanel: false,
       backgrounImage: '',
       disableZoom: false,
+      disableDragNode: false,
+      moveToCenterWhenResize: true,
+      defaultFocusRootNode: true,
       allowShowZoomMenu: true,
       backgrounImageNoRepeat: false,
       allowShowMiniToolBar: true,
@@ -100,16 +103,33 @@ const SeeksStoreManager = {
       Object.keys(userGraphSetting).forEach(key => {
         var _thisUserValue = userGraphSetting[key]
         if (typeof _thisUserValue === 'object') {
-          if (window.SeeksGraphDebug) console.log('user setting object:', key)
+          if (window.SeeksGraphDebug) console.log('user setting object:', key, _thisUserValue)
           var _objectValue = _graphSetting[key]
-          if (_objectValue && !Array.isArray(_objectValue) && _thisUserValue) {
-            Object.keys(_objectValue).forEach(l2Key => {
-              if (window.SeeksGraphDebug) console.log('user setting:', key + '.' + l2Key, _thisUserValue[l2Key])
-              _objectValue[l2Key] = _thisUserValue[l2Key]
-            })
+          if (_objectValue) {
+            if (_objectValue && !Array.isArray(_objectValue) && _thisUserValue) {
+              Object.keys(_objectValue).forEach(l2Key => {
+                if (window.SeeksGraphDebug) console.log('   user setting:', key + '.' + l2Key, _thisUserValue[l2Key])
+                _objectValue[l2Key] = _thisUserValue[l2Key]
+              })
+            } else if(Array.isArray(_objectValue)) {
+              if (window.SeeksGraphDebug) console.log('   user setting array:', key, 'size:', _thisUserValue.length)
+              var _new_arr = []
+              _thisUserValue.forEach(thisItem => {
+                if (window.SeeksGraphDebug) console.log('   user setting array:', key, 'push:', thisItem)
+                if (thisItem && typeof thisItem === 'object') {
+                  _new_arr.push(JSON.parse(JSON.stringify(thisItem)))
+                } else {
+                  _new_arr.push(thisItem)
+                }
+              })
+              _graphSetting[key] = _new_arr
+              // if (window.SeeksGraphDebug) console.log('   user setting array:', key, 'copy size:', _new_arr.length)
+            } else {
+              if (window.SeeksGraphDebug) console.log('user setting value:', key)
+              _graphSetting[key] = _thisUserValue
+            }
           } else {
-            if (window.SeeksGraphDebug) console.log('user setting:', key, _thisUserValue)
-            _graphSetting[key] = _thisUserValue
+            console.log('ignore option:', key)
           }
         } else {
           if (window.SeeksGraphDebug) console.log('user setting:', key, _thisUserValue)

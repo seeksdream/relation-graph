@@ -17,7 +17,7 @@
     <div v-if="graphSetting.layouts.length > 1" class="c-mb-button">
       <svg class="rg-icon" aria-hidden="true"><use xlink:href="#icon-yuanquanfenxiang"></use></svg>
       <span class="c-mb-text">布局</span>
-      <div :style="{width:(graphSetting.layouts.length * 70 + 6)+'px','margin-left':(graphSetting.layouts.length * -70 - 7)+'px'}" class="c-mb-child-panel">
+      <div :style="{width:(graphSetting.layouts.length * 70 + 6)+'px','margin-left':(graphSetting.layouts.length * -70 - 5)+'px'}" class="c-mb-child-panel">
         <div v-for="thisLayoutSetting in graphSetting.layouts" :key="thisLayoutSetting.label" class="c-mb-button c-mb-button-c" :class="{'c-mb-button-on':graphSetting.layoutLabel===thisLayoutSetting.label}" style="width: 70px;" @click="switchLayout(thisLayoutSetting)">
           <svg class="rg-icon" aria-hidden="true"><use xlink:href="#icon-yuanquanfenxiang"></use></svg>
           <span class="c-mb-text">{{ thisLayoutSetting.label }}</span>
@@ -27,7 +27,7 @@
     <div v-if="graphSetting.allowSwitchLineShape" class="c-mb-button">
       <svg class="rg-icon" aria-hidden="true"><use xlink:href="#icon-hj2"></use></svg>
       <span class="c-mb-text">线条</span>
-      <div class="c-mb-child-panel" style="width:256px;margin-left:-257px;">
+      <div class="c-mb-child-panel" style="width:256px;margin-left:-255px;">
         <div :class="{'c-mb-button-on':graphSetting.defaultLineShape===1}" class="c-mb-button c-mb-button-c" style="width: 50px;" @click="graphSetting.defaultLineShape=1">
           <svg class="rg-icon" aria-hidden="true"><use xlink:href="#icon-hj2"></use></svg>
           <span class="c-mb-text">直线</span>
@@ -53,7 +53,7 @@
     <div v-if="graphSetting.allowSwitchJunctionPoint" class="c-mb-button">
       <svg class="rg-icon" aria-hidden="true"><use xlink:href="#icon-lianjie_connecting5"></use></svg>
       <span class="c-mb-text">连接点</span>
-      <div class="c-mb-child-panel" style="width:206px;margin-left:-207px;">
+      <div class="c-mb-child-panel" style="width:206px;margin-left:-205px;">
         <div :class="{'c-mb-button-on':graphSetting.defaultJunctionPoint==='border'}" class="c-mb-button c-mb-button-c" style="width: 50px;" @click="graphSetting.defaultJunctionPoint='border'">
           <svg class="rg-icon" aria-hidden="true"><use xlink:href="#icon-lianjie_connecting5"></use></svg>
           <span class="c-mb-text">边缘</span>
@@ -74,7 +74,7 @@
     </div>
     <div v-if="graphSetting.isNeedShowAutoLayoutButton" :title="graphSetting.autoLayouting?'点击停止自动布局':'点击开始自动调整布局'" :class="{'c-mb-button-on':graphSetting.autoLayouting}" class="c-mb-button" @click="toggleAutoLayout">
       <svg v-if="!graphSetting.autoLayouting" class="rg-icon" aria-hidden="true"><use xlink:href="#icon-zidong"></use></svg>
-      <svg v-else class="c-loading-icon icon" aria-hidden="true"><use xlink:href="#icon-lianjiezhong"></use></svg>
+      <svg v-else class="c-loading-icon rg-icon" aria-hidden="true"><use xlink:href="#icon-lianjiezhong"></use></svg>
       <span class="c-mb-text">自动</span>
     </div>
     <div class="c-mb-button" @click="refresh">
@@ -84,7 +84,7 @@
     <div class="c-mb-button">
       <svg class="rg-icon" aria-hidden="true"><use xlink:href="#icon-ziyuan"></use></svg>
       <span class="c-mb-text">下载</span>
-      <div :style="{width:downloadPanelWidth+'px','margin-left':(downloadPanelWidth*-1-1)+'px'}" class="c-mb-child-panel">
+      <div :style="{width:downloadPanelWidth+'px','margin-left':(downloadPanelWidth*-1)+'px'}" class="c-mb-child-panel">
         <div class="c-mb-button c-mb-button-c" style="width: 50px;" @click="$parent.downloadAsImage('png')">
           <svg class="rg-icon" aria-hidden="true"><use xlink:href="#icon-tupian"></use></svg>
           <span class="c-mb-text">PNG</span>
@@ -103,7 +103,6 @@
 </template>
 
 <script>
-import './core4vue/SeeksGraphIconfont'
 import SeeksRGLayouters from './core4vue/SeeksRGLayouters'
 export default {
   name: 'GraphMiniToolBar',
@@ -178,9 +177,9 @@ export default {
 
 <style scoped>
   .rg-icon {
-    width: 1em;
-    height: 1em;
-    vertical-align: -0.15em;
+    width: 16px;
+    height: 16px;
+    vertical-align: -3px;
     fill: currentColor;
     overflow: hidden;
   }
