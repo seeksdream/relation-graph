@@ -9,9 +9,7 @@
 
 *详细使用方法、配置选项、在线demo，以及可视化的配置工具，可以访问这个网址：*
 
-http://relation-graph.com
-
-
+[http://relation-graph.com](http://relation-graph.com)
 
 ---
 *快速使用：*
