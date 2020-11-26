@@ -36,6 +36,7 @@ export default {
           { id: 'a', text: 'A' },
           { id: 'b', text: 'B' },
           { id: 'c', text: 'C' },
+          { id: 'x', text: 'X' },
           { id: 'd', text: 'D', nodeShape: 1, width: 150, height: 100 },
           { id: 'e', text: 'E', width: 150, height: 150 },
           { id: 'f', text: 'F', nodeShape: 1 },
@@ -78,7 +79,35 @@ export default {
           { from: 'e', to: 'p1', text: '样式5', lineShape: 5, color: '#ffd700' },
           { from: 'e', to: 'p2', text: '样式5', lineShape: 5, color: '#ffd700' },
           { from: 'e', to: 'p3', text: '样式5', lineShape: 5, color: '#ffd700' },
-          { from: 'e', to: 'p4', text: '样式5', lineShape: 5, color: '#ffd700' }
+          { from: 'e', to: 'p4', text: '样式5', lineShape: 5, color: '#ffd700' },
+          {
+            "from": "i",
+            "to": "x",
+            "text": "Link2",
+            "color": "rgba(255, 120, 0, 1)",
+            "lineWidth": 1,
+            "data": {}
+          },
+          {
+            "from": "x",
+            "to": "i",
+            "text": "Link3",
+            "color": "rgba(0, 206, 209, 1)",
+            "isReverse": true,
+            "lineWidth": 1,
+            "lineShape": 1,
+            "data": {}
+          },
+          {
+            "from": "x",
+            "to": "i",
+            "text": "Link3",
+            "color": "rgba(144, 240, 144, 0.5)",
+            "isHideArrow": true,
+            "lineWidth": 5,
+            "lineShape": 3,
+            "data": {}
+          }
         ]
       }
       /**
