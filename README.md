@@ -1,4 +1,4 @@
-[![relation-graph](http://relation-graph.com/website/logo =50x50)](http://relation-graph.com)
+[![relation-graph](http://relation-graph.com/website/logo)](http://relation-graph.com)
 
 *relation-graph*
 ---
