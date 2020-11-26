@@ -1,3 +1,5 @@
+[![relation-graph](http://relation-graph.com/website/logo =50x50)](http://relation-graph.com)
+
 *relation-graph*
 ---
 
@@ -8,6 +10,8 @@
 *详细使用方法、配置选项、在线demo，以及可视化的配置工具，可以访问这个网址：*
 
 http://relation-graph.com
+
+
 
 ---
 *快速使用：*
@@ -95,14 +99,14 @@ npm install --save relation-graph
 http://relation-graph.com
 ---
 
-最新版本v1.1.0：
+**最新版本v1.1.0：**
 
 修改问题：
 * 修复了ie浏览器下滚动轴只能放大无法缩小的问题
 * 修复了导出图片不全或留白太多的问题
 * 修复了工具栏按钮样式错误和节点的收缩按钮样式错误
 
-新特特性：
+新特性：
 * 为中心布局添加新的配置distance_coefficient，可以设置各层级之间的距离，以达到调整连线长度的视觉效果。请参考：http://relation-graph.com/#/docs/layout 中的章节《center / 中心布局 特有的选项》），示例：http://relation-graph.com/#/demo/distance_coefficient
   
   另外，目前树状布局一直支持距离调整，请参考：http://relation-graph.com/#/docs/layout 中的章节《tree / 树状布局 特有的选项》。示例：http://relation-graph.com/#/demo/tree-distance
@@ -133,7 +137,7 @@ http://relation-graph.com
 
 如果这个项目能帮到大家，有更多的人关注，后续我会开发用于小程序、react、angular的版本，以及基于canvas的实现。
 
-有问题可以加QQ：3235808353，提bug、提建议、一起交流分享前端开发心得。
+**有问题可以加QQ：3235808353，提bug、提建议、一起交流分享前端开发心得，第一获取新版本发布消息。**
 
 
 
