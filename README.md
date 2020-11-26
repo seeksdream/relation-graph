@@ -1,4 +1,4 @@
-[![relation-graph](http://relation-graph.com/website/logo)](http://relation-graph.com){:target="_blank"}
+<a href="http://relation-graph.com" target="_blank"><img src="http://relation-graph.com/website/logo" width="60" /></a>
 
 *relation-graph*
 ---
