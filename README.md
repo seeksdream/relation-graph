@@ -1,4 +1,4 @@
-[![relation-graph](http://relation-graph.com/website/logo)](http://relation-graph.com)
+[![relation-graph](http://relation-graph.com/website/logo)](http://relation-graph.com){target="_blank"}
 
 *relation-graph*
 ---
@@ -138,6 +138,5 @@ http://relation-graph.com
 如果这个项目能帮到大家，有更多的人关注，后续我会开发用于小程序、react、angular的版本，以及基于canvas的实现。
 
 **有问题可以加QQ：3235808353，提bug、提建议、一起交流分享前端开发心得，第一获取新版本发布消息。**
-
 
 
