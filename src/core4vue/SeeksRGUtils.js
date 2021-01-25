@@ -98,14 +98,14 @@ SeeksRGUtils.json2Node = function(originData) {
     disableDrag: originData.disableDrag !== undefined ? originData.disableDrag : false,
     data: originData.data !== undefined ? originData.data : {}
   }
-  if(jsonData.lot === undefined) jsonData.lot = { childs: [], parent: undefined, eached: false, strength: 0 }
-  if(jsonData.lot.childs === undefined) jsonData.lot.childs = []
-  if(jsonData.lot.parent === undefined) jsonData.lot.parent = undefined
-  if(jsonData.lot.eached === undefined) jsonData.lot.eached = false
-  if(jsonData.lot.strength === undefined) jsonData.lot.strength = 0
-  if(jsonData.el === undefined) jsonData.el = { offsetWidth: 50, offsetHeight: 50 }
-  if(jsonData.width !== undefined) jsonData.el.offsetWidth = jsonData.width
-  if(jsonData.height !== undefined) jsonData.el.offsetHeight = jsonData.height
+  if (jsonData.lot === undefined) jsonData.lot = { childs: [], parent: undefined, eached: false, strength: 0 }
+  if (jsonData.lot.childs === undefined) jsonData.lot.childs = []
+  if (jsonData.lot.parent === undefined) jsonData.lot.parent = undefined
+  if (jsonData.lot.eached === undefined) jsonData.lot.eached = false
+  if (jsonData.lot.strength === undefined) jsonData.lot.strength = 0
+  if (jsonData.el === undefined) jsonData.el = { offsetWidth: 50, offsetHeight: 50 }
+  if (jsonData.width !== undefined) jsonData.el.offsetWidth = jsonData.width
+  if (jsonData.height !== undefined) jsonData.el.offsetHeight = jsonData.height
   return jsonData
 }
 SeeksRGUtils.json2Link = function(originData) {
@@ -126,7 +126,7 @@ SeeksRGUtils.json2Link = function(originData) {
     hidden: originData.hidden !== undefined ? originData.hidden : false,
     lineDirection: originData.lineDirection !== undefined ? originData.lineDirection : undefined,
     reverseText: originData.reverseText !== undefined ? originData.reverseText : undefined,
-    data: originData.data !== undefined ? originData.data : {},
+    data: originData.data !== undefined ? originData.data : {}
   }
   return jsonData
 }
@@ -137,7 +137,7 @@ SeeksRGUtils.getPosition = function(el) {
   }
   return el.offsetTop
 }
-var _ignore_node_keys = [ 'Fx', 'Fy', 'appended', 'el', 'targetFrom', 'targetNodes', 'targetTo', 'type', 'lot', 'seeks_id' ]
+var _ignore_node_keys = ['Fx', 'Fy', 'appended', 'el', 'targetFrom', 'targetNodes', 'targetTo', 'type', 'lot', 'seeks_id']
 SeeksRGUtils.transNodeToJson = function(node, nodes) {
   if (!node) return
   var _node_json = {}
@@ -150,7 +150,7 @@ SeeksRGUtils.transNodeToJson = function(node, nodes) {
   })
   nodes.push(_node_json)
 }
-var _ignore_link_keys = [ 'arrow', 'id', 'reverseText', 'isReverse' ]
+var _ignore_link_keys = ['arrow', 'id', 'reverseText', 'isReverse']
 SeeksRGUtils.transLineToJson = function(line, links) {
   if (!line) return
   line.relations.forEach(thisRelation => {

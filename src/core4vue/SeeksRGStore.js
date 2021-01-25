@@ -94,7 +94,7 @@ const SeeksStoreManager = {
         config.canvasOffset.y = config.viewNVInfo.height / 2 - 100
       }
     }
-    var _debug = userGraphSetting.debug !== true ? false : true
+    var _debug = userGraphSetting.debug === true
     if (_debug) console.log('user instance graphSetting:', userGraphSetting)
     if (window) {
       window.SeeksGraphDebug = _debug
@@ -111,7 +111,7 @@ const SeeksStoreManager = {
                 if (window.SeeksGraphDebug) console.log('   user setting:', key + '.' + l2Key, _thisUserValue[l2Key])
                 _objectValue[l2Key] = _thisUserValue[l2Key]
               })
-            } else if(Array.isArray(_objectValue)) {
+            } else if (Array.isArray(_objectValue)) {
               if (window.SeeksGraphDebug) console.log('   user setting array:', key, 'size:', _thisUserValue.length)
               var _new_arr = []
               _thisUserValue.forEach(thisItem => {
@@ -233,8 +233,8 @@ function SeeksRGStore(_graphSetting) {
   this.getOptions = function() {
     var _options = {}
     var _ignore = [
-        'layouter', 'autoLayouting', 'canvasNVInfo', 'canvasOffset', 'canvasZoom', 'fullscreen', 'instanceId', 'layoutClassName', 'layoutDirection',
-        'layoutLabel', 'layoutName', 'resetViewSize', 'viewELSize', 'viewNVInfo', 'viewSize', 'canvasSize'
+      'layouter', 'autoLayouting', 'canvasNVInfo', 'canvasOffset', 'canvasZoom', 'fullscreen', 'instanceId', 'layoutClassName', 'layoutDirection',
+      'layoutLabel', 'layoutName', 'resetViewSize', 'viewELSize', 'viewNVInfo', 'viewSize', 'canvasSize'
     ]
     Object.keys(this.graphSetting).forEach(thisKey => {
       if (_ignore.indexOf(thisKey) === -1) {
