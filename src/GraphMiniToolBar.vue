@@ -1,5 +1,6 @@
 <template>
   <div :style="{'margin-left':(graphSetting.viewELSize.width-50)+'px','margin-top':(graphSetting.viewELSize.height-260)/2+'px'}" class="c-mini-toolbar">
+  <!-- 感觉直接改props 不太好 -->
     <div class="c-mb-button" style="margin-top: 0px;" @click="graphSetting.fullscreen = !graphSetting.fullscreen">
       <svg class="rg-icon" aria-hidden="true"><use xlink:href="#icon-resize-"></use></svg>
       <span class="c-mb-text">{{ graphSetting.fullscreen?'退出':'全屏' }}</span>
