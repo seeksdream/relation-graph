@@ -93,7 +93,9 @@
               <!--<path :fill="thisColor.color" d="M 14 7 L 1 .3 L 4 7 L .4 13 L 14 7, Z" />-->
               <!--</marker>-->
             </defs>
-            <SeeksRGLink v-for="thisLine in lineViewList" :key="thisLine.seeks_id" :line-props="thisLine" :graph-setting="graphSetting" :on-line-click="onRGLineClick" />
+            <SeeksRGLink v-for="thisLine in lineViewList" :key="thisLine.seeks_id" :line-props="thisLine" :graph-setting="graphSetting" :on-line-click="onRGLineClick"
+              :on-mouseover="onLineMouseover"
+              :on-mouseout="onLineMouseout"/>
           </svg>
         </div>
       </div>
@@ -181,6 +183,16 @@
         default: () => { return () => {} },
         type: Function
       },
+      onMouseover: {
+          mustUseProp: false,
+          default: () => { return () => {}; },
+          type: Function
+      },
+      onMouseout: {
+          mustUseProp: false,
+          default: () => { return () => {}; },
+          type: Function
+      },
       onDownloadExcel: {
         mustUseProp: false,
         default: null,
@@ -244,7 +256,8 @@
         zoomCenter_of_newSize: { x: 0, y: 0 },
         currentZoomSet: null,
         newZoomSet: null,
-        alive: true
+        alive: true,
+        initStatus: false
       }
     },
     computed: {
@@ -263,7 +276,17 @@
     watch: {
       'graphSetting.fullscreen': function(newV, oldV) {
         if (oldV === true || oldV === false) {
-          screenfull.toggle(this.$refs.seeksRelationGraph)
+          if (!document.fullscreenElement && newV === false) {
+              return;
+          }
+          // 解决全屏后，按ESC 退出，工具栏还是退出提示
+          screenfull.toggle(this.$refs.seeksRelationGraph);
+          if (!this.initStatus) {
+              screenfull.onchange((res) => {
+                  !document.fullscreenElement && this.graphSetting.fullscreen && (this.graphSetting.fullscreen = false) ;
+              });
+          }
+          this.initStatus = true;
         }
       }
     },
@@ -933,6 +956,12 @@
         //     thisLine.flash = thisLine.flash + 1
         //   }
         // }
+      },
+      onLineMouseover (lineData, e) {
+          this.onMouseover(lineData, e);
+      },
+      onLineMouseout (lineData, e) {
+          this.onMouseout(lineData, e);
       },
       getNodeById(nodeId) {
         for (let i = 0; i < this.nodeViewList.length; i++) {

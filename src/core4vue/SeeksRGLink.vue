@@ -11,7 +11,10 @@
       <g v-if="thisRelation.isHide === false" :key="'l-'+thisRelation.id">
         <path :d="createLinePath(lineProps.fromNode, lineProps.toNode, ri, thisRelation)" :class="[thisRelation.styleClass,graphSetting.checkedLineId==lineProps.seeks_id?'c-rg-line-checked':'']" :stroke="thisRelation.color?thisRelation.color:graphSetting.defaultLineColor" :style="{'stroke-width': (thisRelation.lineWidth?thisRelation.lineWidth:graphSetting.defaultLineWidth) + 'px'}" :marker-end="getArrow(thisRelation.isHideArrow, thisRelation.arrow, thisRelation.color)" fill="none" class="c-rg-line" @click="onClick($event)" />
         <g v-if="graphSetting.defaultShowLineLabel && graphSetting.canvasZoom>40" :transform="getTextTransform(thisRelation, thisRelation.textPositon.x,thisRelation.textPositon.y,thisRelation.textPositon.rotate)">
-          <text :key="'t-'+thisRelation.id" :x="0" :y="0" :style="{fill:(thisRelation.fontColor?thisRelation.fontColor:(thisRelation.color?thisRelation.color:undefined))}" class="c-rg-link-text" @click="onClick($event)">
+          <text :key="'t-'+thisRelation.id" :x="0" :y="0" :style="{fill:(thisRelation.fontColor?thisRelation.fontColor:(thisRelation.color?thisRelation.color:undefined))}" class="c-rg-link-text"
+            @click="onClick($event)"
+            @mouseover="mouseover($event)"
+            @mouseout="mouseout($event)">
             <!--<textPath :xlink:href="'#'+lineProps.id">{{ lineProps.text }}</textPath>-->
             {{ thisRelation.text }}
           </text>
@@ -47,6 +50,16 @@ export default {
       type: Object
     },
     onLineClick: {
+      mustUseProp: false,
+      default: () => { return () => {} },
+      type: Function
+    },
+    onMouseover: {
+      mustUseProp: false,
+      default: () => { return () => {} },
+      type: Function
+    },
+    onMouseout: {
       mustUseProp: false,
       default: () => { return () => {} },
       type: Function
@@ -288,6 +301,12 @@ export default {
       if (this.onLineClick) {
         this.onLineClick(this.lineProps, e)
       }
+    },
+    mouseover (e) {
+      this.onMouseover(this.lineProps, e)
+    },
+    mouseout (e) {
+      this.onMouseout(this.lineProps, e)
     },
     isAllowShowNode: function(thisNode) {
       const _r = thisNode.isShow !== false && thisNode.isHide !== true && (!thisNode.lot.parent || this.isAllowShowNode(thisNode.lot.parent, false) === true)
