@@ -37,6 +37,12 @@ module.exports = merge({
       commonjs2: 'html2canvas',
       amd: 'html2canvas'
     },
+    jspdf: {
+      root: 'jspdf',
+      commonjs: 'jspdf',
+      commonjs2: 'jspdf',
+      amd: 'jspdf'
+    },
     screenfull: {
       root: 'screenfull',
       commonjs: 'screenfull',

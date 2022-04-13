@@ -62,6 +62,7 @@
   "dependencies": {
     "vue": "^2.5.9",
     "html2canvas": "^1.0.0-rc.5",
+    "jspdf": "^2.5.1",
     "screenfull": "^4.2.0"
   }
 }
