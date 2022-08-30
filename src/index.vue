@@ -10,7 +10,7 @@
     <graph-mini-tool-bar v-show="graphSetting.allowShowMiniToolBar===true" :graph-setting="graphSetting" />
     <graph-mini-view v-if="graphSetting.allowShowMiniView===true" :graph-setting="graphSetting" />
     <slot :graph="this" name="graphPlug" />
-    <div :style="{width: '100%',height : '100%', 'background-image': 'url('+graphSetting.backgrounImage+')'}" :class="[graphSetting.layoutClassName, (graphSetting.backgrounImageNoRepeat?'rel-map-background-norepeat':'')]" class="rel-map" @mousedown.left.stop="onDragStart($event)" @mousewheel="mouseListener">
+    <div :style="{width: '100%',height : '100%', 'background-image': 'url('+graphSetting.backgrounImage+')'}" :class="[graphSetting.layoutClassName, (graphSetting.backgrounImageNoRepeat?'rel-map-background-norepeat':'')]" class="rel-map" @mousedown.left.stop="onDragStart($event, false)" @touchstart="onDragStart($event, true)" @mousewheel="mouseListener">
       <div ref="seeksRGCanvas" :style="canvasSizeAndPosition" class="rel-map-canvas">
 <!--        <svg aria-hidden="true" style="position: absolute; width: 0px; height: 0px; overflow: hidden;">-->
 <!--          <symbol id="icon-add-select" viewBox="0 0 128 128"><path d="M544 213.333333v266.666667H810.666667v64H544V810.666667h-64V544H213.333333v-64h266.666667V213.333333z"></path></symbol>-->
@@ -892,8 +892,12 @@
           document.body.addEventListener('mousemove', this.wow)
         })
       },
-      onDragStart(e) {
-        SeeksRGUtils.startDrag(e, this.graphSetting.canvasOffset, this.onDragEnd)
+      onDragStart(e, isTouch) {
+          let event = e
+          if(isTouch){
+              event = e.changedTouches['0']
+          }
+          SeeksRGUtils.startDrag(event, this.graphSetting.canvasOffset, this.onDragEnd, isTouch)
       },
       onDragEnd() {
         this.refreshNVAnalysisInfo()

@@ -3,7 +3,7 @@ var __tmp_positionModel = { x: 0, y: 0 }
 var __ondraged
 var __start_info = { x: 0, y: 0 }
 var SeeksRGUtils = {
-  startDrag(e, positionModel, ondraged) {
+  startDrag(e, positionModel, ondraged, isTouch) {
     __ondraged = ondraged
     // console.log('startDrag:', __tmp_basePosition, e.clientX, e.clientY)
     __tmp_positionModel = positionModel
@@ -13,11 +13,17 @@ var SeeksRGUtils = {
     __tmp_basePosition.y = parseInt(__tmp_positionModel.y) - e.clientY
     document.body.addEventListener('mousemove', SeeksRGUtils.onNodeMove)
     document.body.addEventListener('mouseup', SeeksRGUtils.onNodeDragend)
+    if(isTouch){
+      document.body.addEventListener('touchend', SeeksRGUtils.onNodeDragend)
+      document.body.addEventListener('touchmove', SeeksRGUtils.onNodeMove)
+    }
   },
   onNodeMove(e) {
     // console.log('move', __tmp_basePosition, e.clientX, e.clientY)
-    __tmp_positionModel.x = e.clientX + __tmp_basePosition.x
-    __tmp_positionModel.y = e.clientY + __tmp_basePosition.y
+    const clientX = e.clientX || e.changedTouches['0'].clientX
+    const clientY = e.clientY || e.changedTouches['0'].clientY
+    __tmp_positionModel.x = clientX + __tmp_basePosition.x
+    __tmp_positionModel.y = clientY + __tmp_basePosition.y
   },
   onNodeDragend() {
     // console.log('onNodeDragend', __tmp_positionModel.x - __start_info.x, __tmp_positionModel.y - __start_info.y)
