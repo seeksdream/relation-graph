@@ -277,14 +277,23 @@ export default {
     },
     onClick(e) {
       // RGStore.commit('setCurrentLineId', this.lineProps.id)
-      this.graphSetting.checkedLineId = this.lineProps.seeks_id
-      this.lineProps.fromNode.selected = true
-      this.lineProps.toNode.selected = true
-      // Velocity(this.$refs.seeksRGLink, { strokDashoffset: 50 }, { duration: 3000, loop: 5 })
-      setTimeout(function() {
-        this.lineProps.fromNode.selected = false
-        this.lineProps.toNode.selected = false
-      }.bind(this), 2000)
+      if(this.graphSetting.checkedLineId.has(this.lineProps.seeks_id)){
+        this.graphSetting.checkedLineId.delete(this.lineProps.seeks_id);
+      }else{
+        this.graphSetting.checkedLineId.add(this.lineProps.seeks_id);
+
+        this.lineProps.fromNode.selected = true;
+        this.lineProps.toNode.selected = true;
+        // Velocity(this.$refs.seeksRGLink, { strokDashoffset: 50 }, { duration: 3000, loop: 5 })
+        setTimeout(()=>{
+          this.lineProps.fromNode.selected = false
+          this.lineProps.toNode.selected = false
+        }, 2000);
+      }
+     
+      this.lineProps.fromNode.y++;
+      this.lineProps.fromNode.y--;
+    
       if (this.onLineClick) {
         this.onLineClick(this.lineProps, e)
       }
