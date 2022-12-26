@@ -16,7 +16,7 @@
     <div v-if="nodeProps.html" v-html="nodeProps.html" />
     <div
       v-else
-      :class="['rel-node-shape-'+(nodeProps.nodeShape===undefined?graphSetting.defaultNodeShape:nodeProps.nodeShape),'rel-node-type-'+nodeProps.type, (nodeProps.id===graphSetting.checkedNodeId?'rel-node-checked':''), (nodeProps.selected?'rel-node-selected':''), nodeProps.styleClass, (hovering?'rel-node-hover':''), (nodeProps.innerHTML?'rel-diy-node':'')]"
+      :class="['rel-node-shape-'+(nodeProps.nodeShape===undefined?graphSetting.defaultNodeShape:nodeProps.nodeShape),'rel-node-type-'+nodeProps.type, (graphSetting.checkedNodeId.has(nodeProps.id)?'rel-node-checked':''), (nodeProps.selected?'rel-node-selected':''), nodeProps.styleClass, (hovering?'rel-node-hover':''), (nodeProps.innerHTML?'rel-diy-node':'')]"
       :style="{'background-color':(nodeProps.color===undefined?graphSetting.defaultNodeColor:nodeProps.color),'color':(nodeProps.fontColor===undefined?graphSetting.defaultNodeFontColor:nodeProps.fontColor),'border': (nodeProps.borderColor || graphSetting.defaultNodeBorderColor) + ' solid '+(nodeProps.borderWidth || graphSetting.defaultNodeBorderWidth)+'px', 'width':(nodeProps.width || graphSetting.defaultNodeWidth)+'px', 'height':(nodeProps.height||graphSetting.defaultNodeHeight)+'px'}"
       class="rel-node"
     >
@@ -213,7 +213,13 @@ export default {
         return
       }
       if (!this.nodeProps.disableDefaultClickEffect) {
-        this.graphSetting.checkedNodeId = this.nodeProps.id
+        if(this.graphSetting.checkedNodeId.has(this.nodeProps.id)){
+          this.graphSetting.checkedNodeId.delete(this.nodeProps.id);
+        }else{
+          this.graphSetting.checkedNodeId.add(this.nodeProps.id);
+        }
+        this.nodeProps.y++;
+        this.nodeProps.y--;
       }
       if (this.onNodeClick) {
         this.onNodeClick(this.nodeProps, e)

@@ -858,7 +858,14 @@
         })
         if (this.graphData.rootNode) {
           if (this.graphSetting.defaultFocusRootNode) {
-            this.graphSetting.checkedNodeId = this.graphData.rootNode.id
+            this.graphSetting.checkedNodeId.clear();
+            this.graphSetting.checkedNodeId.add(this.graphData.rootNode.id);
+            
+            setTimeout(()=>{
+              this.graphSetting.checkedNodeId.delete(this.graphData.rootNode.id);
+              this.graphData.rootNode.y++;
+              this.graphData.rootNode.y--;
+            },3000);
           }
         } else {
           throw Error('没有设置根节点[rootId]！也无法获取根节点!')
@@ -1309,9 +1316,21 @@
     stroke-linejoin: bevel;
     /* firefox bug fix - won't rotate at 90deg angles */
     -moz-transform: rotate(-89deg) translateX(-190px);
-    animation-timing-function:linear;
-    animation: ACTRGLineChecked 10s;
+    animation: ACTRGLineChecked 10s linear 0s infinite;
   }
+
+  @keyframes ACTRGLineChecked{
+    from{
+      stroke-dashoffset: 352px;
+      stroke-width: 3px;
+    }
+
+    to{
+      stroke-dashoffset: 0;
+      stroke-width: 2px;
+    }
+  }
+
   .rel-map /deep/ img{
     -webkit-user-drag: none;
     -webkit-user-select: none;
