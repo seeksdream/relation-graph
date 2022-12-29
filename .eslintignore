@@ -1,4 +1,6 @@
 build/*.js
-src/assets
+examples/assets
 public
 dist
+lib
+node_modules

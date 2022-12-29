@@ -1,11 +1,15 @@
 {
   "name": "relation-graph",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "relation-graph，Vue 关联关系图谱组件，可以展示如组织机构图谱、股权架构图谱、集团关系图谱等知识图谱，可提供多种图谱布局，包括树状布局、中心布局、力学布局自动布局等。Vue component for relationship graph , which can display knowledge graphs, such as organization graph, equity structure graph, group relationship graph, etc.",
-  "main": "dist/relation-graph.min.js",
+  "main": "lib/relation-graph.common.js",
+  "style": "lib/relation-graph.css",
+  "unpkg": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --config webpack.config.js"
+    "dev": "vue-cli-service serve examples/main.js",
+    "build": "vue-cli-service build --target lib --dest lib --name relation-graph src/index.js",
+    "build:site": "vue-cli-service --dest dist build examples/main.js",
+    "lint": "vue-cli-service lint"
   },
   "author": "seeks<seeksdream@qq.com>",
   "license": "MIT",
@@ -30,48 +34,41 @@
     "url": "https://github.com/seeksdream/relation-graph/issues"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.10",
-    "babel-core": "^6.26.3",
+    "@vue/cli-plugin-babel": "^4.5.8",
+    "@vue/cli-plugin-eslint": "^4.5.8",
+    "@vue/cli-service": "^4.5.8",
     "babel-eslint": "^10.1.0",
-    "babel-loader": "^8.2.2",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-stage-2": "^6.24.1",
-    "copy-webpack-plugin": "^7.0.0",
-    "css-loader": "^5.0.1",
-    "es6-promise": "^4.1.1",
+    "element-ui": "^2.15.12",
+    "sass-loader": "^7.1.0",
+    "node-sass": "^4.13.1",
+    "vue-router": "^3.2.0",
+    "svg-sprite-loader": "4.1.3",
+    "vuex": "3.4.0",
     "eslint": "^7.11.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-loader": "^4.0.2",
+    "eslint-plugin-eslint-plugin": "^2.3.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
     "eslint-plugin-vue": "^7.5.0",
-    "less": "^4.1.0",
-    "less-loader": "^7.3.0",
-    "node-sass": "^5.0.0",
-    "sass": "^1.14.3",
-    "sass-loader": "^10.1.1",
-    "style-loader": "^2.0.0",
-    "url-loader": "^4.1.1",
-    "vue-hot-reload-api": "^2.2.4",
-    "vue-html-loader": "^1.2.4",
-    "vue-loader": "^15.9.6",
-    "vue-router": "^3.0.1",
-    "vue-style-loader": "^4.1.2",
-    "vue-template-compiler": "^2.5.9",
-    "webpack": "^5.17.0",
-    "webpack-cli": "^4.4.0",
-    "webpack-dev-server": "^3.11.2",
-    "webpack-merge": "^5.1.3"
-  },
-  "engines": {
-    "node": ">=12.13.0"
+    "prettier": "^2.1.0",
+    "vue": "^2.6.12",
+    "vue-template-compiler": "^2.6.12"
   },
   "dependencies": {
     "html2canvas": "^1.0.0-rc.5",
-    "screenfull": "^5.1.0",
-    "vue": "^2.5.9"
+    "screenfull": "^5.1.0"
   },
   "peerDependencies": {
-    "eslint": "^3 || ^4 || ^5 || ^6 || ^7"
-  }
+    "vue": "^2.6.12"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
 }

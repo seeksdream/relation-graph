@@ -109,7 +109,7 @@ http://relation-graph.com
   
   另外，目前树状布局一直支持距离调整，请参考：http://relation-graph.com/#/docs/layout 中的章节《tree / 树状布局 特有的选项》。示例：http://relation-graph.com/#/demo/tree-distance
 * 新增图谱选项：disableDragNode，可以全局禁用节点拖动
-* 当图谱的大小发生变化时自动居中（可以通过图谱选项moveToCenterWhenResize禁用此功能）。示例：http://relation-graph.com/#/demo/graph-resize
+* 当图谱的大小发生变化时自动居中（可以通过图谱选项moveToCenterWhenRefresh禁用此功能）。示例：http://relation-graph.com/#/demo/graph-resize
 * 树状数据的支持，即通过{text:a,children: [{b},{c},{d}] }这样的方式定义数据，免去树形图谱的数据扁平化转换。示例：http://relation-graph.com/#/demo/tree-data
 
 ---

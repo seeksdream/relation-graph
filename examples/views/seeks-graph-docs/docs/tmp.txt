@@ -1,0 +1,47 @@
+&lt;template&gt;
+   &lt;div&gt;
+     &lt;div style="height:calc(100vh - 50px);"&gt;
+       &lt;RelationGraph ref="seeksRelationGraph" :options="graphOptions" /&gt;
+     &lt;/div&gt;
+   &lt;/div&gt;
+ &lt;/template&gt;
+
+ &lt;script&gt;
+ import RelationGraph from 'relation-graph'
+ export default {
+   name: 'Demo',
+   components: { RelationGraph },
+   data() {
+     return {
+       graphOptions: {
+
+       }
+     }
+   },
+   mounted() {
+     this.showSeeksGraph()
+   },
+   methods: {
+     showSeeksGraph(query) {
+       var __graph_json_data = {
+         rootId: 'a',
+         nodes: [
+           { id: 'a', text: 'A', borderColor: 'yellow' },
+           { id: 'b', text: 'B', color: '#43a2f1', fontColor: 'yellow' },
+           { id: 'c', text: 'C', nodeShape: 1, width: 80, height: 60 },
+           { id: 'e', text: 'E', nodeShape: 0, width: 150, height: 150 }
+         ],
+         links: [
+           { from: 'a', to: 'b', text: '关系1', color: '#43a2f1' },
+           { from: 'a', to: 'c', text: '关系2' },
+           { from: 'a', to: 'e', text: '关系3' },
+           { from: 'b', to: 'e', color: '#67C23A' }
+         ]
+       }
+       this.$refs.seeksRelationGraph.setJsonData(__graph_json_data, (seeksRGGraph) =&gt; {
+         // Called when the relation-graph is completed
+       })
+     }
+   }
+ }
+ &lt;/script&gt;
