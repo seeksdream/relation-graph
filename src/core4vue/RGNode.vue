@@ -305,6 +305,9 @@ export default {
   .rel-node-shape-1{
     /*border: #FD8B37 solid 1px;*/
     border-radius: 5px;
+  }
+  .rel-node-shape-1 .c-node-text{
+    /*border: #FD8B37 solid 1px;*/
     padding-left:5px;
     padding-right:5px;
   }
@@ -316,7 +319,12 @@ export default {
     justify-content: center;
   }
   .rel-node-shape-0{
-    padding:10px;
+    /*padding:10px;*/
+  }
+  .rel-node-shape-1 .c-node-text{
+    /*border: #FD8B37 solid 1px;*/
+    padding-left:5px;
+    padding-right:5px;
   }
   .rel-node-shape-0{
     width:80px;

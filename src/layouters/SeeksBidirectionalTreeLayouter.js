@@ -209,6 +209,8 @@ export class SeeksBidirectionalTreeLayouter {
       const _center_offset_y = parseInt(this.config.centerOffset_y) || 0;
       rootNode.lot.x = -(rootNode.el.offsetWidth || rootNode.width) / 2 + _center_offset_x;
       rootNode.lot.y = -(rootNode.el.offsetHeight || rootNode.height) / 2 + _center_offset_y;
+      // rootNode.lot.x = -(rootNode.el.offsetWidth || rootNode.width) / 2;
+      // rootNode.lot.y = -(rootNode.el.offsetHeight || rootNode.height) / 2;
       devLog('root position:', rootNode.lot.x, rootNode.lot.y);
       if (this.config.from === 'top') {
         rootNode.lot.y -= (this.graphSetting.viewSize.height / 2 - (rootNode.el.offsetHeight || rootNode.height)) - 100;
@@ -289,20 +291,6 @@ export class SeeksBidirectionalTreeLayouter {
           thisNode.lot.y = rootNode.lot.y + __per_height * ((analyticResult.max_strength / -2) + thisNode.lot.strengthWithChilds_from + thisNode.lot.strengthWithChilds / 2);
         }
       });
-      // this.allNodes.forEach(thisNode => {
-      //   if (thisNode.fixed === true) return
-      //   if (thisNode.lot.level === 1) {
-      //     thisNode.lot.y = __per_height * (thisNode.lot.strength_plus - thisNode.lot.strength + (thisNode.lot.strength - 1) / 2)
-      //   }
-      // })
-      // this.allNodes.forEach(thisNode => {
-      //   if (thisNode.fixed === true) return
-      //   if (thisNode.lot.level > 1) {
-      //     // thisNode.lot.y = __per_height * (thisNode.lot.strength_plus - thisNode.lot.strength + (thisNode.lot.strength - 1) / 2)
-      //     thisNode.lot.y = __per_height * (thisNode.lot.parent.lot.strength_plus - thisNode.lot.parent.lot.strength + thisNode.lot.index_of_parent)
-      //     // thisNode.text = thisNode.lot.parent.lot.strength_plus + '-' + thisNode.lot.parent.lot.strength + '+' + thisNode.lot.index_of_parent
-      //   }
-      // })
     } else {
       const __min_per_height = this.config.min_per_height || 250;
       const __max_per_height = this.config.max_per_height || 400;
@@ -331,22 +319,10 @@ export class SeeksBidirectionalTreeLayouter {
         if (thisNode.fixed === true) return;
         if (thisNode.lot.level !== 0) {
           // console.log('Place node xxxx:', thisNode.lot.strengthWithChilds_from, thisNode.lot.strengthWithChilds, __per_width)
-          thisNode.lot.x = -58 + rootNode.lot.x + __per_width * ((analyticResult.max_strength / -2) + thisNode.lot.strengthWithChilds_from + thisNode.lot.strengthWithChilds / 2);
+          thisNode.lot.x = rootNode.lot.x + __per_width * ((analyticResult.max_strength / -2) + thisNode.lot.strengthWithChilds_from + thisNode.lot.strengthWithChilds / 2);
           // thisNode.lot.x = rootNode.lot.x
         }
       });
-      // this.allNodes.forEach(thisNode => {
-      //   if (thisNode.fixed === true) return
-      //   if (thisNode.lot.level === 1) {
-      //     thisNode.lot.x = __per_width * (thisNode.lot.strength_plus - thisNode.lot.strength + thisNode.lot.strength / 2)
-      //   }
-      // })
-      // this.allNodes.forEach(thisNode => {
-      //   if (thisNode.fixed === true) return
-      //   if (thisNode.lot.level > 1) {
-      //     thisNode.lot.x = __per_width * (thisNode.lot.parent.lot.strength_plus - thisNode.lot.parent.lot.strength + thisNode.lot.index_of_parent)
-      //   }
-      // })
     }
   }
   getLevelDistance(node, level, perSize) {

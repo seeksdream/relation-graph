@@ -46,10 +46,10 @@ export default {
       this.showSettingPanel = !this.showSettingPanel;
     },
     printOptions() {
-      console.log('options:', this.relationGraph.options);
+      console.log('options:', this.relationGraph.getGraphJsonOptions());
     },
     printData() {
-      console.log('data:', this.relationGraph.graphData);
+      console.log('data:', this.relationGraph.getGraphJsonData());
     },
     enableDevlog() {
       this.relationGraph.enableDebugLog(!this.relationGraph.options.debug);

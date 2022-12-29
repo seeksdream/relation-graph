@@ -115,6 +115,114 @@ const graph_data = {
     }
   ]
 };
+const graph_data2 = {
+  'rootId': 'a',
+  'nodes': [
+    { 'id': 'a', 'text': 'a' },
+    { 'id': 'b', 'text': 'b' },
+    { 'id': 'b1', 'text': 'b1' },
+    { 'id': 'b2', 'text': 'b2' },
+    { 'id': 'b3', 'text': 'b3' },
+    { 'id': 'b4', 'text': 'b4' },
+    { 'id': 'b5', 'text': 'b5' },
+    { 'id': 'b6', 'text': 'b6' },
+    { 'id': 'c', 'text': 'c' },
+    { 'id': 'c1', 'text': 'c1' },
+    { 'id': 'c2', 'text': 'c2' },
+    { 'id': 'c3', 'text': 'c3' },
+    { 'id': 'd', 'text': 'd' },
+    { 'id': 'd1', 'text': 'd1' },
+    { 'id': 'd2', 'text': 'd2' },
+    { 'id': 'd3', 'text': 'd3' },
+    { 'id': 'd4', 'text': 'd4' },
+    { 'id': 'e', 'text': 'e' },
+    { 'id': 'e1', 'text': 'e1' },
+    { 'id': 'e2', 'text': 'e2' }
+  ],
+  'lines': [{ 'from': 'a', 'to': 'b' }, { 'from': 'b', 'to': 'b1' }, { 'from': 'b', 'to': 'b2' }, { 'from': 'b', 'to': 'b3' }, { 'from': 'b', 'to': 'b4' }, { 'from': 'b', 'to': 'b5' }, { 'from': 'b', 'to': 'b6' }, { 'from': 'a', 'to': 'c' }, { 'from': 'c', 'to': 'c1' }, { 'from': 'c', 'to': 'c2' }, { 'from': 'c', 'to': 'c3' }, { 'from': 'a', 'to': 'd' }, { 'from': 'd', 'to': 'd1' }, { 'from': 'd', 'to': 'd2' }, { 'from': 'd', 'to': 'd3' }, { 'from': 'd', 'to': 'd4' }, { 'from': 'a', 'to': 'e' }, { 'from': 'e', 'to': 'e1' }, { 'from': 'e', 'to': 'e2' }, { 'from': 'd', 'to': 'd3', 'text': 'Link2', 'color': 'rgba(255, 120, 0, 1)', 'lineWidth': 1, 'data': {}}, { 'from': 'd3', 'to': 'd', 'text': 'Link3', 'color': 'rgba(0, 206, 209, 1)', 'isReverse': true, 'lineWidth': 1, 'lineShape': 1, 'data': {}}, { 'from': 'd3', 'to': 'd', 'text': 'Link3', 'color': 'rgba(144, 240, 144, 0.5)', 'isHideArrow': true, 'lineWidth': 5, 'lineShape': 3, 'data': {}}]
+};
+const graph_data3 = {
+  'rootId': 'a',
+  'nodes': [
+    { 'id': 'a', 'text': 'a' },
+    { 'id': 'b', 'text': 'b' },
+    { 'id': 'c', 'text': 'c' },
+    { 'id': 'd', 'text': 'd' },
+    { 'id': 'e', 'text': 'e' },
+    { 'id': 'f', 'text': 'f' }
+  ],
+  'lines': [{ 'from': 'a', 'to': 'b' }, { 'from': 'a', 'to': 'c' }, { 'from': 'a', 'to': 'd' }, { 'from': 'a', 'to': 'e' }, { 'from': 'a', 'to': 'f' }]
+};
+const person = [
+  { 'id': 'N1', 'text': '侯亮平', 'pic': 'https://dss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=2308340537,462224207&fm=58&app=83&f=JPEG?w=250&h=250&s=EC708F46DA96B89CB69D5DDA0300D014' },
+  { 'id': 'N2', 'text': '李达康', 'pic': 'https://dss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=2677153550,2207805387&fm=58&app=83&f=JPEG?w=250&h=250&s=249039DDC2D153D411A851360300C062' },
+  { 'id': 'N3', 'text': '祁同伟', 'pic': 'https://dss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=1725297532,1915921796&fm=58&app=83&f=JPEG?w=250&h=250&s=FE8EA444A60759554DAC1DBB03000092' },
+  { 'id': 'N4', 'text': '陈岩石', 'pic': 'https://dss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=2025797948,1615296290&fm=58&app=83&f=JPEG?w=250&h=250&s=B5B04C331F32739C4604F9F503007021' },
+  { 'id': 'N5', 'text': '陆亦可', 'pic': 'https://dss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=344720653,260255884&fm=58&app=83&f=JPEG?w=250&h=250&s=57B8AB676AE862941D94ED170300E060' },
+  { 'id': 'N6', 'text': '高育良', 'pic': 'https://dss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=3098576865,849900134&fm=58&app=83&f=JPEG?w=250&h=250&s=EDE01A63A65917DC104509920300C0C1' },
+  { 'id': 'N7', 'text': '沙瑞金', 'pic': 'https://dss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=3722686698,2547355567&fm=58&app=83&f=JPEG?w=250&h=250&s=BF8A356E04E1B2BCEFA45D860100E0E1' },
+  { 'id': 'N8', 'text': '高小琴', 'pic': 'https://dss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=4266886844,1791850012&fm=58&s=66B01AC758BB67960834B8FA0300C011' },
+  { 'id': 'N9', 'text': '高小凤', 'pic': 'https://dss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=2747443453,2680399969&fm=58&app=83&f=JPEG?w=150&h=150&s=DB8828C1562265150814ADFE03007012' },
+  { 'id': 'N10', 'text': '赵东来', 'pic': 'https://dss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=3301823375,1282024443&fm=58&app=83&f=JPG?w=250&h=250&s=2BC2834F2C22A25D12C06CA80300E013' },
+  { 'id': 'N11', 'text': '程度', 'pic': 'https://dss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=134233720,666111889&fm=58&app=83&f=JPG?w=250&h=250&s=4DE5A844801F1BD461E039A20300C0C3' },
+  { 'id': 'N12', 'text': '吴惠芬', 'pic': 'https://dss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=1215039713,3597142764&fm=58&app=83&f=JPEG?w=250&h=250&s=1A20E0018E3B6E9CD10C7DA30300E081' },
+  { 'id': 'N13', 'text': '赵瑞龙', 'pic': 'https://dss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=1140839330,2922201597&fm=58&app=83&f=JPEG?w=250&h=250&s=CDF9A844D45AB87512C8508B0100F080' },
+  { 'id': 'N14', 'text': '赵立春', 'pic': 'https://dss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=2110325119,1633583088&fm=58&app=83&f=JPEG?w=120&h=120&s=971E35C05A43305DCA7C1C0B030080C' },
+  { 'id': 'N15', 'text': '陈海', 'pic': 'https://dss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=1416498138,2265298708&fm=58&app=83&f=JPEG?w=250&h=250&s=F906CF1C0E1356D046AC3CEB0300B0A0' },
+  { 'id': 'N16', 'text': '梁璐', 'pic': 'https://dss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=3749144697,3456463661&fm=58&app=83&f=JPEG?w=250&h=250&s=783823D3FE621E94138CC08B030070C2' },
+  { 'id': 'N17', 'text': '刘新建', 'pic': 'https://dss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=2263876103,310235844&fm=58&app=83&f=JPEG?w=250&h=250&s=6CE2A944CC1223DC632CC09203009082' },
+  { 'id': 'N18', 'text': '欧阳菁', 'pic': 'https://dss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=3590139977,3135325708&fm=58&app=83&f=JPEG?w=250&h=250&s=2F1C8B46C4A214BCE100A81A03004091' },
+  { 'id': 'N19', 'text': '吴心怡', 'pic': 'https://dss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=2110325119,1633583088&fm=58&app=83&f=JPEG?w=120&h=120&s=971E35C05A43305DCA7C1C0B030080C' },
+  { 'id': 'N20', 'text': '蔡成功', 'pic': 'https://dss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=4153440298,254451173&fm=58&app=83&f=JPEG?w=250&h=250&s=07C2B4488C42D355548CC41F010080D1' },
+  { 'id': 'N21', 'text': '丁义珍', 'pic': 'https://dss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=842795163,1346447987&fm=58&app=83&f=JPEG?w=250&h=250&s=2BC3736EE499247D41C0B4820100E093' }
+];
+const icons = [
+  { id: '1', name: '节点-1', data: { myicon: 'el-icon-star-on' }},
+  { id: '2', name: '节点-2', data: { myicon: 'el-icon-setting' }},
+  { id: '3', name: '节点-3', data: { myicon: 'el-icon-setting' }},
+  { id: '4', name: '节点-4', data: { myicon: 'el-icon-star-on' }},
+  { id: '6', name: '节点-6', data: { myicon: 'el-icon-setting' }},
+  { id: '7', name: '节点-7', data: { myicon: 'el-icon-setting' }},
+  { id: '8', name: '节点-8', data: { myicon: 'el-icon-star-on' }},
+  { id: '9', name: '节点-9', data: { myicon: 'el-icon-headset' }},
+  { id: '71', name: '节点-71', data: { myicon: 'el-icon-headset' }},
+  { id: '72', name: '节点-72', data: { myicon: 'el-icon-s-tools' }},
+  { id: '73', name: '节点-73', data: { myicon: 'el-icon-star-on' }},
+  { id: '81', name: '节点-81', data: { myicon: 'el-icon-s-promotion' }},
+  { id: '82', name: '节点-82', data: { myicon: 'el-icon-s-promotion' }},
+  { id: '83', name: '节点-83', data: { myicon: 'el-icon-star-on' }},
+  { id: '84', name: '节点-84', data: { myicon: 'el-icon-s-promotion' }},
+  { id: '85', name: '节点-85', data: { myicon: 'el-icon-sunny' }}
+];
+const appendPersonData = (nodes) => {
+  nodes.forEach((node, index) => {
+    node.data = {};
+    const picIndex = index % (person.length - 1);
+    node.data.pic = person[picIndex].pic;
+    node.data.name = person[picIndex].text;
+  });
+};
+const appendIconData = (nodes) => {
+  nodes.forEach((node, index) => {
+    const picIndex = index % (icons.length - 1);
+    node.data.myicon = icons[picIndex].data.myicon;
+  });
+};
+appendPersonData(graph_data.nodes);
+appendIconData(graph_data.nodes);
+appendPersonData(graph_data2.nodes);
+appendIconData(graph_data2.nodes);
+appendPersonData(graph_data3.nodes);
+appendIconData(graph_data3.nodes);
+
+// const xx2 = graph_data2.lines.filter(line => {
+//   return line.from.indexOf('-') === -1 && line.to.indexOf('-') === -1;
+// });
+// console.log(JSON.stringify(xx2));
+// const xx3 = graph_data2.lines.filter(line => {
+//   return line.from.length === 1 && line.to.length === 1;
+// });
+// console.log(JSON.stringify(xx3));
 export const predefineColors = [
   '#ff4500',
   '#ff8c00',
@@ -148,5 +256,14 @@ export const getGraphOptions = () => {
   return JSON.stringify(graph_options, null, 2);
 };
 export const getGraphData = () => {
-  return JSON.stringify(graph_data, null, 2);
+  return JSON.stringify(graph_data2, null, 2);
+};
+export const getGraphTeamplateData = (dataIndex) => {
+  if (dataIndex === 1) {
+    return JSON.stringify(graph_data, null, 2);
+  } else if (dataIndex === 2) {
+    return JSON.stringify(graph_data2, null, 2);
+  } else if (dataIndex === 3) {
+    return JSON.stringify(graph_data3, null, 2);
+  }
 };
