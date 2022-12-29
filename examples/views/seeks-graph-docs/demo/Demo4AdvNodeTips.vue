@@ -24,7 +24,7 @@
       <div class="c-node-menu-item">id:{{currentNode.text}}</div>
       <div class="c-node-menu-item">图标:{{currentNode.data.myicon}}</div>
     </div>
-    <el-button type="success" class="c-show-code-button"><el-link href="https://github.com/seeksdream/relation-graph/blob/master/doc/demo/Demo4AdvNodeTips.vue" target="_blank" style="color: #ffffff;">查看代码</el-link></el-button>
+    <el-button type="success" class="c-show-code-button"><el-link href="https://github.com/seeksdream/relation-graph/blob/master/examples/views/seeks-graph-docs/demo/Demo4AdvNodeTips.vue" target="_blank" style="color: #ffffff;">查看代码</el-link></el-button>
   </div>
 </template>
 
@@ -81,7 +81,7 @@ export default {
           { id: '55', name: '节点-55', data: { myicon: 'el-icon-sunny' }},
           { id: '5', name: '节点-5', data: { myicon: 'el-icon-sunny' }}
         ],
-        links: [
+        lines: [
           { from: '7', to: '71', text: '投资' },
           { from: '7', to: '72', text: '投资' },
           { from: '7', to: '73', text: '投资' },

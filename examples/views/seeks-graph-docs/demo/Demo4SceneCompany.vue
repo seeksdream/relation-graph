@@ -3,7 +3,7 @@
     <div style="width: calc(100% - 2px);height:calc(100vh - 50px);">
       <SeeksRelationGraph ref="seeksRelationGraph" :options="userGraphOptions" />
     </div>
-    <el-button type="success" class="c-show-code-button"><el-link href="https://github.com/seeksdream/relation-graph/blob/master/doc/demo/Demo4SceneCompany.vue" target="_blank" style="color: #ffffff;">查看代码</el-link></el-button>
+    <el-button type="success" class="c-show-code-button"><el-link href="https://github.com/seeksdream/relation-graph/blob/master/examples/views/seeks-graph-docs/demo/Demo4SceneCompany.vue" target="_blank" style="color: #ffffff;">查看代码</el-link></el-button>
   </div>
 </template>
 
@@ -81,7 +81,7 @@ export default {
       const graphData = {
         rootId: 'root',
         nodes: [],
-        links: []
+        lines: []
       };
       // 添加根节点和虚拟节点
       const rootNode = { id: graphData.rootId, name: _orign_data.entname, styleClass: 'c-g-center', color: '#A4C1FF', width: 250, height: 50, x: _center.x - 125, y: _center.y - 25 };
@@ -104,17 +104,17 @@ export default {
       graphData.nodes.push(asinvRootNode);
       graphData.nodes.push(branchRootNode);
       // 添加根节点和虚拟节点之间的关系，并将关系数据放入graphData
-      graphData.links.push({ from: rootNode.id, to: invRootNode.id, styleClass: 'c-g-l-group', color: '#C7E9FF', lineShape: 2 });
-      graphData.links.push({ from: rootNode.id, to: personRootNode.id, styleClass: 'c-g-l-group', color: '#C7E9FF', lineShape: 2 });
-      graphData.links.push({ from: rootNode.id, to: asinvRootNode.id, styleClass: 'c-g-l-group', color: '#C7E9FF', lineShape: 2 });
-      graphData.links.push({ from: rootNode.id, to: branchRootNode.id, styleClass: 'c-g-l-group', color: '#C7E9FF', lineShape: 2 });
+      graphData.lines.push({ from: rootNode.id, to: invRootNode.id, styleClass: 'c-g-l-group', color: '#C7E9FF', lineShape: 2 });
+      graphData.lines.push({ from: rootNode.id, to: personRootNode.id, styleClass: 'c-g-l-group', color: '#C7E9FF', lineShape: 2 });
+      graphData.lines.push({ from: rootNode.id, to: asinvRootNode.id, styleClass: 'c-g-l-group', color: '#C7E9FF', lineShape: 2 });
+      graphData.lines.push({ from: rootNode.id, to: branchRootNode.id, styleClass: 'c-g-l-group', color: '#C7E9FF', lineShape: 2 });
       // 将股东加入虚拟节点"股东"
       _orign_data.invs.forEach((thisNode, _index) => {
         thisNode.width = 200;
         thisNode.x = invRootNode.x - 300 - thisNode.width;
         thisNode.y = invRootNode.y + _index * 30 * -1 + 30;
         graphData.nodes.push(thisNode);
-        graphData.links.push({ from: invRootNode.id, to: thisNode.id, text: thisNode.desc, color: '#FFC5A6', arrow: 'none', lineShape: 4 });
+        graphData.lines.push({ from: invRootNode.id, to: thisNode.id, text: thisNode.desc, color: '#FFC5A6', arrow: 'none', lineShape: 4 });
       });
       // 将高管加入虚拟节点"高管"
       _orign_data.persons.forEach((thisNode, _index) => {
@@ -122,21 +122,21 @@ export default {
         thisNode.x = personRootNode.x - 200 - thisNode.width;
         thisNode.y = personRootNode.y + _index * 30;
         graphData.nodes.push(thisNode);
-        graphData.links.push({ from: personRootNode.id, to: thisNode.id, text: thisNode.desc, color: '#B9FFA7', arrow: 'none', lineShape: 4 });
+        graphData.lines.push({ from: personRootNode.id, to: thisNode.id, text: thisNode.desc, color: '#B9FFA7', arrow: 'none', lineShape: 4 });
       });
       // 将对外投资企业加入虚拟节点"对外投资"
       _orign_data.asInvs.forEach((thisNode, _index) => {
         thisNode.x = asinvRootNode.x + 200;
         thisNode.y = asinvRootNode.y + _index * 30 * -1 + 30;
         graphData.nodes.push(thisNode);
-        graphData.links.push({ from: asinvRootNode.id, to: thisNode.id, text: thisNode.desc, color: '#FFBEC1', lineShape: 4 });
+        graphData.lines.push({ from: asinvRootNode.id, to: thisNode.id, text: thisNode.desc, color: '#FFBEC1', lineShape: 4 });
       });
       // 将分支机构加入虚拟节点"分支机构东"
       _orign_data.branchs.forEach((thisNode, _index) => {
         thisNode.x = branchRootNode.x + 200;
         thisNode.y = branchRootNode.y + _index * 30;
         graphData.nodes.push(thisNode);
-        graphData.links.push({ from: branchRootNode.id, to: thisNode.id, text: thisNode.desc, color: '#FFA1F8', lineShape: 4 });
+        graphData.lines.push({ from: branchRootNode.id, to: thisNode.id, text: thisNode.desc, color: '#FFA1F8', lineShape: 4 });
       });
       this.$refs.seeksRelationGraph.setJsonData(graphData, (seeksRGGraph) => {
 

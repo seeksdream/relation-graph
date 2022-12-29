@@ -3,7 +3,7 @@
     <div style="height:50px;padding-top:6px;padding-left: 30px;padding-right:30px;border-bottom: #efefef solid 1px;">
       <el-button :disabled="level2DataIsloaded" type="success" @click="loadNextLevel2Data">加载第2层数据</el-button>
       <el-button :disabled="level3DataIsloaded" type="success" @click="loadNextLevel3Data">加载第3层数据</el-button>
-      <el-button type="success" class="c-show-code-button"><el-link href="https://github.com/seeksdream/relation-graph/blob/master/doc/demo/Demo4AdvDynamicData.vue" target="_blank" style="color: #ffffff;">查看代码</el-link></el-button>
+      <el-button type="success" class="c-show-code-button"><el-link href="https://github.com/seeksdream/relation-graph/blob/master/examples/views/seeks-graph-docs/demo/Demo4AdvDynamicData.vue" target="_blank" style="color: #ffffff;">查看代码</el-link></el-button>
     </div>
     <div style="height:calc(100vh - 50px);">
       <SeeksRelationGraph
@@ -72,7 +72,7 @@ export default {
           { id: '8', name: '节点-8', myicon: 'el-icon-star-on' },
           { id: '9', name: '节点-9', myicon: 'el-icon-headset' }
         ],
-        links: [
+        lines: [
           { from: '1', to: '2', text: '投资' },
           { from: '4', to: '2', text: '高管' },
           { from: '6', to: '2', text: '高管' },
@@ -103,7 +103,7 @@ export default {
           { id: '92', name: '节点-82', myicon: 'el-icon-sunny' },
           { id: '5', name: '节点-5', myicon: 'el-icon-sunny' }
         ],
-        links: [
+        lines: [
           { from: '7', to: '71', text: '投资' },
           { from: '7', to: '72', text: '投资' },
           { from: '7', to: '73', text: '投资' },
@@ -133,7 +133,7 @@ export default {
           { id: '54', name: '节点-54', myicon: 'el-icon-sunny' },
           { id: '55', name: '节点-55', myicon: 'el-icon-sunny' }
         ],
-        links: [
+        lines: [
           { from: '5', to: '51', text: '投资1' },
           { from: '5', to: '52', text: '投资' },
           { from: '5', to: '53', text: '投资3' },

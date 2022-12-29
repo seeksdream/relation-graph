@@ -13,7 +13,7 @@
       </SeeksRelationGraph>
     </div>
     <el-button type="success" class="c-show-code-button">
-      <el-link href="https://github.com/seeksdream/relation-graph/blob/master/doc/demo/Demo4CenterDistanceCoefficient.vue" target="_blank" style="color: #ffffff;">查看代码
+      <el-link href="https://github.com/seeksdream/relation-graph/blob/master/examples/views/seeks-graph-docs/demo/Demo4CenterDistanceCoefficient.vue" target="_blank" style="color: #ffffff;">查看代码
       </el-link>
     </el-button>
   </div>
@@ -102,8 +102,6 @@ export default {
       });
     },
     onChangeOption() {
-      // this.$refs.seeksRelationGraph.graphSetting.layouter.config.distance_coefficient = this.distance_coefficient
-      // this.$refs.seeksRelationGraph.refresh()
       this.graphOptions.layouts[0].distance_coefficient = this.distanceCoefficient;
       this.$refs.seeksRelationGraph.setOptions(this.graphOptions, (seeksRGGraph) => {
         // 这些写上当图谱初始化完成后需要执行的代码

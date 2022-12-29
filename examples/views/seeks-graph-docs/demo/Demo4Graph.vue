@@ -7,7 +7,7 @@
         :on-node-click="onNodeClick"
         :on-line-click="onLineClick" />
     </div>
-    <el-button type="success" class="c-show-code-button"><el-link href="https://github.com/seeksdream/relation-graph/blob/master/doc/demo/Demo4Graph.vue" target="_blank" style="color: #ffffff;">查看代码</el-link></el-button>
+    <el-button type="success" class="c-show-code-button"><el-link href="https://github.com/seeksdream/relation-graph/blob/master/examples/views/seeks-graph-docs/demo/Demo4Graph.vue" target="_blank" style="color: #ffffff;">查看代码</el-link></el-button>
   </div>
 </template>
 
@@ -40,7 +40,7 @@ export default {
           { id: 'c', text: 'C', nodeShape: 1, width: 80, height: 60 },
           { id: 'e', text: 'E', nodeShape: 0, width: 150, height: 150 }
         ],
-        links: [
+        lines: [
           { from: 'a', to: 'b', text: '关系1', color: '#43a2f1' },
           { from: 'a', to: 'c', text: '关系2' },
           { from: 'a', to: 'e', text: '关系3' },

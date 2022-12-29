@@ -9,7 +9,7 @@
     <el-tabs v-model="activeTabName" type="card" @tab-click="handleClick">
       <el-tab-pane label="基本信息" name="base">基本信息</el-tab-pane>
       <el-tab-pane label="关系图谱（点这里）" name="relation">
-        <div v-loading="g_loading" style="margin-top:50px;width: calc(100% - 10px);height:calc(100vh - 140px);">
+        <div v-loading="g_loading" style="width: calc(100%);height:calc(100vh - 300px);">
           <SeeksRelationGraph ref="seeksRelationGraph" :options="graphOptions">
           </SeeksRelationGraph>
         </div>
@@ -18,7 +18,7 @@
     </el-tabs>
 
     <el-button type="success" class="c-show-code-button">
-      <el-link href="https://github.com/seeksdream/relation-graph/blob/master/doc/demo/Demo4Hide2Show.vue" target="_blank" style="color: #ffffff;">查看代码
+      <el-link href="https://github.com/seeksdream/relation-graph/blob/master/examples/views/seeks-graph-docs/demo/Demo4Hide2Show.vue" target="_blank" style="color: #ffffff;">查看代码
       </el-link>
     </el-button>
   </div>
@@ -33,6 +33,7 @@ export default {
   data() {
     return {
       g_loading: true,
+      graphDataLoaded: false,
       activeTabName: 'base',
       demoname: '---',
       graphOptions: {
@@ -73,10 +74,9 @@ export default {
   },
   mounted() {
     this.demoname = this.$route.params.demoname;
-    this.setGraphData();
   },
   methods: {
-    setGraphData() {
+    loadGraphData() {
       const __graph_json_data = {
         'rootId': 'a',
         'nodes': [
@@ -115,21 +115,21 @@ export default {
       };
 
       console.log(JSON.stringify(__graph_json_data));
-      setTimeout(function() {
+      setTimeout(() => { // 模拟异步获取数据
         this.g_loading = false;
         this.$refs.seeksRelationGraph.setJsonData(__graph_json_data, (seeksRGGraph) => {
           // 这些写上当图谱初始化完成后需要执行的代码
+          seeksRGGraph.refresh();
         });
-      }.bind(this), 1000);
+      }, 1000);
     },
     handleClick(node, e) {
       console.log('this.activeTabName:', this.activeTabName);
       if (this.activeTabName === 'relation') {
-        this.$nextTick(() => {
-          setTimeout(() => {
-            this.$refs.seeksRelationGraph.refresh();
-          }, 500);
-        });
+        if (!this.graphDataLoaded) { // 不重复获取数据
+          this.graphDataLoaded = true;
+          this.loadGraphData();
+        }
       }
     }
   }

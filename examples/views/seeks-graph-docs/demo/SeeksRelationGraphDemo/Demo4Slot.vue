@@ -103,7 +103,7 @@ export default {
           { id: '55', name: '节点-55', myicon: 'el-icon-sunny' },
           { id: '5', name: '节点-5', myicon: 'el-icon-sunny' }
         ],
-        links: [
+        lines: [
           { from: '7', to: '71', text: '投资' },
           { from: '7', to: '72', text: '投资' },
           { from: '7', to: '73', text: '投资' },
@@ -129,12 +129,12 @@ export default {
           { from: '1', to: '5', text: '投资' }
         ]
       };
-      setTimeout(function() {
+      setTimeout(() => {
         this.g_loading = false;
         this.$refs.seeksRelationGraph.setJsonData(data, function(seeksRGGraph) {
           seeksRGGraph.doLayout();
         });
-      }.bind(this), 500);
+      }, 500);
     }
   }
 };

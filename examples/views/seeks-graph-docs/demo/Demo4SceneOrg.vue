@@ -3,7 +3,7 @@
     <div v-loading="g_loading" style="margin-top:50px;width: calc(100% - 10px);height:calc(100vh - 140px);">
       <SeeksRelationGraph ref="seeksRelationGraph" :options="graphOptions" :on-node-expand="onNodeExpand" />
     </div>
-    <el-button type="success" class="c-show-code-button"><el-link href="https://github.com/seeksdream/relation-graph/blob/master/doc/demo/Demo4SceneOrg.vue" target="_blank" style="color: #ffffff;">查看代码</el-link></el-button>
+    <el-button type="success" class="c-show-code-button"><el-link href="https://github.com/seeksdream/relation-graph/blob/master/examples/views/seeks-graph-docs/demo/Demo4SceneOrg.vue" target="_blank" style="color: #ffffff;">查看代码</el-link></el-button>
   </div>
 </template>
 
@@ -72,19 +72,19 @@ export default {
           thisNode.expanded = false;
         }
       });
-      setTimeout(function() {
+      setTimeout(() => {
         this.g_loading = false;
         this.$refs.seeksRelationGraph.setJsonData(__graph_json_data, (seeksRGGraph) => {
           // 这些写上当图谱初始化完成后需要执行的代码
         });
-      }.bind(this), 1000);
+      }, 1000);
     },
     onNodeExpand(node, e) {
       // 模拟动态加载数据
       if (node.data && node.data.asyncChild === true && node.data.loaded === false) {
         this.g_loading = true;
         node.data.loaded = true;
-        setTimeout(function() {
+        setTimeout(() => {
           this.g_loading = false;
           const _new_json_data = {
             nodes: [
@@ -92,7 +92,7 @@ export default {
               { id: node.id + '-child-2', text: node.id + '-的子节点2' },
               { id: node.id + '-child-3', text: node.id + '-的子节点3' }
             ],
-            links: [
+            lines: [
               { from: node.id, to: node.id + '-child-1', text: '动态子节点' },
               { from: node.id, to: node.id + '-child-2', text: '动态子节点' },
               { from: node.id, to: node.id + '-child-3', text: '动态子节点' }
@@ -101,7 +101,7 @@ export default {
           this.$refs.seeksRelationGraph.appendJsonData(_new_json_data, (seeksRGGraph) => {
             // 这些写上当图谱初始化完成后需要执行的代码
           });
-        }.bind(this), 1000);
+        }, 1000);
         return;
       }
     }

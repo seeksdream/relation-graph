@@ -25,7 +25,7 @@ export default {
   //   graphSetting: () => SeeksRGStore.state.graphSetting
   // }),
   mounted() {
-    setTimeout(function() {
+    setTimeout(() => {
       this.g_loading = false;
       this.loadGraphJsonData({
         invs: [
@@ -53,14 +53,14 @@ export default {
           { id: 'branch5', name: '中数智汇（武汉）科技股份有限公司', desc: '20%' }
         ]
       });
-    }.bind(this), 1000);
+    }, 1000);
   },
   methods: {
     loadGraphJsonData(jsonData) {
       const graphData = {
         // rootId: this.currentOrgId,
         nodes: [],
-        links: []
+        lines: []
       };
       const _graphSetting = this.$refs.seeksRelationGraph.graphSetting;
       const _center = {

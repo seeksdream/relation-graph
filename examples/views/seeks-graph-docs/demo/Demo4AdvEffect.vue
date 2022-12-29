@@ -1,7 +1,7 @@
 <template>
   <div>
     <div style="height:110px;padding-top:6px;padding-left: 30px;padding-right:30px;border-bottom: #efefef solid 1px;color: #555555;font-size: 12px;">
-      <el-button type="success" class="c-show-code-button"><el-link href="https://github.com/seeksdream/relation-graph/blob/master/doc/demo/Demo4AdvEffect.vue" target="_blank" style="color: #ffffff;">查看代码</el-link></el-button>
+      <el-button type="success" class="c-show-code-button"><el-link href="https://github.com/seeksdream/relation-graph/blob/master/examples/views/seeks-graph-docs/demo/Demo4AdvEffect.vue" target="_blank" style="color: #ffffff;">查看代码</el-link></el-button>
       <div style="">
         <el-button @click="doAction1()">定位到祁同伟</el-button>
         <el-button @click="doAction2()">让高育良变透明</el-button>
@@ -64,7 +64,7 @@ export default {
       this.$refs.seeksRelationGraph.setJsonData(__graph_json_data, (seeksRGGraph) => {
         // 这些写上当图谱初始化完成后需要执行的代码
         setTimeout(() => {
-          seeksRGGraph.options.layouter.stop();
+          seeksRGGraph.stopAutoLayout();
         }, 1000);
       });
     },

@@ -223,7 +223,7 @@ export default {
       const graphData = {
         rootId: 'root',
         nodes: [],
-        links: []
+        lines: []
       };
       // 添加根节点和虚拟节点
       const rootNode = { id: graphData.rootId, name: _orign_data.entname, styleClass: 'c-g-center', color: '#A4C1FF', width: 250, height: 50, x: _center.x - 125, y: _center.y - 25 };

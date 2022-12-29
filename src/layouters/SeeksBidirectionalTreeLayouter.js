@@ -211,13 +211,13 @@ export class SeeksBidirectionalTreeLayouter {
       rootNode.lot.y = -(rootNode.el.offsetHeight || rootNode.height) / 2 + _center_offset_y;
       devLog('root position:', rootNode.lot.x, rootNode.lot.y);
       if (this.config.from === 'top') {
-        rootNode.lot.y -= (this.graphSetting.viewSize.height / 2 - (rootNode.el.offsetHeight || rootNode.height));
+        rootNode.lot.y -= (this.graphSetting.viewSize.height / 2 - (rootNode.el.offsetHeight || rootNode.height)) - 100;
       } else if (this.config.from === 'bottom') {
-        rootNode.lot.y += (this.graphSetting.viewSize.height / 2 - (rootNode.el.offsetHeight || rootNode.height));
+        rootNode.lot.y += (this.graphSetting.viewSize.height / 2 - (rootNode.el.offsetHeight || rootNode.height)) - 200;
       } else if (this.config.from === 'right') {
-        rootNode.lot.x += (this.graphSetting.viewSize.width / 2 - (rootNode.el.offsetHeight || rootNode.width));
+        rootNode.lot.x += (this.graphSetting.viewSize.width / 2 - (rootNode.el.offsetWidth || rootNode.width)) - 100;
       } else {
-        rootNode.lot.x -= (this.graphSetting.viewSize.width / 2 - (rootNode.el.offsetHeight || rootNode.width));
+        rootNode.lot.x -= (this.graphSetting.viewSize.width / 2 - (rootNode.el.offsetWidth || rootNode.width)) - 100;
       }
       devLog('设置根节点位置:', rootNode.text, rootNode.x, rootNode.y, this.graphSetting.canvasSize.width, this.graphSetting.canvasSize.height, this.graphSetting.canvasOffset.x, this.graphSetting.canvasOffset.y);
       rootNode.x = rootNode.lot.x + __offsetX;

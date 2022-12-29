@@ -205,7 +205,7 @@ export class SeeksCenterLayouter {
       this.applyToNodePosition(this.__origin_nodes[i]);
     }
     // }
-    window.setTimeout(function() { this.autoLayout(); }.bind(this), 30);
+    window.setTimeout(() => { this.autoLayout(); }, 30);
   }
   stop() {
     this.layoutTimes = 1000;

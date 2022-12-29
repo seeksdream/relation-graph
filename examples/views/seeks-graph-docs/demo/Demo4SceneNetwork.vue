@@ -3,7 +3,7 @@
     <div v-loading="g_loading" style="width: calc(100% - 2px);height:calc(100vh - 50px);">
       <SeeksRelationGraph ref="seeksRelationGraph" :options="userGraphOptions" />
     </div>
-    <el-button type="success" class="c-show-code-button"><el-link href="https://github.com/seeksdream/relation-graph/blob/master/doc/demo/Demo4SceneNetwork.vue" target="_blank" style="color: #ffffff;">查看代码</el-link></el-button>
+    <el-button type="success" class="c-show-code-button"><el-link href="https://github.com/seeksdream/relation-graph/blob/master/examples/views/seeks-graph-docs/demo/Demo4SceneNetwork.vue" target="_blank" style="color: #ffffff;">查看代码</el-link></el-button>
   </div>
 </template>
 
@@ -84,7 +84,7 @@ export default {
           { 'from': 'cron', 'to': 'exe-10', 'text': null }
         ]
       };
-      setTimeout(function() {
+      setTimeout(() => {
         this.g_loading = false;
         this.$refs.seeksRelationGraph.setJsonData(__graph_json_data, (seeksRGGraph) => {
           const nodes = seeksRGGraph.getNodes();
@@ -95,7 +95,7 @@ export default {
             }
           });
         });
-      }.bind(this), 1000);
+      }, 1000);
     }
   }
 };

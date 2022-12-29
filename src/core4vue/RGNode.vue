@@ -187,10 +187,10 @@ export default {
         });
       }
       if (Math.abs(x_buff) + Math.abs(y_buff) > 6) {
-        setTimeout(function() {
+        setTimeout(() => {
           devLog('delay end dragging', this.dragging);
           this.dragging = false;
-        }.bind(this), 100);
+        }, 100);
       } else {
         this.dragging = false;
       }

@@ -55,7 +55,7 @@ npm install --save relation-graph
            { id: 'c', text: 'C', nodeShape: 1, width: 80, height: 60 },
            { id: 'e', text: 'E', nodeShape: 0, width: 150, height: 150 }
          ],
-         links: [
+         lines: [
             // link配置选项：http://relation-graph.com/#/docs/link
            { from: 'a', to: 'b', text: '关系1', color: '#43a2f1' },
            { from: 'a', to: 'c', text: '关系2' },
@@ -70,15 +70,15 @@ npm install --save relation-graph
      onNodeClick(nodeObject, $event) {
        console.log('onNodeClick:', nodeObject)
      },
-     onLineClick(lineObject, $event) {
-       console.log('onLineClick:', lineObject)
+     onLineClick(linkObject, $event) {
+       console.log('onLineClick:', linkObject)
      }
    }
  }
  </script>
 ```
 *上面代码的效果：*
-![简单示例效果图](doc/relation-graph-simple.png)
+![简单示例效果图](doc/images/relation-graph-simple.png)
 ![简单示例效果图](doc/images/d1.png)
 ![简单示例效果图](doc/images/d2.png)
 ![简单示例效果图](doc/images/d3.png)

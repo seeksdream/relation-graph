@@ -5,7 +5,7 @@
       </SeeksRelationGraph>
     </div>
     <el-button type="success" class="c-show-code-button">
-      <el-link href="https://github.com/seeksdream/relation-graph/blob/master/doc/demo/Demo4Expand.vue" target="_blank" style="color: #ffffff;">查看代码
+      <el-link href="https://github.com/seeksdream/relation-graph/blob/master/examples/views/seeks-graph-docs/demo/Demo4Expand.vue" target="_blank" style="color: #ffffff;">查看代码
       </el-link>
     </el-button>
   </div>
@@ -104,12 +104,12 @@ export default {
       };
 
       console.log(JSON.stringify(__graph_json_data));
-      setTimeout(function() {
+      setTimeout(() => {
         this.g_loading = false;
         this.$refs.seeksRelationGraph.setJsonData(__graph_json_data, (seeksRGGraph) => {
           // 这些写上当图谱初始化完成后需要执行的代码
         });
-      }.bind(this), 1000);
+      }, 1000);
     },
     onNodeCollapse(node, e) {
       this.$refs.seeksRelationGraph.refresh();

@@ -295,7 +295,7 @@ export class RelationGraphWithData extends RelationGraph {
   }
   getGraphJsonData() {
     const _nodes = [];
-    const _links = [];
+    const _lines = [];
     this.graphData.nodes.forEach(thisNode => {
       const jsonNode = transNodeToJson(thisNode);
       if (jsonNode) {
@@ -303,12 +303,12 @@ export class RelationGraphWithData extends RelationGraph {
       }
     });
     this.graphData.links.forEach(thisLink => {
-      transLinkToJson(thisLink, _links);
+      transLinkToJson(thisLink, _lines);
     });
     return {
       rootId: this.graphData.rootNode ? this.graphData.rootNode.id : '',
       nodes: _nodes,
-      links: _links
+      lines: _lines
     };
   }
   getGraphJsonOptions() {

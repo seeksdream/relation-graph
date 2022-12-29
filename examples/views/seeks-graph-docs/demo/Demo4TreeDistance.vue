@@ -29,7 +29,7 @@
       </SeeksRelationGraph>
     </div>
     <el-button type="success" class="c-show-code-button">
-      <el-link href="https://github.com/seeksdream/relation-graph/blob/master/doc/demo/Demo4TreeDistance.vue" target="_blank" style="color: #ffffff;">查看代码
+      <el-link href="https://github.com/seeksdream/relation-graph/blob/master/examples/views/seeks-graph-docs/demo/Demo4TreeDistance.vue" target="_blank" style="color: #ffffff;">查看代码
       </el-link>
     </el-button>
   </div>
@@ -60,7 +60,7 @@ export default {
             'layoutClassName': 'seeks-layout-center',
             'defaultNodeShape': 0,
             'defaultLineShape': 1,
-            'from': 'left',
+            'from': 'bottom',
             // 通过这4个属性来调整 tree-层级距离&节点距离
             'min_per_width': undefined,
             'max_per_width': '300',

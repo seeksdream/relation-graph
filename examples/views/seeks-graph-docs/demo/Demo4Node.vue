@@ -7,7 +7,7 @@
         :on-node-click="onNodeClick"
         :on-line-click="onLineClick" />
     </div>
-    <el-button type="success" class="c-show-code-button"><el-link href="https://github.com/seeksdream/relation-graph/blob/master/doc/demo/Demo4Node.vue" target="_blank" style="color: #ffffff;">查看代码</el-link></el-button>
+    <el-button type="success" class="c-show-code-button"><el-link href="https://github.com/seeksdream/relation-graph/blob/master/examples/views/seeks-graph-docs/demo/Demo4Node.vue" target="_blank" style="color: #ffffff;">查看代码</el-link></el-button>
   </div>
 </template>
 
@@ -46,7 +46,7 @@ export default {
           { id: 'f1', text: '固定位置', fixed: true, x: 20, y: 20 },
           { id: 'g', text: '自定义class实现闪烁', styleClass: 'my-node-style' }
         ],
-        links: [
+        lines: [
           { from: 'a', to: 'b' },
           { from: 'a', to: 'c' },
           { from: 'a', to: 'a1' },
