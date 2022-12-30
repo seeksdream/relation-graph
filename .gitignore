@@ -20,3 +20,7 @@ selenium-debug.log
 package-lock.json
 yarn.lock
 syncSrc.sh
+
+dist/
+lib/
+doc-site/

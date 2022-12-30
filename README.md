@@ -55,7 +55,7 @@ npm install --save relation-graph
            { id: 'c', text: 'C', nodeShape: 1, width: 80, height: 60 },
            { id: 'e', text: 'E', nodeShape: 0, width: 150, height: 150 }
          ],
-         links: [
+         lines: [
             // link配置选项：http://relation-graph.com/#/docs/link
            { from: 'a', to: 'b', text: '关系1', color: '#43a2f1' },
            { from: 'a', to: 'c', text: '关系2' },
@@ -70,15 +70,15 @@ npm install --save relation-graph
      onNodeClick(nodeObject, $event) {
        console.log('onNodeClick:', nodeObject)
      },
-     onLineClick(lineObject, $event) {
-       console.log('onLineClick:', lineObject)
+     onLineClick(linkObject, $event) {
+       console.log('onLineClick:', linkObject)
      }
    }
  }
  </script>
 ```
 *上面代码的效果：*
-![简单示例效果图](doc/relation-graph-simple.png)
+![简单示例效果图](doc/images/relation-graph-simple.png)
 ![简单示例效果图](doc/images/d1.png)
 ![简单示例效果图](doc/images/d2.png)
 ![简单示例效果图](doc/images/d3.png)
@@ -109,7 +109,7 @@ http://relation-graph.com
   
   另外，目前树状布局一直支持距离调整，请参考：http://relation-graph.com/#/docs/layout 中的章节《tree / 树状布局 特有的选项》。示例：http://relation-graph.com/#/demo/tree-distance
 * 新增图谱选项：disableDragNode，可以全局禁用节点拖动
-* 当图谱的大小发生变化时自动居中（可以通过图谱选项moveToCenterWhenResize禁用此功能）。示例：http://relation-graph.com/#/demo/graph-resize
+* 当图谱的大小发生变化时自动居中（可以通过图谱选项moveToCenterWhenRefresh禁用此功能）。示例：http://relation-graph.com/#/demo/graph-resize
 * 树状数据的支持，即通过{text:a,children: [{b},{c},{d}] }这样的方式定义数据，免去树形图谱的数据扁平化转换。示例：http://relation-graph.com/#/demo/tree-data
 
 ---
