@@ -14,7 +14,9 @@
 
 *详细使用方法、配置选项、在线demo，以及可视化的配置工具，可以访问这个网址：*
 
-[http://relation-graph.com](http://relation-graph.com)
+[http://relation-graph.com](http://relation-graph.com)  （国内用户，无需科学上网）
+
+[https://seeksdream.github.io](https://seeksdream.github.io)（For regions outside of China）
 
 ---
 *快速使用：*
