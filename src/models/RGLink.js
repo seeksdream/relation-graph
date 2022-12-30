@@ -50,3 +50,8 @@ export const transLinkToJson = (link, relations) => {
     relations.push(_line_json);
   });
 };
+
+export default {
+  json2Line,
+  transLinkToJson
+};

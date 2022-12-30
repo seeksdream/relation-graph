@@ -2,5 +2,7 @@ build/*.js
 examples/assets
 public
 dist
+doc
+npm
 lib
 node_modules

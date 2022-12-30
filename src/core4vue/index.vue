@@ -61,6 +61,7 @@ import GraphMiniView from './widgets/GraphMiniView';
 import GraphMiniToolBar from './widgets/GraphMiniToolBar';
 import { devLog } from '../utils/RGCommon';
 import { RelationGraphFinal } from '../models/RelationGraphFinal';
+import html2canvas from 'html2canvas';
 
 export default {
   name: 'SeeksRelationGraph',
@@ -127,6 +128,12 @@ export default {
     if (Vue.version.substring(0, 4) === '2.5.') {
       console.log('注意：当你使用的vue版本低于2.6时，你只能通过插槽slot[node]来显示节点内容，示例请参考：http://relation-graph.com/#/demo/adv-slot');
     }
+    if (!screenfull) {
+      console.error('[relation-graph]Please introduce component screenfull, for example:https://cdnjs.cloudflare.com/ajax/libs/screenfull.js/5.1.0/screenfull.min.js');
+    }
+    if (!html2canvas) {
+      console.error('[relation-graph]Please introduce component html2canvas, for example:https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
+    }
   },
   mounted() {
     devLog('---------------------------graph mounted---------------------------');
@@ -139,9 +146,10 @@ export default {
       onImageDownload: this.onImageDownload
     };
     console.log(this.relationGraphCore);
-    const rgClass = this.relationGraphCore || RelationGraphFinal;
-    const newRGCoreInstance = Object.create(rgClass.prototype);
-    const relationGraph = rgClass.apply(newRGCoreInstance, [this.options, listeners]);
+    // const rgClass = this.relationGraphCore || RelationGraphFinal;
+    // const newRGCoreInstance = Object.create(rgClass.prototype);
+    // const relationGraph = rgClass.apply(newRGCoreInstance, [this.options, listeners]);
+    const relationGraph = this.relationGraphCore || new RelationGraphFinal(this.options, listeners);
     relationGraph.setDom(this.$refs.seeksRelationGraph);
     relationGraph.ready();
     // if (this.jsonData) relationGraph.setJsonData(this.jsonData);
@@ -181,8 +189,8 @@ export default {
     appendJsonData(jsonData, isRelayout, callback) {
       this.relationGraph.appendJsonData(jsonData, isRelayout, callback);
     },
-    setLayouter(layouterClass) {
-      this.relationGraph.setLayouterClass(layouterClass);
+    setLayouter(layouterInstance) {
+      this.relationGraph.setLayouter(layouterInstance);
     },
     onGraphResize(jsonData, callback) {
       this.relationGraph.refreshNVAnalysisInfo();

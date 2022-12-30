@@ -8,5 +8,5 @@ module.exports = {
   //   // useBuiltIns: 'usage'  //使用usage不用安装babel/polyfill和引入
   //   useBuiltIns: false  //使用usage不用安装babel/polyfill和引入
   // }]
-  presets: ['@vue/cli-plugin-babel/preset'],
+  presets: ['@vue/cli-plugin-babel/preset']
 };

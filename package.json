@@ -1,14 +1,12 @@
 {
   "name": "relation-graph",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "relation-graph，Vue 关联关系图谱组件，可以展示如组织机构图谱、股权架构图谱、集团关系图谱等知识图谱，可提供多种图谱布局，包括树状布局、中心布局、力学布局自动布局等。Vue component for relationship graph , which can display knowledge graphs, such as organization graph, equity structure graph, group relationship graph, etc.",
   "main": "lib/relation-graph.common.js",
-  "style": "lib/relation-graph.css",
-  "unpkg": "src/index.js",
+  "unpkg": "lib/relation-graph.umd.min.js",
   "scripts": {
-    "dev": "vue-cli-service serve examples/main.js",
     "build": "vue-cli-service build --target lib --dest lib --name relation-graph src/index.js",
-    "build:site": "vue-cli-service --dest dist build examples/main.js",
+    "lib": "webpack --display-error-details --config webpack.config.js.cc",
     "lint": "vue-cli-service lint"
   },
   "author": "seeks<seeksdream@qq.com>",
@@ -38,7 +36,6 @@
     "@vue/cli-plugin-eslint": "^4.5.8",
     "@vue/cli-service": "^4.5.8",
     "babel-eslint": "^10.1.0",
-    "element-ui": "^2.15.12",
     "eslint": "^7.11.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-config-standard": "^14.1.1",
@@ -55,12 +52,11 @@
     "sass-loader": "^7.1.0",
     "svg-sprite-loader": "4.1.3",
     "vue": "^2.6.12",
-    "vue-router": "^3.2.0",
     "vue-template-compiler": "^2.6.12",
     "vuex": "3.4.0"
   },
   "dependencies": {
-    "html2canvas": "^1.0.0-rc.5",
+    "html2canvas": "^1.4.1",
     "screenfull": "^5.1.0"
   },
   "peerDependencies": {

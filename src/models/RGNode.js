@@ -94,3 +94,7 @@ export const transNodeToJson = (node) => {
   });
   return _node_json;
 };
+export default {
+  json2Node,
+  transNodeToJson
+};

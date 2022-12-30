@@ -37,17 +37,17 @@ export class RelationGraphWithData extends RelationGraph {
     this.resetViewSize();
     if (callback) callback(this);
   }
-  setLayouterClass(userLayouerClass) {
-    devLog('setLayouterClass::', userLayouerClass);
-    this.userLayouerClass = userLayouerClass;
+  setLayouter(userLayouerInstance) {
+    devLog('setLayouterClass::', userLayouerInstance);
+    this.userLayouerClass = userLayouerInstance;
   }
   initLayouter() {
     if (this.userLayouerClass) {
-      devLog('Use user layouter class:', this.userLayouerClass);
-      const newLayouterInstance = Object.create(this.userLayouerClass.prototype);
-      const layouterIns = this.userLayouerClass.apply(newLayouterInstance, [this.options.layouts[0], this.options]);
-      devLog('[change layout]Use user layouter instance:', layouterIns);
-      this.options.layouter = newLayouterInstance;
+      devLog('Use user layouter:', this.userLayouerClass);
+      // const newLayouterInstance = Object.create(this.userLayouerClass.prototype);
+      // const layouterIns = this.userLayouerClass.apply(newLayouterInstance, [this.options.layouts[0], this.options]);
+      // devLog('[change layout]Use user layouter instance:', layouterIns);
+      this.options.layouter = this.userLayouerClass;
       // this.options.layouter = new CenterLayouter(this.options.layouts[0], this.options);
     } else {
       if (this.options.layouts && this.options.layouts.length > 0) {
@@ -64,8 +64,11 @@ export class RelationGraphWithData extends RelationGraph {
     }
     devLog('Layouter instance:', this.options.layouter);
   }
-  resetViewSizeWhenSetData = true;
-  setJsonData(jsonData, callback) {
+  setJsonData(jsonData, resetViewSize, callback) {
+    if (arguments.length === 2 && typeof resetViewSize === 'function') {
+      callback = resetViewSize;
+      resetViewSize = true;
+    }
     this.nodeViewList = [];
     this.lineViewList = [];
     this.graphData.nodes = [];
@@ -85,8 +88,8 @@ export class RelationGraphWithData extends RelationGraph {
       this.graphData.rootNode = this.graphData.nodes[0];
     }
     this.applyNewDataToCanvas();
-    if (this.resetViewSizeWhenSetData) {
-      devLog('resetViewSizeWhenSetData:', this.resetViewSizeWhenSetData);
+    if (resetViewSize) {
+      devLog('resetViewSize:', resetViewSize);
       this.resetViewSize();
     }
     setTimeout(() => {
