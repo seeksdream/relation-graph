@@ -8,6 +8,8 @@
 
 之后，v2和v3将同步更新
 
+---
+
 这是一个Vue关系图谱组件，可以展示如组织机构图谱、股权架构图谱、集团关系图谱等知识图谱，可提供多种图谱布局，包括树状布局、中心布局、力学布局自动布局等。
 
 这个项目使用典型的vue编程方式，代码简单易懂。如果需要实现一些自定义的高级功能，你可以直接使用源码作为一个component放到你的项目中去用，轻松、任意的修改。
@@ -101,42 +103,19 @@ npm install --save relation-graph
 ![简单示例效果图](doc/images/d13.png)
 
 *更多效果及使用方法：*
-http://relation-graph.com
+
+[http://relation-graph.com](http://relation-graph.com)  （国内用户，无需科学上网）
+
+[https://seeksdream.github.io](https://seeksdream.github.io)（For regions outside of China）
+
 ---
 
-**最新版本v1.1.0：**
+**最新版本v2.0.2：**
 
 修改问题：
-* 修复了ie浏览器下滚动轴只能放大无法缩小的问题
-* 修复了导出图片不全或留白太多的问题
-* 修复了工具栏按钮样式错误和节点的收缩按钮样式错误
+* 对v1.x代码重构，结构更清晰，方便大家修改，欢迎一起完善
+* 处理了很多issues，解决不少问题
 
-新特性：
-* 为中心布局添加新的配置distance_coefficient，可以设置各层级之间的距离，以达到调整连线长度的视觉效果。请参考：http://relation-graph.com/#/docs/layout 中的章节《center / 中心布局 特有的选项》），示例：http://relation-graph.com/#/demo/distance_coefficient
-  
-  另外，目前树状布局一直支持距离调整，请参考：http://relation-graph.com/#/docs/layout 中的章节《tree / 树状布局 特有的选项》。示例：http://relation-graph.com/#/demo/tree-distance
-* 新增图谱选项：disableDragNode，可以全局禁用节点拖动
-* 当图谱的大小发生变化时自动居中（可以通过图谱选项moveToCenterWhenRefresh禁用此功能）。示例：http://relation-graph.com/#/demo/graph-resize
-* 树状数据的支持，即通过{text:a,children: [{b},{c},{d}] }这样的方式定义数据，免去树形图谱的数据扁平化转换。示例：http://relation-graph.com/#/demo/tree-data
-
----
-*v1.0.9：*
-
-主要修改的问题：
-* 1，解决了当使用者没有使用element-ui时图谱工具栏样式异常的问题
-* 2，默认关闭组件中的打印信息，只有在设置debug时打印信息
-* 3，解决了_graph.removeNodeById方法的bug
-* 4，解决了当图谱大小调整后调用refresh方法无法让图谱位置居中的问题
-* 5，解决了当调整图谱大小后工具栏位置不自动调整的问题
-* 6，解决了无法将图谱数据放在Vue data()中的问题
-
-新特性：
-* 1，提供一种新布局：固定位置布局《fixed/固定坐标布局》，介绍：http://relation-graph.com/#/docs/layout  示例：http://relation-graph.com/#/demo/layout-diy
-* 2，提供getGraphJsonData和getGraphJsonOptions方法，获取图谱中当前所有数据和配置信息的json数据
-* 3，提供图谱配置：禁用图谱缩放、禁用工具栏缩放按钮的配置
-* 4，提供节点配置：禁用节点拖拽、禁用节点点击的默认选中效果
-
----
 
 这个项目使用典型的vue编程方式，代码简单易懂，如果需要实现一些高级功能，你还可以直接使用源码作为一个component放到你的项目中去用，如果有一些优化或者新特性，欢迎提交pull request。
 

@@ -6,6 +6,7 @@ export const createDefaultConfig = (userGraphSetting) => {
     debug: true, // UI
     showDebugPanel: false, // UI
     backgrounImage: '', // UI
+    downloadImageFileName: '', // UI
     disableZoom: false, // UI
     disableDragNode: false, // UI
     moveToCenterWhenRefresh: false, // UI
@@ -16,7 +17,7 @@ export const createDefaultConfig = (userGraphSetting) => {
     allowShowZoomMenu: true, // UI
     allowAutoLayoutIfSupport: true, // UI
     allowShowRefreshButton: true, // UI
-    allowShowDownloadButton: false, // UI
+    allowShowDownloadButton: true, // UI TODO
     backgrounImageNoRepeat: false, // UI
     allowShowMiniToolBar: true, // UI
     allowSwitchLineShape: false, // UI

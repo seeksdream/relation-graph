@@ -26,14 +26,14 @@ export const RGOptions = SeeksRGOptions;
 export const RGLink = SeeksRGLink;
 export const RGNode = SeeksRGNode;
 const install = (Vue, options) => {
-  console.log('install:RelationGraph');
+  // console.log('install:RelationGraph');
   Vue.component('RelationGraph', RelationGraph);
   Vue.component('SeeksRelationGraph', RelationGraph);
-  console.log('install:RelationGraph:ok:', RelationGraph);
+  // console.log('install:RelationGraph:ok:', RelationGraph);
 };
 /* istanbul ignore if */
 if (typeof window !== 'undefined' && window.Vue) {
-  console.log('run:install:RelationGraph');
+  // console.log('run:install:RelationGraph');
   install(window.Vue);
 }
 export default {
