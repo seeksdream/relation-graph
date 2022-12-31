@@ -17,7 +17,7 @@ export class RelationGraphWithImage extends RelationGraphWithEvent {
     }
     return new Blob([u8arr], { type: mime });
   }
-  downloadAsImage(format) {
+  downloadAsImage(format, fileName) {
     if (this.listeners.onImageDownload) {
       const contineToDownload = this.listeners.onImageDownload(this.$canvasDom);
       if (contineToDownload === false) {
@@ -34,7 +34,10 @@ export class RelationGraphWithImage extends RelationGraphWithEvent {
       throw Error('没有节点，没有内容需要导出！');
     }
     if (!format)format = 'png';
+    if (!fileName) fileName = this.options.downloadImageFileName;
+    if (!fileName) fileName = 'SeeksRelationGraph-' + (Math.random() * 100000).toFixed(0);
     this.options.checkedNodeId = '';
+    const orign_zoom = this.options.canvasZoom;
     this.options.canvasZoom = 100;
     const exportDom = this.$canvasDom;
     const orign_width = exportDom.clientWidth; // 获取dom 宽度
@@ -58,12 +61,14 @@ export class RelationGraphWithImage extends RelationGraphWithEvent {
         _max_y = thisNode.y + thisNode.el.offsetHeight;
       }
     });
+    const nodeOffsetX = (_min_x - _padding);
+    const nodeOffsetY = (_min_y - _padding);
     this.graphData.nodes.forEach(thisNode => {
-      thisNode.x = thisNode.x - _min_x + _padding;
-      thisNode.y = thisNode.y - _min_y + _padding;
+      thisNode.x = thisNode.x - nodeOffsetX;
+      thisNode.y = thisNode.y - nodeOffsetY;
     });
-    const _origin_offset_x = this.options.canvasOffset.x + _min_x - _padding;
-    const _origin_offset_y = this.options.canvasOffset.y + _min_y - _padding;
+    const _origin_offset_x = this.options.canvasOffset.x;
+    const _origin_offset_y = this.options.canvasOffset.y;
     this.options.canvasOffset.x = _padding * -1;
     this.options.canvasOffset.y = _padding * -1;
     devLog('offset:', { _origin_offset_x, _origin_offset_y, _min_x, _min_y, _max_x, _max_y });
@@ -88,15 +93,17 @@ export class RelationGraphWithImage extends RelationGraphWithEvent {
     // exportDom.style.zIndex ='999'
     window.scrollTo(0, 0);
     devLog('export image:', { relationGraphPosition, orign_width, orign_height, _image_width, _image_height, _min_x, _min_y, _max_x, _max_y, devicePixelRatio: window.devicePixelRatio });
-    const fileName = 'SeeksRelationGraph-' + (Math.random() * 100000).toFixed(0);
     const canvas = document.createElement('canvas'); // 创建一个canvas节点
     canvas.width = _image_width * pixelRatio; // 定义canvas 宽度 * 缩放
     canvas.height = _image_height * pixelRatio; // 定义canvas高度 *缩放
+    // console.log('exportDom:', exportDom);
+    canvas.style.backgroundColor = getComputedStyle(exportDom.parentElement, null).backgroundColor;
+    console.log('canvas.style.backgroundColor:', canvas.style.backgroundColor);
     canvas.style.width = _image_width * pixelRatio + 'px';
     canvas.style.height = _image_height * pixelRatio + 'px';
     canvas.getContext('2d').scale(1, 1); // 获取context,设置scale
     const opts = {
-      backgroundColor: null,
+      backgroundColor: canvas.style.backgroundColor,
       scale: pixelRatio, // 添加的scale 参数
       canvas: canvas, // 自定义 canvas
       logging: true, // 日志开关，便于查看html2canvas的内部执行流程
@@ -108,7 +115,22 @@ export class RelationGraphWithImage extends RelationGraphWithEvent {
       // y: relationGraphPosition.top,
       useCORS: true // 【重要】开启跨域配置
     };
-    devLog('html2canvas:', opts);
+    setTimeout(() => {
+      this.createImage(exportDom, opts, format, fileName, () => {
+        this.options.canvasSize.width = orign_width;
+        this.options.canvasSize.height = orign_height;
+        this.options.canvasOffset.x = _origin_offset_x;
+        this.options.canvasOffset.y = _origin_offset_y;
+        this.options.canvasZoom = orign_zoom;
+        this.graphData.nodes.forEach(thisNode => {
+          thisNode.x = thisNode.x + nodeOffsetX;
+          thisNode.y = thisNode.y + nodeOffsetY;
+        });
+      });
+    }, 1000);
+  }
+  createImage(exportDom, opts, format, fileName, callback) {
+    devLog('html2canvas:', opts, format, fileName);
     html2canvas(exportDom, opts).then(canvas => {
       const dom = document.body.appendChild(canvas);
       // devLog('canvas:', fileName, dom)
@@ -148,10 +170,7 @@ export class RelationGraphWithImage extends RelationGraphWithEvent {
           document.body.removeChild(a);
           devLog('removeChild ok!');
         }
-        this.options.canvasSize.width = orign_width;
-        this.options.canvasSize.height = orign_height;
-        this.options.canvasOffset.x = _origin_offset_x;
-        this.options.canvasOffset.y = _origin_offset_y;
+        if (callback) callback();
       } catch (e) {
         devLog('[SEEKS Graph]Create and download image error:', e);
       }

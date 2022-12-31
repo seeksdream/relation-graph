@@ -126,7 +126,7 @@ export class RelationGraphWithEffect extends RelationGraphWithZoom {
       devLog('rootNode.x is NaN, graph is currently hidden?');
       return;
     }
-    console.log(this.options.layoutName);
+    // console.log(this.options.layoutName);
     if (this.options.layoutName !== 'force') {
       this.placeSingleNode();
     }
