@@ -1,29 +1,59 @@
 <template>
-  <g v-if="linkProps.isHide !== true && isAllowShowNode(linkProps.fromNode) && isAllowShowNode(linkProps.toNode)" :class="[relationGraph.options.checkedLineId==linkProps.seeks_id?'c-rg-link-checked':'']" ref="seeksRGLink" transform="translate(0,0)">
-    <template v-for="(thisRelation, ri) in linkProps.relations">
-      <slot name="line" :line="thisRelation">
-        <RGLine v-if="thisRelation.isHide === false" :key="'l-'+thisRelation.id" :relation-graph="relationGraph" :link="linkProps" :relation="thisRelation" :relation-index="ri" />
-      </slot>
-    </template>
+  <g>
+    <use
+        :xlink:href="'#' + link.seeks_id + '-' + relationIndex"
+        :class="['c-rg-line', checked ? 'c-rg-line-checked' : '']"
+        @click="onClick(relation, $event)" />
+    <text
+        class="c-rg-line-text"
+        :style="{fill:(checked ? relationGraph.options.checkedLineColor : (relation.fontColor?relation.fontColor:(relation.color?relation.color:undefined)))}"
+        @click="onClick(relation, $event)"
+        :x="textOffset"
+        y="0"
+    >
+      <textPath :xlink:href="'#' + link.seeks_id + '-' + relationIndex" startOffset="0" text-anchor="start" method="align" spacing="auto"> {{ relation.text }} </textPath>
+<!--      startOffset="0" text-anchor="start" method="align" spacing="auto"-->
+    </text>
   </g>
 </template>
 
 <script>
-// import RGLine from './RGLineSmart';
-import RGLine from './RGLineTextByPath';
+
+import { getTextSize } from '../utils/RGCommon';
+import { getNodeDistance } from '../utils/RGGraphMath';
+
 export default {
-  name: 'SeeksRGLink',
-  components: { RGLine },
+  name: 'SeeksRGLine',
   props: {
     relationGraph: {
       mustUseProp: true,
       default: () => { return {}; },
       type: Object
     },
-    linkProps: {
+    link: {
       mustUseProp: true,
       default: () => { return {}; },
       type: Object
+    },
+    relation: {
+      mustUseProp: true,
+      default: () => { return {}; },
+      type: Object
+    },
+    relationIndex: {
+      mustUseProp: true,
+      default: () => { return 0; },
+      type: Number
+    }
+  },
+  computed: {
+    checked() {
+      return this.link.seeks_id === this.relationGraph.options.checkedLineId;
+    },
+    textOffset() {
+      const textWidth = getTextSize(this.relation.text) * 10;
+      const distance = getNodeDistance(this.link.fromNode.x, this.link.fromNode.y, this.link.toNode.x, this.link.toNode.y);
+      return (distance - textWidth) / 2;
     }
   },
   data() {
@@ -41,7 +71,7 @@ export default {
   methods: {
     onClick(line, e) {
       // RGStore.commit('setCurrentLineId', this.lineProps.id)
-      this.relationGraph.onLineClick(line, this.linkProps, e);
+      this.relationGraph.onLineClick(line, this.link, e);
     },
     isAllowShowNode: function(thisNode) {
       const _r = thisNode.isShow !== false && thisNode.isHide !== true && (!thisNode.lot.parent || this.isAllowShowNode(thisNode.lot.parent, false) === true);

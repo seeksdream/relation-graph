@@ -21,6 +21,8 @@ export const json2Line = (originData) => {
       originData.styleClass !== undefined ? originData.styleClass : undefined,
     isHide: originData.isHide !== undefined ? originData.isHide : false,
     arrow: originData.arrow !== undefined ? originData.arrow : undefined,
+    showStartArrow: originData.showStartArrow !== undefined ? originData.showStartArrow : false,
+    showEndArrow: originData.showEndArrow !== undefined ? originData.showEndArrow : true,
     isHideArrow:
       originData.isHideArrow !== undefined ? originData.isHideArrow : undefined,
     hidden: originData.hidden !== undefined ? originData.hidden : false,
@@ -32,6 +34,10 @@ export const json2Line = (originData) => {
       originData.reverseText !== undefined ? originData.reverseText : undefined,
     data: originData.data !== undefined ? originData.data : {}
   };
+  if (jsonData.isHideArrow) {
+    jsonData.showEndArrow = false;
+    jsonData.isHideArrow = false;
+  }
   return jsonData;
 };
 
@@ -50,7 +56,12 @@ export const transLinkToJson = (link, relations) => {
     relations.push(_line_json);
   });
 };
-
+export const JUNCTION_POINT_STYLE = {
+  border: 'border',
+  ltrb: 'ltrb',
+  tb: 'tb',
+  lr: 'lr'
+};
 export default {
   json2Line,
   transLinkToJson

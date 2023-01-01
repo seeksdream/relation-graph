@@ -1,6 +1,6 @@
-import { RelationGraphWithImage } from '@/models/RelationGraphWithImage';
+import { RelationGraphWithLine } from '@/models/RelationGraphWithLine';
 
-export class RelationGraphFinal extends RelationGraphWithImage {
+export class RelationGraphFinal extends RelationGraphWithLine {
   // eslint-disable-next-line no-useless-constructor
   constructor() {
     super(...arguments);

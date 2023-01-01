@@ -277,7 +277,11 @@ export class RelationGraphWithData extends RelationGraph {
     devLog('节点预处理完毕');
     this.loadLines(_lines);
   }
-  getLineArrow(_color) {
+  getLineArrow(_color, isStartArrow, checked) {
+    const arrowType = (isStartArrow ? 'start-' : '');
+    if (checked) {
+      return this.options.instanceId + '-' + arrowType + 'arrow-checked';
+    }
     if (_color) {
       const thisColorId = RGEffectUtils.getColorId(_color);
       if (this.allLineColors.map(thisColorObj => {
@@ -285,9 +289,9 @@ export class RelationGraphWithData extends RelationGraph {
       }).indexOf(thisColorId) === -1) {
         this.allLineColors.push({ id: thisColorId, color: _color });
       }
-      return this.options.instanceId + '-arrow-' + thisColorId;
+      return this.options.instanceId + '-' + arrowType + 'arrow-' + thisColorId;
     } else {
-      return this.options.instanceId + '-arrow-default';
+      return this.options.instanceId + '-' + arrowType + 'arrow-default';
     }
   }
   getNodes() {

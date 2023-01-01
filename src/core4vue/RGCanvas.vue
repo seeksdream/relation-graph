@@ -3,7 +3,7 @@
     <div ref="seeksRGCanvas" :style="canvasSizeAndPosition" class="rel-map-canvas">
       <slot name="canvas-plug" />
       <div ref="rgCanvas" class="rel-linediv" style="overflow: visible">
-        <svg :style="{width : relationGraph.options.canvasSize.width + 'px',height: relationGraph.options.canvasSize.height + 'px'}" style="overflow: visible" xmlns="http://www.w3.org/2000/svg" version="1.2">
+        <svg :style="{width : relationGraph.options.canvasSize.width + 'px',height: relationGraph.options.canvasSize.height + 'px'}" style="overflow: visible" xmlns="http://www.w3.org/2000/svg" version="2.0">
           <defs>
             <linearGradient :id="relationGraph.options.instanceId+'-lineStyle'" x1="1" y1="0" x2="0" y2="0">
               <stop offset="0%" stop-color="#e52c5c" />
@@ -22,6 +22,18 @@
               <path :style="{fill: relationGraph.options.defaultLineColor}" :d="relationGraph.options.defaultLineMarker.data" />
             </marker>
             <marker
+                    :id="relationGraph.options.instanceId+'-start-arrow-default'"
+                    :markerWidth="relationGraph.options.defaultLineMarker.markerWidth"
+                    :markerHeight="relationGraph.options.defaultLineMarker.markerHeight"
+                    :refX="relationGraph.options.defaultLineMarker.refX"
+                    :refY="relationGraph.options.defaultLineMarker.refY"
+                    marker-units="strokeWidth"
+                    orient="auto"
+                    viewBox="0 0 12 12"
+            >
+              <path :style="{fill: relationGraph.options.defaultLineColor}" :d="relationGraph.options.defaultLineMarker.data" transform="translate(12,12)rotate(180)"  />
+            </marker>
+            <marker
                     :id="relationGraph.options.instanceId+'-arrow-checked'"
                     markerUnits="strokeWidth"
                     markerWidth="12"
@@ -31,7 +43,19 @@
                     refY="6"
                     orient="auto"
             >
-              <path :style="{fill: '#FD8B37'}" d="M2,2 L10,6 L2,10 L6,6 L2,2" />
+              <path :style="{fill: relationGraph.options.checkedLineColor}" d="M2,2 L10,6 L2,10 L6,6 L2,2" />
+            </marker>
+            <marker
+                    :id="relationGraph.options.instanceId+'-start-arrow-checked'"
+                    markerUnits="strokeWidth"
+                    markerWidth="12"
+                    markerHeight="12"
+                    viewBox="0 0 12 12"
+                    refX="6"
+                    refY="6"
+                    orient="auto"
+            >
+              <path :style="{fill: relationGraph.options.checkedLineColor}" d="M2,2 L10,6 L2,10 L6,6 L2,2" transform="translate(12,12)rotate(180)" />
             </marker>
             <marker
                     v-for="thisColor in relationGraph.allLineColors"
@@ -44,21 +68,33 @@
                     marker-units="strokeWidth"
                     orient="auto"
             >
-              <path :fill="relationGraph.options.defaultLineMarker.color || thisColor.color" :d="relationGraph.options.defaultLineMarker.data" />
+              <path
+                  :fill="relationGraph.options.defaultLineMarker.color || thisColor.color"
+                  :d="relationGraph.options.defaultLineMarker.data"
+              />
             </marker>
-            <!--<marker-->
-            <!--v-for="thisColor in allLineColors"-->
-            <!--:id="graphSetting.instanceId+'-arrow-'+thisColor.id"-->
-            <!--:key="thisColor.id"-->
-            <!--marker-units="strokeWidth"-->
-            <!--orient="auto"-->
-            <!--markerWidth="15"-->
-            <!--markerHeight="15"-->
-            <!--refX="50"-->
-            <!--refY="7"-->
-            <!--&gt;-->
-            <!--<path :fill="thisColor.color" d="M 14 7 L 1 .3 L 4 7 L .4 13 L 14 7, Z" />-->
-            <!--</marker>-->
+            <marker
+                    v-for="thisColor in relationGraph.allLineColors"
+                    :id="relationGraph.options.instanceId+'-start-arrow-'+thisColor.id"
+                    :key="'start-'+thisColor.id"
+                    :markerWidth="relationGraph.options.defaultLineMarker.markerWidth"
+                    :markerHeight="relationGraph.options.defaultLineMarker.markerHeight"
+                    :refX="relationGraph.options.defaultLineMarker.refX"
+                    :refY="relationGraph.options.defaultLineMarker.refY"
+                    marker-units="strokeWidth"
+                    orient="auto"
+            >
+              <path
+                  :fill="relationGraph.options.defaultLineMarker.color || thisColor.color"
+                  :d="relationGraph.options.defaultLineMarker.data"
+                  transform="translate(12,12)rotate(180)"
+              />
+            </marker>
+            <template v-for="thisLink in relationGraph.graphData.links">
+              <template v-for="(thisRelation, ri) in thisLink.relations">
+                <SeeksRGLinePath :key="thisRelation.id" :relation-graph="relationGraph" :link="thisLink" :relation="thisRelation" :relation-index="ri" />
+              </template>
+            </template>
           </defs>
           <SeeksRGLink v-for="thisLink in relationGraph.graphData.links" :key="thisLink.seeks_id" :link-props="thisLink" :relation-graph="relationGraph">
             <template slot="line" slot-scope="{line}">
@@ -82,11 +118,12 @@
 import RGEffectUtils from '../utils/RGEffectUtils';
 import SeeksRGNode from './RGNode';
 import SeeksRGLink from './RGLink';
+import SeeksRGLinePath from './RGLinePath';
 import { devLog } from '../utils/RGCommon';
 
 export default {
   name: 'RelationGraphCanvas',
-  components: { SeeksRGNode, SeeksRGLink },
+  components: { SeeksRGNode, SeeksRGLink, SeeksRGLinePath },
   props: {
     relationGraph: {
       mustUseProp: false,
@@ -126,8 +163,10 @@ export default {
   methods: {
     init() {
       this.$refs.rgCanvas.style.setProperty('--stroke', 'url(\'#' + this.relationGraph.options.instanceId + '-lineStyle\')');
-      this.$refs.rgCanvas.style.setProperty('--markerEnd', 'url(\'#' + this.relationGraph.options.instanceId + '-arrow-default\')');
+      this.$refs.rgCanvas.style.setProperty('--markerEnd', 'url(\'#' + this.relationGraph.options.instanceId + '-start-arrow-default\')');
+      this.$refs.rgCanvas.style.setProperty('--markerStart', 'url(\'#' + this.relationGraph.options.instanceId + '-arrow-default\')');
       this.$refs.rgCanvas.style.setProperty('--markerEndChecked', 'url(\'#' + this.relationGraph.options.instanceId + '-arrow-checked\')');
+      this.$refs.rgCanvas.style.setProperty('--markerStartChecked', 'url(\'#' + this.relationGraph.options.instanceId + '-start-arrow-checked\')');
       // console.log('#############Seeks graph viewSize:', this.options.viewSize.width, this.options.viewSize.height)
     },
     mouseListener(e) {
@@ -151,14 +190,14 @@ export default {
         x: e.clientX,
         y: e.clientY
       };
-      // console.log('---- center:', userZoomCenter.x, userZoomCenter.y)
-      const _isMac = /macintosh|mac os x/i.test(navigator.userAgent);
       let _deltaY = e.deltaY;
       if (_deltaY === undefined) {
         _deltaY = e.wheelDelta;
       }
+      const _isMac = /macintosh|mac os x/i.test(navigator.userAgent);
       // console.log('mouseListenerEmpty:', _isMac, e.deltaY, e.wheelDelta, e.which, e.detail)
       const _zoomDirection = _isMac ? 1 : -1;
+      // const _zoomDirection = 1;
       if (_deltaY > 0) {
         this.relationGraph.zoom(5 * _zoomDirection, userZoomCenter);
       } else {
@@ -221,24 +260,12 @@ export default {
     left:0px;
     --stroke:url('#lineStyle');
     --markerEnd:url('#arrow-default');
+    --markerStart:url('#start-arrow-default');
     --markerEndChecked:url('#arrow-checked');
+    --markerStartChecked:url('#start-arrow-checked');
   }
   .rel-linediv svg{
     overflow: visible
-  }
-  .rel-linediv /deep/ .c-rg-line-checked {
-    /*stroke: var(--stroke);*/
-    /*marker-end: var(--markerEndChecked) !important;*/
-    stroke-width: 2px;
-    stroke-dasharray: 5,5,5;
-    stroke-dashoffset: 3px;
-    stroke-linecap: butt;
-    /*stroke: #FD8B37;*/
-    stroke-linejoin: bevel;
-    /* firefox bug fix - won't rotate at 90deg angles */
-    -moz-transform: rotate(-89deg) translateX(-190px);
-    animation-timing-function:linear;
-    animation: ACTRGLineChecked 10s;
   }
   .rel-map /deep/ img{
     -webkit-user-drag: none;

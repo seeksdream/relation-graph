@@ -23,6 +23,7 @@ export default {
       graphOptions: {
         allowSwitchLineShape: true,
         allowSwitchJunctionPoint: true,
+        allowShowDownloadButton: true,
         defaultJunctionPoint: 'border'
         // 这里可以参考"Graph 图谱"中的参数进行设置
       }
@@ -32,7 +33,7 @@ export default {
     this.showSeeksGraph();
   },
   methods: {
-    showSeeksGraph(query) {
+    showSeeksGraph() {
       const __graph_json_data = {
         rootId: 'a',
         nodes: [

@@ -58,6 +58,7 @@ export const createDefaultConfig = (userGraphSetting) => {
     fullscreen: false, // private
     checkedNodeId: '', // private
     checkedLineId: '', // private
+    checkedLineColor: '#FD8B37', // private
     layouts: [], // private
     layoutLabel: '', // private
     layoutName: 'tree', // private
