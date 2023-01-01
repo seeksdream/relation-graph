@@ -34,17 +34,8 @@
 </template>
 
 <script>
-// import RGStore from './RGStore'
-// import RGGraphMath from './RGGraphMath'
 import RGEffectUtils from '../utils/RGEffectUtils';
 import { devLog } from '../utils/RGCommon';
-// import Velocity from 'velocity-animate'
-// import { mapState } from 'vuex'
-// var _parent = this.$parent
-// function isAllowShowNode(isShow, isHide, parent) {
-//   const _r = isShow !== false && isHide !== true && (!parent || isAllowShowNode(parent.isShow, parent.isHide, parent.lot.parent) === true)
-//   return _r
-// }
 export default {
   name: 'SeeksRGNode',
   components: { },
@@ -72,21 +63,6 @@ export default {
       return this.nodeProps.expanded === false ? 'c-expanded' : 'c-collapsed';
     }
   },
-  // show() {
-  //
-  // },
-  watch: {
-    // 'nodeProps.isShow': function(v) {
-    //   console.log('nodeProps.isShow:', v)
-    //   if (v === true) {
-    //     this.$nextTick(() => {
-    //       this.nodeProps.el.offsetWidth = this.$refs.seeksRGNode.offsetWidth
-    //       this.nodeProps.el.offsetHeight = this.$refs.seeksRGNode.offsetHeight
-    //       console.log('node 挂载 el size:', this.$refs.seeksRGNode.offsetWidth, this.$refs.seeksRGNode.offsetHeight)
-    //     })
-    //   }
-    // }
-  },
   created() {
     // Vue.version
   },
@@ -107,61 +83,6 @@ export default {
       if (this.nodeProps.el.offsetWidth !== this.$refs.seeksRGNode.offsetWidth || this.nodeProps.el.offsetHeight !== this.$refs.seeksRGNode.offsetHeight) {
         this.relationGraph.updateNodeOffsetSize(this.nodeProps, this.$refs.seeksRGNode.offsetWidth, this.$refs.seeksRGNode.offsetHeight);
       }
-      // this.nodeProps.el = this.$refs.seeksRGNode;
-      // console.log('node 挂载 el:', this.nodeProps.text, this.nodeProps.el.offsetWidth, this.nodeProps.el.offsetHeight)
-      // this.$nextTick(() => {
-      //   this.nodeProps.el.offsetWidth = this.$refs.seeksRGNode.offsetWidth
-      //   this.nodeProps.el.offsetHeight = this.$refs.seeksRGNode.offsetHeight
-      //   console.log('node 挂载 el size:', this.$refs.seeksRGNode.offsetWidth, this.$refs.seeksRGNode.offsetHeight)
-      // })
-      // this.nodeProps.em = true
-      // if (this.nodeProps.style === 0) {
-      //   this.nodeProps.name = RGEffectUtils.transName4Circle(this.nodeProps.name, this.nodeProps.el.offsetWidth)
-      //   console.log('resize node name:', this.name)
-      // }
-      // this.nodeProps.el_width = this.$refs.seeksRGNode.offsetWidth
-      // this.nodeProps.el_height = this.$refs.seeksRGNode.offsetHeight
-      // var __this = this
-      // setInterval(function() {
-      //   __this.nodeProps.x = __this.nodeProps.x
-      //   __this.nodeProps.y = __this.nodeProps.y
-      // }, 1000)
-    },
-    getNodeName() {
-      // if (this.hovering) return 'N-' + this.nodeProps.seeks_id
-      if (this.hovering) {
-        return this.nodeProps.text;
-      }
-      if (this.nodeProps.width === undefined && this.nodeProps.nodeShape !== 0) {
-        return this.nodeProps.text;
-      }
-      const _w = this.nodeProps.el.offsetWidth;
-      const _h = this.nodeProps.el.offsetHeight;
-      const _num_l = parseInt((_w - 20) / 20);
-      const _num_c = parseInt((_h - 20) / 20);
-      if (_num_l === -1 || _num_c === -1) {
-        return this.nodeProps.text;
-      }
-      const _length = _num_l * _num_c * 2;
-      const _text_arr = [];
-      let _current_length = 0;
-      for (let i = 0; i < this.nodeProps.text.length; i++) {
-        const _thisChar = this.nodeProps.text[i];
-        const _charCode = _thisChar.charCodeAt(0);
-        let _charLength = 1;
-        if (_charCode < 0 || _charCode > 255) {
-          _charLength = 2;
-        }
-        if ((_current_length + _charLength) > _length) {
-          return _text_arr.join('') + '...';
-        } else {
-          _current_length += _charLength;
-          _text_arr.push(_thisChar);
-        }
-      }
-      return _text_arr.join('');
-      // return _num_l + '/' + _num_c
-      // return this.nodeProps.text
     },
     expandOrCollapseNode(e) {
       this.relationGraph.expandOrCollapseNode(this.nodeProps, e);
@@ -215,62 +136,6 @@ export default {
         return;
       }
       this.relationGraph.onNodeClick(this.nodeProps, e);
-    },
-    // beforeEnter(el) {
-    //   console.log('beforeEnter')
-    //   el.style.opacity = 0
-    //   el.style.transformOrigin = 'left'
-    // },
-    // enter(el, done) {
-    //   console.log('enter')
-    //   Velocity(el, { opacity: 1, fontSize: '1.4em' }, { duration: 300 })
-    //   Velocity(el, { fontSize: '1em' }, { complete: done })
-    // },
-    // leave(el, done) {
-    //   console.log('leave')
-    //   Velocity(el, { translateX: '0px', rotateZ: '360deg' }, { duration: 600 })
-    //   // Velocity(el, { rotateZ: '180deg' }, { loop: 1 })
-    //   // Velocity(el, {
-    //   //   rotateZ: '45deg',
-    //   //   translateY: '30px',
-    //   //   translateX: '30px',
-    //   //   opacity: 0
-    //   // }, { complete: done })
-    // },
-    getLightColor(col) {
-      // if (this.borderColor !== '') {
-      //   return this.borderColor
-      // }
-      if (col[0] === '#') {
-        let _s = col.substring(1);
-        if (_s.length === 3) {
-          _s = _s[0] + _s[0] + _s[1] + _s[1] + _s[2] + _s[2];
-        }
-        const _rgb_arr = [
-          parseInt(_s[0] + '' + _s[1], 16),
-          parseInt(_s[2] + '' + _s[3], 16),
-          parseInt(_s[4] + '' + _s[5], 16)
-        ];
-        devLog('getLightColor1:', col, ':', _rgb_arr.join(','));
-        col = 'rgb(' + _rgb_arr.join(',') + ')';
-      }
-      let _st = col.substring(col.indexOf('(') + 1);
-      _st = _st.substring(0, _st.indexOf(')'));
-      const _rgb_string = _st.split(',');
-      // console.log('getLightColor444:', _st, ':', _rgb_string.join(','))
-      if (_rgb_string.length >= 3) {
-        const _rgb_number = [
-          parseInt(parseInt(_rgb_string[0]) * 0.9),
-          parseInt(parseInt(_rgb_string[1]) * 0.9),
-          parseInt(parseInt(_rgb_string[2]) * 0.9)
-        ];
-        devLog('getLightColor2:', col, ':', _rgb_number.join(','));
-        this.borderColor = 'rgb(' + _rgb_number.join(',') + ', 0.3)';
-        return this.borderColor;
-      } else {
-        this.borderColor = col;
-        return col;
-      }
     },
     isAllowShowNode(thisNode) {
       const _r = thisNode.isShow !== false && thisNode.isHide !== true && (!thisNode.lot.parent || this.isAllowShowNode(thisNode.lot.parent, false) === true);

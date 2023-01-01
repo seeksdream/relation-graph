@@ -30,7 +30,7 @@ export default {
     this.showSeeksGraph();
   },
   methods: {
-    showSeeksGraph(query) {
+    showSeeksGraph() {
       const __graph_json_data = {
         rootId: 'a',
         nodes: [
@@ -87,7 +87,7 @@ export default {
           { from: 'e', to: 'p1', text: '样式5', lineShape: 5, color: '#ffd700' },
           { from: 'e', to: 'p2', text: '样式5', lineShape: 5, color: '#ffd700' },
           { from: 'e', to: 'p3', text: '样式5', lineShape: 5, color: '#ffd700' },
-          { from: 'e', to: 'p4', text: '样式5', lineShape: 5, color: '#ffd700' },
+          { from: 'e', to: 'p4', text: '这条关系线的文字非常长，它可以顺着这条线走', lineShape: 5, color: '#ffd700' },
           {
             'from': 'i',
             'to': 'x',
@@ -143,17 +143,34 @@ export default {
     onNodeClick(nodeObject, $event) {
       console.log('onNodeClick:', nodeObject);
     },
-    onLineClick(lineObject, $event) {
-      console.log('onLineClick:', lineObject);
+    onLineClick(lineObject, linkObject, $event) {
+      console.log('onLineClick:', lineObject, linkObject);
     }
   }
 };
 </script>
 
 <style lang="scss">
-
 </style>
 
 <style lang="scss" scoped>
-
+// 通过以下代码可以修改线条被选中时的样式：
+::v-deep .c-rg-link-checked{
+  .c-rg-line, .c-rg-line-checked{
+    color: #ff0000;
+    border-color: #ff0000;
+    stroke: #ff0000 !important;
+  }
+  .c-rg-line-text{
+    color: #ff0000;
+    border-color: #ff0000;
+    stroke: #ff0000 !important;
+    fill:  #ff0000 !important;
+  }
+}
+::v-deep .c-rg-line-checked{
+  color: #ff0000;
+  border-color: #ff0000;
+  stroke: #ff0000 !important;
+}
 </style>

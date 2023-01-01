@@ -539,5 +539,13 @@ export const RGGraphMath = {
     return _r;
   }
 };
-
+export const getNodeDistance = (fx, fy, tx, ty) => {
+  const buff_x = fx - tx;
+  const buff_y = fy - ty;
+  const bSquare = buff_x ** 2;
+  const pSquare = buff_y ** 2;
+  const sum = bSquare + pSquare;
+  const hypotenuse = Math.sqrt(sum);
+  return hypotenuse;
+};
 export default RGGraphMath;

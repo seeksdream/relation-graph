@@ -44,7 +44,7 @@ export default {
     this.showSeeksGraph();
   },
   methods: {
-    showSeeksGraph(query) {
+    showSeeksGraph() {
       const __graph_json_data = {
         rootId: '2',
         nodes: [
