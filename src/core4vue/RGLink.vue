@@ -1,7 +1,7 @@
 <template>
   <g v-if="linkProps.isHide !== true && isAllowShowNode(linkProps.fromNode) && isAllowShowNode(linkProps.toNode)" :class="[relationGraph.options.checkedLineId==linkProps.seeks_id?'c-rg-link-checked':'']" ref="seeksRGLink" transform="translate(0,0)">
     <template v-for="(thisRelation, ri) in linkProps.relations">
-      <slot name="line" :line="thisRelation">
+      <slot name="line" :line="thisRelation" :relation-index="ri">
         <RGLineTextByPath v-if="(relationGraph.options.lineUseTextPath || thisRelation.useTextPath) && thisRelation.isHide === false" :key="'l-'+thisRelation.id" :relation-graph="relationGraph" :link="linkProps" :relation="thisRelation" :relation-index="ri" />
         <RGLineSmart v-else-if="thisRelation.isHide === false" :key="'l-'+thisRelation.id" :relation-graph="relationGraph" :link="linkProps" :relation="thisRelation" :relation-index="ri" />
       </slot>

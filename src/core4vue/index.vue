@@ -11,10 +11,10 @@
       <slot name="graph-plug" :relation-graph="relationGraph" />
       <RGCanvas :relation-graph="relationGraph">
         <template slot="node" slot-scope="{node}">
-          <slot :node="node" name="node" />
+          <slot :node="node" :relation-graph="relationGraph" name="node" />
         </template>
-        <template slot="line" slot-scope="{line}">
-          <slot :line="line" name="line" />
+        <template slot="line" slot-scope="{line, link}">
+          <slot :line="line" :link="link" :relation-graph="relationGraph" name="line" />
         </template>
         <template slot="canvas-plug">
           <slot :relation-graph="relationGraph" name="canvas-plug" />
