@@ -92,13 +92,13 @@
             </marker>
             <template v-for="thisLink in relationGraph.graphData.links">
               <template v-for="(thisRelation, ri) in thisLink.relations">
-                <SeeksRGLinePath :key="thisRelation.id" :relation-graph="relationGraph" :link="thisLink" :relation="thisRelation" :relation-index="ri" />
+                <SeeksRGLinePath v-if="relationGraph.options.lineUseTextPath || thisRelation.useTextPath" :key="thisRelation.id" :relation-graph="relationGraph" :link="thisLink" :relation="thisRelation" :relation-index="ri" />
               </template>
             </template>
           </defs>
           <SeeksRGLink v-for="thisLink in relationGraph.graphData.links" :key="thisLink.seeks_id" :link-props="thisLink" :relation-graph="relationGraph">
             <template slot="line" slot-scope="{line}">
-              <slot :line="line" name="line" />
+              <slot :line="line" :link="thisLink" name="line" />
             </template>
           </SeeksRGLink>
         </svg>

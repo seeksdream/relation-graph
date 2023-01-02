@@ -20,9 +20,6 @@
             {{ node.data.myicon }}
           </div>
         </div>
-        <div slot="bottomPanel" style="border-top:#efefef solid 1px;height:60px;line-height: 60px;text-align: center;font-size: 18px;background-color: #ffffff;">
-          这里是底部插槽 slot="bottomPanel",可以自定义这里的内容
-        </div>
       </RelationGraph>
     </div>
     <div v-show="isShowNodeMenuPanel" :style="{left: nodeMenuPanelPosition.x + 'px', top: nodeMenuPanelPosition.y + 'px' }" style="z-index: 999;padding:10px;background-color: #ffffff;border:#eeeeee solid 1px;box-shadow: 0px 0px 8px #cccccc;position: absolute;">
