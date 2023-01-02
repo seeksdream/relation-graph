@@ -7,7 +7,13 @@
         :on-node-click="onNodeClick"
         :on-line-click="onLineClick">
         <div slot="node" slot-scope="{node}">
-          <div style="height:80px;line-height: 80px;border-radius: 50%;cursor: pointer;" @click="showNodeMenus(node, $event)" @contextmenu.prevent.stop="showNodeMenus(node, $event)">
+          <div
+              style="height:80px;line-height: 80px;border-radius: 50%;cursor: pointer;"
+              @click="showNodeMenus(node, $event)"
+              @contextmenu.prevent.stop="showNodeMenus(node, $event)"
+              @mouseover="nodeSlotOver(node, $event)"
+              @mouseout="nodeSlotOut(node, $event)"
+          >
             <i style="font-size: 30px;" :class="node.data.myicon" />
           </div>
           <div style="color: forestgreen;font-size: 16px;position: absolute;width: 160px;height:25px;line-height: 25px;margin-top:5px;margin-left:-48px;text-align: center;background-color: rgba(66,187,66,0.2);">
@@ -118,6 +124,12 @@ export default {
     },
     onLineClick(lineObject, $event) {
       console.log('onLineClick:', lineObject);
+    },
+    nodeSlotOver(nodeObject) {
+      console.log('nodeSlotOver:', nodeObject);
+    },
+    nodeSlotOut(nodeObject) {
+      console.log('nodeSlotOut:', nodeObject);
     },
     showNodeMenus(nodeObject, $event) {
       this.currentNode = nodeObject;

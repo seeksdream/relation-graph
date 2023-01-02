@@ -5,7 +5,7 @@
 <!--        <el-radio-button label="横向树状图谱"></el-radio-button>-->
 <!--        <el-radio-button label="纵向树状图谱" ></el-radio-button>-->
 <!--      </el-radio-group>-->
-      <el-button type="success" class="c-show-code-button"><el-link href="https://github.com/seeksdream/relation-graph/blob/master/examples/views/seeks-graph-docs/demo/Demo4BothwayTree.vue" target="_blank" style="color: #ffffff;">查看代码</el-link></el-button>
+      <el-button type="success" class="c-show-code-button"><el-link href="https://github.com/seeksdream/relation-graph/blob/master/examples/views/seeks-graph-docs/demo/Demo4BothwayTreeFAQ.vue" target="_blank" style="color: #ffffff;">查看代码</el-link></el-button>
     </div>
     <el-row>
       <el-col :span="9">
@@ -102,7 +102,19 @@ export default {
       const __graph_json_data = {
         'rootId': 'a',
         'nodes': [
-          { 'id': 'a', 'text': '根节点a' }, { 'id': 'R-b', 'text': 'R-b' }, { 'id': 'R-c', 'text': 'R-c' }, { 'id': 'R-c-1', 'text': 'R-c-1' }, { 'id': 'R-c-2', 'text': 'R-c-2' }, { 'id': 'R-d', 'text': 'R-d' }, { 'id': 'b', 'text': 'b' }, { 'id': 'c', 'text': 'c' }, { 'id': 'c1', 'text': 'c1' }, { 'id': 'c2', 'text': 'c2' }, { 'id': 'c3', 'text': 'c3' }, { 'id': 'd', 'text': 'd' }, { 'id': 'e', 'text': 'e' }
+          { 'id': 'a', 'text': '根节点a' },
+          { 'id': 'R-b', 'text': 'R-b' },
+          { 'id': 'R-c', 'text': 'R-c', expandHolderPosition: 'top' },
+          { 'id': 'R-c-1', 'text': 'R-c-1' },
+          { 'id': 'R-c-2', 'text': 'R-c-2' },
+          { 'id': 'R-d', 'text': 'R-d' },
+          { 'id': 'b', 'text': 'b' },
+          { 'id': 'c', 'text': 'c', expandHolderPosition: 'bottom' },
+          { 'id': 'c1', 'text': 'c1' },
+          { 'id': 'c2', 'text': 'c2' },
+          { 'id': 'c3', 'text': 'c3' },
+          { 'id': 'd', 'text': 'd' },
+          { 'id': 'e', 'text': 'e' }
         ],
         'lines': [
           { 'from': 'R-b', 'to': 'a', showStartArrow, showEndArrow, color },
