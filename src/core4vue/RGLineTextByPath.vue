@@ -1,7 +1,7 @@
 <template>
   <g>
     <use
-        :xlink:href="'#' + link.seeks_id + '-' + relationIndex"
+        :xlink:href="'#' + relationGraph.options.instanceId + '-' + link.seeks_id + '-' + relationIndex"
         :class="['c-rg-line', checked ? 'c-rg-line-checked' : '']"
         @click="onClick(relation, $event)" />
     <text
@@ -11,7 +11,7 @@
         :x="textOffset"
         y="0"
     >
-      <textPath :xlink:href="'#' + link.seeks_id + '-' + relationIndex" startOffset="0" text-anchor="start" method="align" spacing="auto"> {{ relation.text }} </textPath>
+      <textPath :xlink:href="'#' + relationGraph.options.instanceId + '-' +  link.seeks_id + '-' + relationIndex" startOffset="0" text-anchor="start" method="align" spacing="auto"> {{ relation.text }} </textPath>
 <!--      startOffset="0" text-anchor="start" method="align" spacing="auto"-->
     </text>
   </g>

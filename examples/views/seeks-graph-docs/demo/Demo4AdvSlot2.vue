@@ -149,13 +149,13 @@ export default {
         Object.assign(__graph_json_data.nodes[4], { color: '', borderColor: '#409EFF', nodeShape: 0, borderWidth: 0 });
       }
       console.log(this.slotTeamplateId, __graph_json_data);
-      this.$refs.seeksRelationGraph.setJsonData(__graph_json_data, (seeksRGGraph) => {
+      this.$refs.seeksRelationGraph.setJsonData(__graph_json_data, (graphInstance) => {
         // 这些写上当图谱初始化完成后需要执行的代码
       });
     },
     resetGraphOptions() {
       console.log('options update:resetGraphOptions:', this.userGraphOptions);
-      this.$refs.seeksRelationGraph.setOptions(this.userGraphOptions, (seeksRGGraph) => {
+      this.$refs.seeksRelationGraph.setOptions(this.userGraphOptions, (graphInstance) => {
         // this.initData();
         if (this.slotTeamplateId === 'slot6') {
           this.showSeeksGraph();

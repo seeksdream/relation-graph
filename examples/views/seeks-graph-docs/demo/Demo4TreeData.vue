@@ -99,13 +99,13 @@ export default {
           ]
           }
         ],
-        'links': [
+        'lines': [
           // 你仍然可以通过常规方式添加关系
         ]
       };
       console.log(JSON.stringify(__graph_json_data));
       this.g_loading = false;
-      this.$refs.seeksRelationGraph.setJsonData(__graph_json_data, (seeksRGGraph) => {
+      this.$refs.seeksRelationGraph.setJsonData(__graph_json_data, (graphInstance) => {
         // 这些写上当图谱初始化完成后需要执行的代码
       });
     }

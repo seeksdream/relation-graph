@@ -117,7 +117,7 @@ export default {
           { 'id': 'c1', 'text': 'c1' },
           { 'id': 'c2', 'text': 'c2' },
           { 'id': 'c3', 'text': 'c3' }],
-        'links': [
+        'lines': [
           { 'from': 'a', 'to': 'b' },
           { 'from': 'b', 'to': 'b1' },
           { 'from': 'b1', 'to': 'b1-1' },
@@ -137,7 +137,7 @@ export default {
 
       console.log(JSON.stringify(__graph_json_data));
       this.g_loading = false;
-      this.$refs.seeksRelationGraph.setJsonData(__graph_json_data, (seeksRGGraph) => {
+      this.$refs.seeksRelationGraph.setJsonData(__graph_json_data, (graphInstance) => {
         // 这些写上当图谱初始化完成后需要执行的代码
       });
     },
@@ -152,17 +152,17 @@ export default {
       this.graphOptions.layouts[0].max_per_width = this.range_horizontal[1];
       this.graphOptions.layouts[0].min_per_height = this.range_vertical[0];
       this.graphOptions.layouts[0].max_per_height = this.range_vertical[1];
-      this.$refs.seeksRelationGraph.setOptions(this.graphOptions, (seeksRGGraph) => {
+      this.$refs.seeksRelationGraph.setOptions(this.graphOptions, (graphInstance) => {
         // 这些写上当图谱初始化完成后需要执行的代码
-        console.log('setOptions:callback:', seeksRGGraph);
+        console.log('setOptions:callback:', graphInstance);
         // seeksRGGraph.refresh()
       });
     },
     onChangeOptionByCase2() {
       this.graphOptions.layouts[0].levelDistance = this.levelDistance;
-      this.$refs.seeksRelationGraph.setOptions(this.graphOptions, (seeksRGGraph) => {
+      this.$refs.seeksRelationGraph.setOptions(this.graphOptions, (graphInstance) => {
         // 这些写上当图谱初始化完成后需要执行的代码
-        console.log('setOptions:callback:', seeksRGGraph);
+        console.log('setOptions:callback:', graphInstance);
         // seeksRGGraph.refresh()
       });
     },

@@ -21,7 +21,7 @@ export class RelationGraphWithEvent extends RelationGraphWithEffect {
     node.selected = selected;
   }
   updateNodeOffsetSize(node, nodeOffsetWidth, nodeOffsetHeight) {
-    devLog('[updateNodeOffsetSize]：', node.text, nodeOffsetWidth, nodeOffsetHeight);
+    // devLog('[updateNodeOffsetSize]：', node.text, nodeOffsetWidth, nodeOffsetHeight);
     node.el.offsetWidth = nodeOffsetWidth;
     node.el.offsetHeight = nodeOffsetHeight;
   }

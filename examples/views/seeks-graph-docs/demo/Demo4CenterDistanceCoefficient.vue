@@ -80,7 +80,7 @@ export default {
           { 'id': 'c1', 'text': 'c1' },
           { 'id': 'c2', 'text': 'c2' },
           { 'id': 'c3', 'text': 'c3' }],
-        'links': [
+        'lines': [
           { 'from': 'a', 'to': 'b' },
           { 'from': 'b', 'to': 'b1' },
           { 'from': 'b1', 'to': 'b1-1' },
@@ -98,15 +98,15 @@ export default {
           { 'from': 'c', 'to': 'c3' }]
       };
       this.g_loading = false;
-      this.$refs.seeksRelationGraph.setJsonData(__graph_json_data, (seeksRGGraph) => {
+      this.$refs.seeksRelationGraph.setJsonData(__graph_json_data, (graphInstance) => {
         // 这些写上当图谱初始化完成后需要执行的代码
       });
     },
     onChangeOption() {
       this.graphOptions.layouts[0].distance_coefficient = this.distanceCoefficient;
-      this.$refs.seeksRelationGraph.setOptions(this.graphOptions, (seeksRGGraph) => {
+      this.$refs.seeksRelationGraph.setOptions(this.graphOptions, (graphInstance) => {
         // 这些写上当图谱初始化完成后需要执行的代码
-        console.log('setOptions:callback:', seeksRGGraph);
+        console.log('setOptions:callback:', graphInstance);
         // seeksRGGraph.refresh()
       });
     }

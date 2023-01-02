@@ -107,7 +107,7 @@ export default {
       console.log(JSON.stringify(__graph_json_data));
       setTimeout(() => {
         this.g_loading = false;
-        this.$refs.seeksRelationGraph.setJsonData(__graph_json_data, (seeksRGGraph) => {
+        this.$refs.seeksRelationGraph.setJsonData(__graph_json_data, (graphInstance) => {
           // 这些写上当图谱初始化完成后需要执行的代码
         });
       }, 1000);
@@ -134,7 +134,7 @@ export default {
       node.data.childrenLoaded = true;
       this.loadChildNodesFromRemoteServer(node, new_data => {
         this.g_loading = false;
-        this.$refs.seeksRelationGraph.getInstance().appendJsonData(new_data, (seeksRGGraph) => {
+        this.$refs.seeksRelationGraph.getInstance().appendJsonData(new_data, (graphInstance) => {
           // 这些写上当图谱初始化完成后需要执行的代码
         });
       });

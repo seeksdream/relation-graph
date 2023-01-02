@@ -25,6 +25,7 @@ export const createDefaultConfig = (userGraphSetting) => {
     isMoveByParentNode: false, // UI
     defaultExpandHolderPosition: 'hide', // UI
     defaultNodeColor: '#67C23A', // UI
+    checkedLineColor: '#FD8B37', //  // UI
     defaultNodeFontColor: '#ffffff', // UI
     defaultNodeBorderColor: '#90EE90', // UI
     defaultNodeBorderWidth: 5, // UI
@@ -38,6 +39,7 @@ export const createDefaultConfig = (userGraphSetting) => {
     hideNodeContentByZoom: false, // UI
     defaultJunctionPoint: 'border', // UI
     disableDragCanvas: false, // UI
+    lineUseTextPath: false, // UI
     viewSize: { width: 300, height: 300 },
     viewELSize: { width: 1300, height: 800, left: 0, top: 100 },
     viewNVInfo: { width: 1300, height: 800, x: 0, y: 100 },
@@ -58,7 +60,6 @@ export const createDefaultConfig = (userGraphSetting) => {
     fullscreen: false, // private
     checkedNodeId: '', // private
     checkedLineId: '', // private
-    checkedLineColor: '#FD8B37', // private
     layouts: [], // private
     layoutLabel: '', // private
     layoutName: 'tree', // private
@@ -112,14 +113,14 @@ export const createDefaultConfig = (userGraphSetting) => {
         if (_objectValue) {
           if (_objectValue && !Array.isArray(_objectValue) && _thisUserValue) {
             Object.keys(_objectValue).forEach(l2Key => {
-              devLog('RGOptions:   user setting:', key + '.' + l2Key, _thisUserValue[l2Key]);
+              // devLog('RGOptions:   user setting:', key + '.' + l2Key, _thisUserValue[l2Key]);
               _objectValue[l2Key] = _thisUserValue[l2Key];
             });
           } else if (Array.isArray(_objectValue)) {
-            devLog('RGOptions:   user setting array:', key, 'size:', _thisUserValue.length);
+            // devLog('RGOptions:   user setting array:', key, 'size:', _thisUserValue.length);
             const _new_arr = [];
             _thisUserValue.forEach(thisItem => {
-              devLog('RGOptions:   user setting array:', key, 'push:', thisItem);
+              // devLog('RGOptions:   user setting array:', key, 'push:', thisItem);
               if (thisItem && typeof thisItem === 'object') {
                 _new_arr.push(JSON.parse(JSON.stringify(thisItem)));
               } else {
@@ -129,14 +130,14 @@ export const createDefaultConfig = (userGraphSetting) => {
             _graphSetting[key] = _new_arr;
             // devLog('   user setting array:', key, 'copy size:', _new_arr.length)
           } else {
-            devLog('RGOptions:user setting value:', key);
+            // devLog('RGOptions:user setting value:', key);
             _graphSetting[key] = _thisUserValue;
           }
         } else {
           devLog('ignore option:', key);
         }
       } else {
-        devLog('RGOptions:user setting:', key, _thisUserValue);
+        // devLog('RGOptions:user setting:', key, _thisUserValue);
         _graphSetting[key] = _thisUserValue;
       }
     });
@@ -242,7 +243,7 @@ class RGOptions {
     devLog('RGOptions:new RGOptions:by:', options);
     devLog('RGOptions:new RGOptions:by:', this);
     Object.assign(this, graphOptions);
-    this.instanceId = 'RG-instance-' + graphInstanceIndex++;
+    this.instanceId = 'RGIns-' + graphInstanceIndex++;
   }
 }
 export default RGOptions;

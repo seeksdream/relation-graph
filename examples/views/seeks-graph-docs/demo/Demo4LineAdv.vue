@@ -51,8 +51,8 @@ export default {
           { id: 'm2', text: 'M-2', x: rootX + 459, y: rootY - 189 },
           { id: 'm3', text: 'M-3', x: rootX + 236, y: rootY - 177 },
           { id: 'm4', text: 'M-4', x: rootX + 354, y: rootY - 183 },
-          { id: 'p3', text: 'P-3', x: rootX - 129, y: rootY - 389 },
-          { id: 'p4', text: 'P-4', x: rootX - 238, y: rootY - 316 }
+          { id: 'p3', text: 'P-3', x: rootX - 386, y: rootY - 389 },
+          { id: 'p4', text: 'P-4', x: rootX + 450, y: rootY - 459 }
         ],
         lines: [
           { from: 'a', to: 'c', text: 'a > c', color: 'rgba(30, 144, 255, 1)' },
@@ -66,7 +66,7 @@ export default {
           { from: 'i', to: 'm', text: '数据为：i > m 但显示为 m > i', showStartArrow: true, showEndArrow: false, color: '#00ced1' },
           { from: 'i', to: 'm', text: '数据为：i > m', showStartArrow: false, showEndArrow: true, color: 'rgba(255, 140, 0, 1)' },
           { from: 'e', to: 'p3', text: '这条关系线的文字非常长，但不顺着这条线走', lineShape: 5, color: '#ffd700' },
-          { from: 'e', to: 'p4', text: '这条关系线的文字非常长，它可以顺着这条线走', lineShape: 5, color: '#ffd700' }
+          { from: 'e', to: 'p4', text: '这条关系线的文字非常长，它可以顺着这条线走', useTextPath: true, lineShape: 5, color: '#ffd700' }
         ]
       };
       /**
@@ -87,7 +87,7 @@ export default {
   }
 }
        */
-      this.$refs.seeksRelationGraph.setJsonData(__graph_json_data, (seeksRGGraph) => {
+      this.$refs.seeksRelationGraph.setJsonData(__graph_json_data, (graphInstance) => {
         // 这些写上当图谱初始化完成后需要执行的代码
       });
     },

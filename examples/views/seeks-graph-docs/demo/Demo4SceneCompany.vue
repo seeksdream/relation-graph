@@ -139,7 +139,7 @@ export default {
         graphData.nodes.push(thisNode);
         graphData.lines.push({ from: branchRootNode.id, to: thisNode.id, text: thisNode.desc, color: '#FFA1F8', lineShape: 4 });
       });
-      this.$refs.seeksRelationGraph.setJsonData(graphData, (seeksRGGraph) => {
+      this.$refs.seeksRelationGraph.setJsonData(graphData, (graphInstance) => {
 
       });
     }

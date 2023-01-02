@@ -87,7 +87,7 @@ export default {
           { from: 'e', to: 'p1', text: '样式5', lineShape: 5, color: '#ffd700' },
           { from: 'e', to: 'p2', text: '样式5', lineShape: 5, color: '#ffd700' },
           { from: 'e', to: 'p3', text: '样式5', lineShape: 5, color: '#ffd700' },
-          { from: 'e', to: 'p4', text: '这条关系线的文字非常长，它可以顺着这条线走', lineShape: 5, color: '#ffd700' },
+          { from: 'e', to: 'p4', text: '这条关系线的文字非常长，它可以顺着这条线走', useTextPath: true, lineShape: 5, color: '#ffd700' },
           {
             'from': 'i',
             'to': 'x',
@@ -136,7 +136,7 @@ export default {
   }
 }
        */
-      this.$refs.seeksRelationGraph.setJsonData(__graph_json_data, (seeksRGGraph) => {
+      this.$refs.seeksRelationGraph.setJsonData(__graph_json_data, (graphInstance) => {
         // 这些写上当图谱初始化完成后需要执行的代码
       });
     },

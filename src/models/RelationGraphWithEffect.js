@@ -8,14 +8,14 @@ export class RelationGraphWithEffect extends RelationGraphWithZoom {
   }
   doLayout() {
     if (!this.options.layouter) {
-      devLog('没有布局器！');
+      devLog('no layouter');
       return;
     }
     if (!this.graphData.rootNode) {
-      devLog('你没有设置，或者无法获取根节点!');
+      devLog('Cant find rootNode!');
       return;
     }
-    devLog('需要布局的节点数量：', this.graphData.nodes.length);
+    devLog('node size：', this.graphData.nodes.length);
     this.options.layouter.placeNodes(this.graphData.nodes, this.graphData.rootNode, this.graphSetting);
   }
   refresh() {
@@ -47,7 +47,7 @@ export class RelationGraphWithEffect extends RelationGraphWithZoom {
     this.options.canvasOffset.y -= 1;
   }
   refreshNVAnalysisInfo() {
-    devLog('[refreshNVAnalysisInfo]');
+    // devLog('[refreshNVAnalysisInfo]');
     if (!this.$dom) {
       console.error('cannot get view size !');
       return;
@@ -100,17 +100,25 @@ export class RelationGraphWithEffect extends RelationGraphWithZoom {
       height: _stuff_height
     };
   }
+  getNodesCenter() {
+    const x = this.options.viewNVInfo.width / 2;
+    const y = this.options.viewNVInfo.height / 2;
+    return {
+      x,
+      y
+    };
+  }
   playShowEffect() {
     if (this.graphData.nodes.length === 0) {
       devLog('relation-graph:move to center: data not ready!');
       return;
     }
+    devLog('playShowEffect:', this.options.moveToCenterWhenRefresh, this.options.zoomToFitWhenRefresh);
     if (this.options.moveToCenterWhenRefresh) {
       // devLog('relation-graph:move to center:', [this.options.viewSize.width, this.options.viewSize.height], [_box.width, _box.height]);
       // this.focusRootNode()
-      const _final_x = this.options.viewNVInfo.width / 2;
-      const _final_y = this.options.viewNVInfo.height / 2;
-      this.animateGoto(_final_x, _final_y, 500, () => {
+      const center = this.getNodesCenter();
+      this.animateGoto(center.x, center.y, 500, () => {
         // this.graphOptions.checkedNodeId = thisNode.id
         // this.refreshNVAnalysisInfo();
         if (this.options.zoomToFitWhenRefresh) {
