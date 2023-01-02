@@ -1,6 +1,6 @@
 <template>
   <path
-      :id="link.seeks_id + '-' + relationIndex"
+      :id="relationGraph.options.instanceId + '-' + link.seeks_id + '-' + relationIndex"
       :d="relationGraph.createLinePath(link, relationIndex, relation)"
       :stroke="checked ? relationGraph.options.checkedLineColor : (relation.color?relation.color:relationGraph.options.defaultLineColor)"
       :style="{'stroke-width': (relation.lineWidth?relation.lineWidth:relationGraph.options.defaultLineWidth) + 'px'}"

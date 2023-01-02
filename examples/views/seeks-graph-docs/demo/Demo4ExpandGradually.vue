@@ -87,7 +87,7 @@ export default {
           { 'id': 'c1', 'text': 'c1' },
           { 'id': 'c2', 'text': 'c2' },
           { 'id': 'c3', 'text': 'c3' }],
-        'links': [
+        'lines': [
           { 'from': 'a', 'to': 'b' },
           { 'from': 'b', 'to': 'b1' },
           { 'from': 'b1', 'to': 'b1-1' },
@@ -107,10 +107,10 @@ export default {
 
       console.log(JSON.stringify(__graph_json_data));
       this.g_loading = false;
-      this.$refs.seeksRelationGraph.setJsonData(__graph_json_data, (seeksRGGraph) => {
+      this.$refs.seeksRelationGraph.setJsonData(__graph_json_data, (graphInstance) => {
         // 这些写上当图谱初始化完成后需要执行的代码
         // 获取根节点的子节点，即可获得图谱第一层中的节点
-        const level_1_nodes = seeksRGGraph.getNodeById(__graph_json_data.rootId).lot.childs;
+        const level_1_nodes = graphInstance.getNodeById(__graph_json_data.rootId).lot.childs;
         level_1_nodes.forEach(thisLevel1Node => {
           this.applyCollapseStyle2Node(thisLevel1Node);
         });

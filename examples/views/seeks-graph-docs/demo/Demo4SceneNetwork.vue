@@ -68,7 +68,7 @@ export default {
           { 'text': 'ExeSvr-docker-02@10.0.0.211 | 最后响应：3秒前', 'id': 'exe-09', nodeShape: 1, width: 500, height: 35 },
           { 'text': 'ExeSvr-docker-03@10.0.0.211 | 最后响应：3秒前', 'id': 'exe-10', nodeShape: 1, width: 500, height: 35 }
         ],
-        'links': [
+        'lines': [
           { 'from': 'data', 'to': 'centre', 'text': null, isHideArrow: true, lineShape: 4 },
           { 'from': 'proxy', 'to': 'centre', 'text': null, isHideArrow: true, lineShape: 4 },
           { 'from': 'task', 'to': 'centre', 'text': null, isHideArrow: true, lineShape: 4 },
@@ -87,12 +87,12 @@ export default {
       };
       setTimeout(() => {
         this.g_loading = false;
-        this.$refs.seeksRelationGraph.setJsonData(__graph_json_data, (seeksRGGraph) => {
-          const nodes = seeksRGGraph.getNodes();
+        this.$refs.seeksRelationGraph.setJsonData(__graph_json_data, (graphInstance) => {
+          const nodes = graphInstance.getNodes();
           nodes.forEach(node => {
             if (__graph_json_data.nodes.some(n => n.fixed && n.id === node.id)) {
-              node.x = seeksRGGraph.graphData.rootNode.x + node.x;
-              node.y = seeksRGGraph.graphData.rootNode.y + node.y;
+              node.x = graphInstance.graphData.rootNode.x + node.x;
+              node.y = graphInstance.graphData.rootNode.y + node.y;
             }
           });
         });

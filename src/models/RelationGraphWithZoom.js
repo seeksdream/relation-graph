@@ -1,4 +1,4 @@
-import { devLog, getScreenHeight, getScreenWidth } from '@/utils/RGCommon';
+import { getScreenHeight, getScreenWidth } from '@/utils/RGCommon';
 import { RelationGraphWithDom } from '@/models/RelationGraphWithDom';
 export class RelationGraphWithZoom extends RelationGraphWithDom {
   // eslint-disable-next-line no-useless-constructor
@@ -6,7 +6,7 @@ export class RelationGraphWithZoom extends RelationGraphWithDom {
     super(...arguments);
   }
   zoom(buff, userZoomCenter) {
-    devLog('[zoom]', buff, 'from:', userZoomCenter);
+    // devLog('[zoom]', buff, 'from:', userZoomCenter);
     if ((this.options.canvasZoom + buff) < 10) {
       return;
     }

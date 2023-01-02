@@ -1,6 +1,10 @@
 <template>
   <div>
     <div style="height:50px;padding-top:6px;padding-left: 30px;padding-right:30px;border-bottom: #efefef solid 1px;">
+      <el-radio-group v-model="currentCase" size="small" @change="resetGraph">
+        <el-radio-button label="横向树状图谱"></el-radio-button>
+        <el-radio-button label="纵向树状图谱" ></el-radio-button>
+      </el-radio-group>
       <el-button type="success" class="c-show-code-button"><el-link href="https://github.com/seeksdream/relation-graph/blob/master/examples/views/seeks-graph-docs/demo/Demo4BothwayTree.vue" target="_blank" style="color: #ffffff;">查看代码</el-link></el-button>
     </div>
     <div style="height:calc(100vh - 100px);">
@@ -22,31 +26,19 @@ export default {
   components: { },
   data() {
     return {
-      currentCase: '双向树',
+      currentCase: '横向树状图谱',
       isShowCodePanel: false,
       graphOptions: {
         'backgrounImage': 'https://camo.githubusercontent.com/ede1654f055903cdc39044129d15d5b158f4f3b33ba5b7c21c7407792a506dea/687474703a2f2f72656c6174696f6e2d67726170682e636f6d2f776562736974652f6c6f676f',
         'backgrounImageNoRepeat': true,
         'layouts': [
           {
-            'label': '中心',
             'layoutName': 'tree',
-            'layoutClassName': 'seeks-layout-center',
-            'defaultJunctionPoint': 'border',
-            'defaultNodeShape': 0,
-            'defaultLineShape': 1,
             'from': 'left',
             'max_per_width': '300',
             'min_per_height': '40'
           }
         ],
-        'defaultLineMarker': {
-          'markerWidth': 12,
-          'markerHeight': 12,
-          'refX': 6,
-          'refY': 6,
-          'data': 'M2,2 L10,6 L2,10 L6,6 L2,2'
-        },
         'defaultNodeShape': 1,
         'defaultNodeWidth': '100',
         'defaultLineShape': 4,
@@ -58,9 +50,33 @@ export default {
     };
   },
   mounted() {
-    this.showSeeksGraph();
+    this.resetGraph();
   },
   methods: {
+    resetGraph() {
+      if (this.currentCase === '横向树状图谱') {
+        this.graphOptions.layouts[0].from = 'left';
+        this.graphOptions.layouts[0].min_per_width = 40;
+        this.graphOptions.layouts[0].max_per_width = 300;
+        this.graphOptions.layouts[0].min_per_height = 40;
+        this.graphOptions.layouts[0].max_per_height = 200;
+        this.graphOptions.defaultNodeWidth = 100;
+        this.graphOptions.defaultNodeHeight = 30;
+        this.graphOptions.defaultJunctionPoint = 'tb';
+      } else {
+        this.graphOptions.layouts[0].from = 'top';
+        this.graphOptions.layouts[0].min_per_width = 40;
+        this.graphOptions.layouts[0].max_per_width = 200;
+        this.graphOptions.layouts[0].min_per_height = 40;
+        this.graphOptions.layouts[0].max_per_height = 200;
+        this.graphOptions.defaultNodeWidth = 30;
+        this.graphOptions.defaultNodeHeight = 100;
+        this.graphOptions.defaultJunctionPoint = 'lr';
+      }
+      this.$refs.seeksRelationGraph.setOptions(this.graphOptions, (graphInstance) => {
+        this.showSeeksGraph();
+      });
+    },
     showSeeksGraph() {
       const __graph_json_data = {
         'rootId': 'a',
@@ -105,7 +121,7 @@ export default {
           { 'id': 'e2-5', 'text': 'e2-5' }, { 'id': 'e2-6', 'text': 'e2-6' }, { 'id': 'e2-7', 'text': 'e2-7' },
           { 'id': 'e2-8', 'text': 'e2-8' }, { 'id': 'e2-9', 'text': 'e2-9' }
         ],
-        'links': [
+        'lines': [
           // 根节点左侧的关系数据，注意关系的方向，是从 节点--->根节点：
           { 'from': 'R-b', 'to': 'a' }, { 'from': 'R-b-1', 'to': 'R-b' }, { 'from': 'R-b-2', 'to': 'R-b' }, { 'from': 'R-b-3', 'to': 'R-b' },
           { 'from': 'R-c', 'to': 'a' }, { 'from': 'R-c-1', 'to': 'R-c' }, { 'from': 'R-c-2', 'to': 'R-c' },
@@ -139,7 +155,7 @@ export default {
           { 'from': 'e2', 'to': 'e2-4' }, { 'from': 'e2', 'to': 'e2-5' }, { 'from': 'e2', 'to': 'e2-6' }, { 'from': 'e2', 'to': 'e2-7' },
           { 'from': 'e2', 'to': 'e2-8' }, { 'from': 'e2', 'to': 'e2-9' }
         ] };
-      this.$refs.seeksRelationGraph.setJsonData(__graph_json_data, (seeksRGGraph) => {
+      this.$refs.seeksRelationGraph.setJsonData(__graph_json_data, (graphInstance) => {
         // 这些写上当图谱初始化完成后需要执行的代码
       });
     },

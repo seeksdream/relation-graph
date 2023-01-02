@@ -23,6 +23,7 @@ export const json2Line = (originData) => {
     arrow: originData.arrow !== undefined ? originData.arrow : undefined,
     showStartArrow: originData.showStartArrow !== undefined ? originData.showStartArrow : false,
     showEndArrow: originData.showEndArrow !== undefined ? originData.showEndArrow : true,
+    useTextPath: originData.useTextPath !== undefined ? originData.useTextPath : false,
     isHideArrow:
       originData.isHideArrow !== undefined ? originData.isHideArrow : undefined,
     hidden: originData.hidden !== undefined ? originData.hidden : false,

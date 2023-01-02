@@ -274,7 +274,7 @@ export class RelationGraphWithData extends RelationGraph {
       _lines.push(orign_link);
     });
     this.loadNodes(_nodes);
-    devLog('节点预处理完毕');
+    devLog('Nodes is initialized');
     this.loadLines(_lines);
   }
   getLineArrow(_color, isStartArrow, checked) {

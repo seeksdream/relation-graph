@@ -50,6 +50,13 @@ export const getTextSize = (text) => {
   return width;
 };
 
+export const mergeRGObject = (oldObj, newObj) => {
+  Object.keys(newObj).forEach(key => {
+    oldObj[key] = newObj[key];
+  });
+  return oldObj;
+};
+
 export let isSupportTouch = false;
 const isSupportTouchCheck = () => {
   try {
