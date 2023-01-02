@@ -8,7 +8,7 @@
       <slot v-if="relationGraph.options.allowShowMiniView===true" name="miniViewPanel" :relation-graph="relationGraph">
         <GraphMiniView :relation-graph="relationGraph" />
       </slot>
-      <slot name="graphPlug" :relation-graph="relationGraph" />
+      <slot name="graph-plug" :relation-graph="relationGraph" />
       <RGCanvas :relation-graph="relationGraph">
         <template slot="node" slot-scope="{node}">
           <slot :node="node" name="node" />
