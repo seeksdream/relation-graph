@@ -4,22 +4,30 @@
     ref="seeksRGNode"
     :style="{'left':nodeProps.x + 'px','top':nodeProps.y + 'px', 'opacity': (nodeProps.opacity>1?nodeProps.opacity/100:nodeProps.opacity) }"
     class="rel-node-peel"
-    @mousedown.left.stop="onDragStart($event)"
-    @touchstart.stop="onDragStart($event)"
-    @mouseover.stop="onMouseHover($event)"
-    @mouseout.stop="onMouseOut($event)"
-    @click.stop="onclick($event)"
   >
     <div v-if="(nodeProps.expandHolderPosition&&nodeProps.expandHolderPosition!=='hide')||(relationGraph.options.defaultExpandHolderPosition&&relationGraph.options.defaultExpandHolderPosition!=='hide'&&nodeProps.lot.childs&&nodeProps.lot.childs.length>0)" :class="[('c-expand-positon-'+(nodeProps.expandHolderPosition||relationGraph.options.defaultExpandHolderPosition))]" class="c-btn-open-close">
       <span :class="expandButtonClass" :style="{'background-color':(nodeProps.color||relationGraph.options.defaultNodeColor)}" @click.stop="expandOrCollapseNode">
       </span>
     </div>
-    <div v-if="nodeProps.html" v-html="nodeProps.html" />
+    <div
+        v-if="nodeProps.html"
+        v-html="nodeProps.html"
+        @click.stop="onclick($event)"
+        @mousedown.left.stop="onDragStart($event)"
+        @touchstart.stop="onDragStart($event)"
+        @mouseover.stop="onMouseHover($event)"
+        @mouseout.stop="onMouseOut($event)"
+    />
     <div
       v-else
       :class="['rel-node-shape-'+(nodeProps.nodeShape===undefined?relationGraph.options.defaultNodeShape:nodeProps.nodeShape),'rel-node-type-'+nodeProps.type, (nodeProps.id===relationGraph.options.checkedNodeId?'rel-node-checked':''), (nodeProps.selected?'rel-node-selected':''), nodeProps.styleClass, (hovering?'rel-node-hover':''), (nodeProps.innerHTML?'rel-diy-node':'')]"
       :style="{'background-color':(nodeProps.color===undefined?relationGraph.options.defaultNodeColor:nodeProps.color),'color':(nodeProps.fontColor===undefined?relationGraph.options.defaultNodeFontColor:nodeProps.fontColor),'border': (nodeProps.borderColor || relationGraph.options.defaultNodeBorderColor) + ' solid '+(nodeProps.borderWidth || relationGraph.options.defaultNodeBorderWidth)+'px', 'width':(nodeProps.width || relationGraph.options.defaultNodeWidth)+'px', 'height':(nodeProps.height||relationGraph.options.defaultNodeHeight)+'px'}"
       class="rel-node"
+      @click.stop="onclick($event)"
+      @mousedown.left.stop="onDragStart($event)"
+      @touchstart.stop="onDragStart($event)"
+      @mouseover.stop="onMouseHover($event)"
+      @mouseout.stop="onMouseOut($event)"
     >
       <template v-if="!(relationGraph.options.hideNodeContentByZoom === true && relationGraph.options.canvasZoom<40)">
         <slot name="node" :node="nodeProps">
@@ -272,6 +280,8 @@ export default {
     align-items: center;
     justify-content: center;
     /*border:#ff0000 solid 1px;*/
+    user-select: none;
+    pointer-events: none;
   }
   .c-btn-open-close span{
     width: 19px;
@@ -284,6 +294,7 @@ export default {
     font-size: 19px;
     line-height: 16px;
     background-size: 100% 100%;
+    pointer-events: all;
   }
   .c-expanded{
     background-image: url(data:image/svg+xml;%20charset=utf8,%3Csvg%20t=%221606310217820%22%20viewBox=%220%200%201024%201024%22%20version=%221.1%22%20xmlns=%22http://www.w3.org/2000/svg%22%20p-id=%223373%22%20width=%2232%22%20height=%2232%22%3E%3Cpath%20d=%22M853.333333%20480H544V170.666667c0-17.066667-14.933333-32-32-32s-32%2014.933333-32%2032v309.333333H170.666667c-17.066667%200-32%2014.933333-32%2032s14.933333%2032%2032%2032h309.333333V853.333333c0%2017.066667%2014.933333%2032%2032%2032s32-14.933333%2032-32V544H853.333333c17.066667%200%2032-14.933333%2032-32s-14.933333-32-32-32z%22%20p-id=%223374%22%20fill=%22white%22%3E%3C/path%3E%3C/svg%3E);
@@ -293,7 +304,7 @@ export default {
   }
   .c-expand-positon-left{
     margin-top:-8px;
-    margin-left:-18px;
+    margin-left:-25px;
   }
   .c-expand-positon-right{
     height:100%;
