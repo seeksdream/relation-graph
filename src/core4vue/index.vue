@@ -181,8 +181,9 @@ export default {
     setJsonData(jsonData, callback) {
       this.relationGraph.setJsonData(jsonData, (instance) => {
         this.$nextTick(() => {
-          this.relationGraph.playShowEffect();
-          if (callback) callback(instance);
+          this.relationGraph.playShowEffect(() => {
+            if (callback) callback(instance);
+          });
         });
       });
     },

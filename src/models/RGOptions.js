@@ -11,6 +11,7 @@ export const createDefaultConfig = (userGraphSetting) => {
     disableDragNode: false, // UI
     moveToCenterWhenRefresh: false, // UI
     zoomToFitWhenRefresh: true, // UI
+    useAnimationWhenRefresh: true, // UI
     defaultFocusRootNode: true, // UI
     disableNodeClickEffect: false, // UI
     disableLineClickEffect: false, // UI

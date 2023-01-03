@@ -88,6 +88,13 @@ npm install --save relation-graph
  }
  </script>
 ```
+
+完整的、可运行的示例项目：
+
+https://github.com/seeksdream/relation-graph-vue2-demo
+
+
+
 *上面代码的效果：*
 ![简单示例效果图](doc/images/relation-graph-simple.png)
 ![简单示例效果图](doc/images/d1.png)
@@ -118,7 +125,8 @@ npm install --save relation-graph
 * 对v1.x代码重构，结构更清晰，方便大家修改，欢迎一起完善
 * 处理了很多issues，解决不少问题
 * 修改了线条文字的展示方式，现在线条文字会跟随线条轨迹走
-
+* 新增线条插槽
+* 新增画布插槽
 
 这个项目使用典型的vue编程方式，代码简单易懂，如果需要实现一些高级功能，你还可以直接使用源码作为一个component放到你的项目中去用，如果有一些优化或者新特性，欢迎提交pull request。
 

@@ -31,13 +31,8 @@ export class RelationGraphWithEffect extends RelationGraphWithZoom {
     this.options.viewSize.width = this.$dom.getBoundingClientRect().width;
     this.options.viewSize.height = this.$dom.getBoundingClientRect().height;
     this.options.canvasZoom = 100;
-    if (this.options.moveToCenterWhenRefresh) {
-      this.options.canvasOffset.x = 0;
-      this.options.canvasOffset.y = 0;
-    } else {
-      this.options.canvasOffset.x = this.options.viewNVInfo.width / 2;
-      this.options.canvasOffset.y = this.options.viewNVInfo.height / 2;
-    }
+    this.options.canvasOffset.x = this.options.viewNVInfo.width / 2;
+    this.options.canvasOffset.y = this.options.viewNVInfo.height / 2;
     this.refreshNVAnalysisInfo();
   }
   dataUpdated() {
@@ -75,40 +70,55 @@ export class RelationGraphWithEffect extends RelationGraphWithZoom {
     this.options.viewELSize.top = _view_info.top;
   }
   getStuffSize() {
-    let _min_x = 9999999;
-    let _min_y = 9999999;
-    let _max_x = 0;
-    let _max_y = 0;
+    let minX = 9999999;
+    let minY = 9999999;
+    let maxX = 0;
+    let maxY = 0;
     this.graphData.nodes.forEach(thisNode => {
-      if (thisNode.lot.x < _min_x) {
-        _min_x = thisNode.lot.x;
+      if (thisNode.lot.x < minX) {
+        minX = thisNode.lot.x;
       }
-      if (thisNode.lot.x > _max_x) {
-        _max_x = thisNode.lot.x + thisNode.el.offsetWidth;
+      if (thisNode.lot.x > maxX) {
+        maxX = thisNode.lot.x + thisNode.el.offsetWidth;
       }
-      if (thisNode.lot.y < _min_y) {
-        _min_y = thisNode.lot.y;
+      if (thisNode.lot.y < minY) {
+        minY = thisNode.lot.y;
       }
-      if (thisNode.lot.y > _max_y) {
-        _max_y = thisNode.lot.y + thisNode.el.offsetHeight;
+      if (thisNode.lot.y > maxY) {
+        maxY = thisNode.lot.y + thisNode.el.offsetHeight;
       }
     });
-    const _stuff_width = _max_x - _min_x;
-    const _stuff_height = _max_y - _min_y;
+    const padding = 100;
+    const _stuff_width = maxX - minX + padding;
+    const _stuff_height = maxY - minY + padding;
     return {
       width: _stuff_width,
-      height: _stuff_height
+      height: _stuff_height,
+      minX,
+      maxX,
+      minY,
+      maxY
     };
   }
   getNodesCenter() {
-    const x = this.options.viewNVInfo.width / 2;
-    const y = this.options.viewNVInfo.height / 2;
+    const stuffSize = this.getStuffSize();
+    devLog('getStuffSize:', stuffSize);
+    // const x = (stuffSize.width - this.options.viewSize.width) / 2;
+    // const y = (stuffSize.height - this.options.viewSize.height) / 2;
+    const x = stuffSize.minX + (stuffSize.width - 100) / 2;
+    const y = stuffSize.minY + (stuffSize.height - 100) / 2;
     return {
       x,
       y
     };
   }
-  playShowEffect() {
+  setCanvasCenter(x, y) {
+    const viewX = this.options.viewSize.width / 2;
+    const viewY = this.options.viewSize.height / 2;
+    this.options.canvasOffset.x = viewX - x;
+    this.options.canvasOffset.y = viewY - y;
+  }
+  playShowEffect(callback) {
     if (this.graphData.nodes.length === 0) {
       devLog('relation-graph:move to center: data not ready!');
       return;
@@ -117,18 +127,21 @@ export class RelationGraphWithEffect extends RelationGraphWithZoom {
     if (this.options.moveToCenterWhenRefresh) {
       // devLog('relation-graph:move to center:', [this.options.viewSize.width, this.options.viewSize.height], [_box.width, _box.height]);
       // this.focusRootNode()
-      const center = this.getNodesCenter();
-      this.animateGoto(center.x, center.y, 500, () => {
-        // this.graphOptions.checkedNodeId = thisNode.id
-        // this.refreshNVAnalysisInfo();
-        if (this.options.zoomToFitWhenRefresh) {
-          this.zoomToFit();
-        }
-      });
-    } else {
-      if (this.options.zoomToFitWhenRefresh) {
-        this.zoomToFit();
+      if (this.options.useAnimationWhenRefresh) {
+        const center = this.getNodesCenter();
+        devLog('center:', center.x, center.y);
+        const x = this.options.viewSize.width / 2 - center.x;
+        const y = this.options.viewSize.height / 2 - center.y;
+        this.animateGoto(x, y, 500, () => {
+          this.zoomToFitWhenRefresh(callback);
+        });
+      } else {
+        const center = this.getNodesCenter();
+        this.setCanvasCenter(center.x, center.y);
+        this.zoomToFitWhenRefresh(callback);
       }
+    } else {
+      this.zoomToFitWhenRefresh(callback);
     }
     if (isNaN(this.graphData.rootNode.x)) {
       devLog('rootNode.x is NaN, graph is currently hidden?');
@@ -137,6 +150,13 @@ export class RelationGraphWithEffect extends RelationGraphWithZoom {
     // console.log(this.options.layoutName);
     if (this.options.layoutName !== 'force') {
       this.placeSingleNode();
+    }
+  }
+  zoomToFitWhenRefresh(callback) {
+    if (this.options.zoomToFitWhenRefresh) {
+      this.zoomToFit(callback);
+    } else {
+      callback && callback();
     }
   }
   placeSingleNode() {
@@ -163,21 +183,27 @@ export class RelationGraphWithEffect extends RelationGraphWithZoom {
       forceLayout.autoLayout();
     }
   }
-  zoomToFit() {
+  zoomToFit(callback) {
     const stuffSize = this.getStuffSize();
     const zoomPercentX = this.options.viewSize.width / stuffSize.width;
     const zoomPercentY = this.options.viewSize.height / stuffSize.height;
     const zoomPercent = Math.min(zoomPercentX, zoomPercentY, 1);
     devLog('animateToZoom:', { stuffSize, zoomPercent, zoomPercentX, zoomPercentY, viewSize: this.options.viewSize });
-    this.animateToZoom(zoomPercent * 100, 300);
+    if (this.options.useAnimationWhenRefresh) {
+      this.animateToZoom(zoomPercent * 100, 300, callback);
+    } else {
+      this.setZoom(zoomPercent * 100, 300);
+      if (callback) callback();
+    }
   }
   animateGoto(x, y, time, callback) {
+    devLog('animateGoto:', x, y);
     const _distance_x = x - this.options.canvasOffset.x;
     const _distance_y = y - this.options.canvasOffset.y;
     const _allTime = time;
     const _allStepNum = 5;
-    const _speed_x = parseInt(_distance_x / _allStepNum);
-    const _speed_y = parseInt(_distance_y / _allStepNum);
+    const _speed_x = Math.round(_distance_x / _allStepNum);
+    const _speed_y = Math.round(_distance_y / _allStepNum);
     const _perDelay = _allTime / _allStepNum;
     this.animateStepAction(0, _perDelay, _allStepNum, () => {
       this.options.canvasOffset.x += _speed_x;
@@ -191,12 +217,14 @@ export class RelationGraphWithEffect extends RelationGraphWithZoom {
     const _zoom_distance = finalZoom - this.options.canvasZoom;
     const _allTime = time;
     const _allStepNum = 5;
-    const _speed = parseInt(_zoom_distance / _allStepNum);
+    const _speed = Math.round(_zoom_distance / _allStepNum);
     const _perDelay = _allTime / _allStepNum;
+    devLog('animateToZoom:', _zoom_distance, _speed);
     this.animateStepAction(0, _perDelay, _allStepNum, () => {
       this.zoom(_speed);
     }, () => {
       // devLog('分解完毕....')
+      this.setZoom(finalZoom);
       if (callback) callback();
     });
   }

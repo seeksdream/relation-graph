@@ -21,6 +21,7 @@ export default {
     return {
       isShowCodePanel: false,
       graphOptions: {
+        debug: true,
         allowSwitchLineShape: true,
         allowSwitchJunctionPoint: true,
         allowShowDownloadButton: true,
