@@ -35,8 +35,6 @@ export default {
       myGraphPanelSize: { width: 400, height: 400 },
       graphOptions: {
         debug: true,
-        'backgrounImage': 'https://camo.githubusercontent.com/ede1654f055903cdc39044129d15d5b158f4f3b33ba5b7c21c7407792a506dea/687474703a2f2f72656c6174696f6e2d67726170682e636f6d2f776562736974652f6c6f676f',
-        'backgrounImageNoRepeat': true,
         'layouts': [
           {
             'label': '中心',
@@ -61,6 +59,9 @@ export default {
           'refY': 6,
           'data': 'M2,2 L10,6 L2,10 L6,6 L2,2'
         },
+        moveToCenterWhenRefresh: true,
+        useAnimationWhenRefresh: true,
+        zoomToFitWhenRefresh: true,
         'defaultExpandHolderPosition': 'right',
         'defaultNodeShape': 1,
         'defaultNodeWidth': '100',
@@ -108,7 +109,7 @@ export default {
           { 'from': 'b1', 'to': 'b1-2' },
           { 'from': 'b1', 'to': 'b1-3' },
           { 'from': 'b1', 'to': 'b1-4' },
-          { 'from': 'b1', 'to': 'b1-5' },
+          { 'from': 'b1-6', 'to': 'b1-5' },
           { 'from': 'b1', 'to': 'b1-6' },
           { 'from': 'b', 'to': 'b2' },
           { 'from': 'b2', 'to': 'b2-1' },

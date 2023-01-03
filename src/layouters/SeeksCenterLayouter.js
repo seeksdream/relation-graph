@@ -119,13 +119,13 @@ export class SeeksCenterLayouter {
   }
   placeRelativePosition(rootNode, analyticResult) {
     const distance_coefficient = this.config.distance_coefficient === undefined ? 1 : this.config.distance_coefficient;
-    let __leve1_min_r = parseInt(((this.graphSetting.viewSize.height + this.graphSetting.viewSize.width) / analyticResult.max_deep * 0.2)) * distance_coefficient;
+    let __leve1_min_r = Math.round(((this.graphSetting.viewSize.height + this.graphSetting.viewSize.width) / analyticResult.max_deep * 0.2)) * distance_coefficient;
     devLog('analyticResult:', analyticResult, __leve1_min_r, this.config.distance_coefficient);
     if (__leve1_min_r < 150 * distance_coefficient) __leve1_min_r = 150 * distance_coefficient;
     let __level1_r = 0;
     this.allNodes.forEach(thisNode => {
       if (thisNode.lot.subling.level === 1) {
-        __level1_r = parseInt(thisNode.lot.subling.all_size * 50 / Math.PI / 2);
+        __level1_r = Math.round(thisNode.lot.subling.all_size * 50 / Math.PI / 2);
         if (__level1_r < __leve1_min_r)__level1_r = __leve1_min_r;
         // if (__level1_r > 500)__level1_r = 500
         const _point = RGGraphMath.getOvalPoint(rootNode.lot.x, rootNode.lot.y, thisNode.lot.subling.level * __level1_r, thisNode.lot.strength_plus - (thisNode.lot.strength / 2), thisNode.lot.subling.all_strength);
@@ -134,7 +134,7 @@ export class SeeksCenterLayouter {
         thisNode.lot.y = _point.y;
       }
     });
-    const __level_r = parseInt(300 * distance_coefficient);
+    const __level_r = Math.round(300 * distance_coefficient);
     this.allNodes.forEach(thisNode => {
       if (thisNode.lot.subling.level > 1) {
         const __area_start = thisNode.lot.parent.lot.strength_plus - thisNode.lot.parent.lot.strength;
@@ -275,8 +275,8 @@ export class SeeksCenterLayouter {
     //   return
     // }
     // console.log('F add:', node.name, node.Fx, node.Fy)
-    const __buff_x = parseInt(node.Fx);
-    const __buff_y = parseInt(node.Fy);
+    const __buff_x = Math.round(node.Fx);
+    const __buff_y = Math.round(node.Fy);
     // console.log('F add:2:', node.name, __buff_x, __buff_y)
     node.x = node.x + __buff_x;
     node.y = node.y + __buff_y;

@@ -298,8 +298,8 @@ export class SeeksForceLayouter {
     //   return
     // }
     // console.log('F add:', node.name, node.Fx, node.Fy)
-    const __buff_x = parseInt(node.Fx);
-    const __buff_y = parseInt(node.Fy);
+    const __buff_x = Math.round(node.Fx);
+    const __buff_y = Math.round(node.Fy);
     // console.log('F add:2:', node.name, __buff_x, __buff_y)
     node.x = node.x + __buff_x;
     node.y = node.y + __buff_y;

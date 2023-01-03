@@ -32,8 +32,8 @@ const RGEffectUtils = {
     // console.log('[canvas]onDragStart...', isSupportTouch, e);
     try {
       const clientPosition = getClientPosition(e);
-      __tmp_basePosition.x = parseInt(__tmp_positionModel.x) - clientPosition.clientX;
-      __tmp_basePosition.y = parseInt(__tmp_positionModel.y) - clientPosition.clientY;
+      __tmp_basePosition.x = Math.round(__tmp_positionModel.x) - clientPosition.clientX;
+      __tmp_basePosition.y = Math.round(__tmp_positionModel.y) - clientPosition.clientY;
       if (isSupportTouch) {
         // e.stopPropagation();
         e.preventDefault();

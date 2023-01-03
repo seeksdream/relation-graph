@@ -268,10 +268,10 @@ export class SeeksBidirectionalTreeLayouter {
       const __max_per_height = this.config.max_per_height || 400;
       const __min_per_width = this.config.min_per_width || 430;
       const __max_per_width = this.config.max_per_width || 650;
-      let __per_width = parseInt((dynamicSizeConfig.__mapWidth - 10) / (analyticResult.max_deep + 2));
+      let __per_width = Math.round((dynamicSizeConfig.__mapWidth - 10) / (analyticResult.max_deep + 2));
       if (__per_width < __min_per_width)__per_width = __min_per_width;
       if (__per_width > __max_per_width)__per_width = __max_per_width;
-      let __per_height = parseInt(dynamicSizeConfig.__mapHeight / (analyticResult.max_strength + 1));
+      let __per_height = Math.round(dynamicSizeConfig.__mapHeight / (analyticResult.max_strength + 1));
       if (__per_height < __min_per_height)__per_height = __min_per_height;
       if (__per_height > __max_per_height)__per_height = __max_per_height;
       this.allNodes.forEach(thisNode => {
@@ -297,10 +297,10 @@ export class SeeksBidirectionalTreeLayouter {
       const __max_per_height = this.config.max_per_height || 400;
       const __min_per_width = this.config.min_per_width || 250;
       const __max_per_width = this.config.max_per_width || 500;
-      let __per_width = parseInt((dynamicSizeConfig.__mapWidth - 10) / (analyticResult.max_strength + 2));
+      let __per_width = Math.round((dynamicSizeConfig.__mapWidth - 10) / (analyticResult.max_strength + 2));
       if (__per_width < __min_per_width)__per_width = __min_per_width;
       if (__per_width > __max_per_width)__per_width = __max_per_width;
-      let __per_height = parseInt((dynamicSizeConfig.__mapHeight - 10) / (analyticResult.max_deep + 2));
+      let __per_height = Math.round((dynamicSizeConfig.__mapHeight - 10) / (analyticResult.max_deep + 2));
       if (__per_height < __min_per_height)__per_height = __min_per_height;
       if (__per_height > __max_per_height)__per_height = __max_per_height;
       this.allNodes.forEach(thisNode => {

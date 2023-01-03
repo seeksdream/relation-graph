@@ -29,6 +29,7 @@ export default {
       currentCase: '横向树状图谱',
       isShowCodePanel: false,
       graphOptions: {
+        debug: true,
         'backgrounImage': 'https://camo.githubusercontent.com/ede1654f055903cdc39044129d15d5b158f4f3b33ba5b7c21c7407792a506dea/687474703a2f2f72656c6174696f6e2d67726170682e636f6d2f776562736974652f6c6f676f',
         'backgrounImageNoRepeat': true,
         'layouts': [

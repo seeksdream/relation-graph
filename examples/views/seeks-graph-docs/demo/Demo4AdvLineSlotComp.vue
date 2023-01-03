@@ -89,6 +89,8 @@ export default {
       for (let i = 0; i < this.$refs.flower.childNodes.length; i++) {
         this.$refs.flower.removeChild(this.$refs.flower.childNodes[i]);
       }
+      // 看到这里不会要紧张，这里只是引用了一个外部类来生成一个炫酷的花朵
+      // 你完全可以根据自己的需求用少量的代码来生成你自己的svg
       new Flower(params);
     },
     updateFlower() {
@@ -107,20 +109,6 @@ export default {
 </script>
 
 <style lang="scss">
-body {
-  margin: 0;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 0.9rem;
-  color: #000;
-  text-shadow: 1px 1px 1px #fff;
-}
-#svg {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  cursor: pointer;
-  filter: drop-shadow(0 0 4px #000);
-}
 .flower path {
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -136,33 +124,7 @@ body {
   stroke: rgba(0, 0, 0, 0.7);
   stroke-width: 0.75px;
 }
-a {
-  color: #555;
-  text-decoration: none;
-  border-bottom: 0.25rem solid transparent;
-  transition: all 0.4s;
-}
-a:hover {
-  color: #000;
-  border-bottom-color: rgba(0, 0, 0, 0.7);
-}
-header,
-footer {
-  position: absolute;
-  width: 100%;
-  text-align: center;
-}
-header h1 {
-  font-size: 2em;
-  margin: 0.5em 0 0;
-}
-footer {
-  bottom: 0.5em;
-}
 @-moz-document url-prefix() {
-  #svg {
-    filter: none;
-  }
   .layer {
     filter: drop-shadow(0 0 3px #000);
   }

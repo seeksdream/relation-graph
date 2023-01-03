@@ -26,6 +26,10 @@ export class RelationGraphWithZoom extends RelationGraphWithDom {
     this.options.canvasZoom = __new_zoom_value;
     this.refreshNVAnalysisInfo();
   }
+  setZoom(finalZoom, userZoomCenter) {
+    const buff = Math.floor(finalZoom - this.options.canvasZoom);
+    this.zoom(buff);
+  }
   zoomCenter_of_newSize = { x: 0, y: 0 };
   showZoomCenter(userZoomCenter, zoomBuff) {
     if (!this.$dom) {

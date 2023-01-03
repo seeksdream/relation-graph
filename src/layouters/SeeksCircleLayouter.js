@@ -190,7 +190,7 @@ export class SeeksCenterLayouter {
     for (let i = 0; i < this.allNodes.length; i++) {
       const thisNode = this.allNodes[i];
       if (thisNode.lot.subling.level === 1 && thisNode.lot.childs_size === 0) {
-        let __per_height = parseInt(__mapHeight / (thisNode.lot.subling.all_size + 1));
+        let __per_height = Math.round(__mapHeight / (thisNode.lot.subling.all_size + 1));
         if (__per_height > 70)__per_height = 70;
         devLog(__per_height, __mapHeight, thisNode.lot.subling.all_size, thisNode.lot.subling.all_strength, thisNode.lot.strength);
         for (let j = 0; j < this.allNodes.length; j++) {
@@ -294,8 +294,8 @@ export class SeeksCenterLayouter {
     if (node.Fy > 1000)node.Fy = 3000;
     if (node.Fx < -1000)node.Fx = -3000;
     if (node.Fy < -1000)node.Fy = -3000;
-    const __buff_x = parseInt(node.Fx * 0.02);
-    const __buff_y = parseInt(node.Fy * 0.02);
+    const __buff_x = Math.round(node.Fx * 0.02);
+    const __buff_y = Math.round(node.Fy * 0.02);
     // console.log('F add:2:', node.name, __buff_x, __buff_y)
     node.x = node.x + __buff_x;
     node.y = node.y + __buff_y;

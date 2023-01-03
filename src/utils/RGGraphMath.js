@@ -73,7 +73,7 @@ export const RGGraphMath = {
     const _from_c_y = y1 + n1h / 2;
     const _to_c_x = x2 + n2w / 2;
     const _to_c_y = y2 + n2h / 2;
-    const _atan2 = parseInt(Math.atan2(_to_c_y - _from_c_y, _to_c_x - _from_c_x) * 180 / 3.14) + 135;
+    const _atan2 = Math.round(Math.atan2(_to_c_y - _from_c_y, _to_c_x - _from_c_x) * 180 / 3.14) + 135;
     if (_atan2 >= 0 && _atan2 < 90) { // top
       return { x: x1 + n1w / 2, y: y1 - 5 };
     } else if (_atan2 >= 90 && _atan2 < 180) { // right
@@ -236,7 +236,7 @@ export const RGGraphMath = {
     // if (tan > 90 && tan < 270) {
     //   tan = 0
     // }
-    return parseInt(tan);
+    return Math.round(tan);
   },
   getTreePointFromTop: function(c_x, c_y, c_height, c_i, c_n, sizehelper) {
     if (!c_x) { // if root
