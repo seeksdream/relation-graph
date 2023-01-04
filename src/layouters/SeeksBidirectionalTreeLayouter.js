@@ -44,9 +44,7 @@ export class SeeksBidirectionalTreeLayouter {
     // var __prev_node
     thisLevelNodes.forEach(thisNode => {
       let __thisNode_child_size = 0;
-      // console.log('Build node::', thisNode.text, thisNode.targetNodes.length)
       if (levelDirect === -1) {
-        // console.log('Build node::from::', thisNode.text, thisNode.targetFrom.length)
         let __thisTargetIndex = 0;
         thisNode.targetFrom.forEach((thisTarget) => {
           if (!thisTarget.lot)thisTarget.lot = { eached: false };
@@ -63,12 +61,10 @@ export class SeeksBidirectionalTreeLayouter {
               __thisNode_child_size++;
             } else {
               thisNode.lot.childs.push(thisTarget);
-              // console.log('hide node:', thisTarget.name, 'from:', thisNode.text)
             }
           }
         });
       } else {
-        // console.log('Build node::to::', thisNode.text, thisNode.targetTo.length)
         let __thisTargetIndex = 0;
         thisNode.targetTo.forEach((thisTarget) => {
           if (!thisTarget.lot)thisTarget.lot = { eached: false };
@@ -85,7 +81,6 @@ export class SeeksBidirectionalTreeLayouter {
               __thisNode_child_size++;
             } else {
               thisNode.lot.childs.push(thisTarget);
-              // console.log('hide node:', thisTarget.name, 'from:', thisNode.text)
             }
           }
         });
@@ -100,9 +95,7 @@ export class SeeksBidirectionalTreeLayouter {
     if (__thisLOT_subling.all_strength > analyticResult.max_strength) {
       analyticResult.max_strength = __thisLOT_subling.all_strength;
     }
-    // console.log(thisDeep, 'next level nodes:', newLevelNodes.length)
     if (newLevelNodes.length > 0) {
-      // console.log('thisLevelNodes.length:', thisLevelNodes, thisLevelNodes.length)
       this.analysisNodes4Didirectional(willLayoutNodes, newLevelNodes, thisDeep + levelDirect, analyticResult, levelDirect);
     } else {
       willLayoutNodes.forEach(thisNode => {
@@ -163,47 +156,12 @@ export class SeeksBidirectionalTreeLayouter {
     };
     this.analysisNodes4Didirectional(this.allNodes, [this.rootNode], 0, analyticResult, 1);
     this.placeNodesPosition(this.rootNode, this.allNodes, analyticResult);
-
-    // console.log('根据数据调整画板高度')
-    // if (this.config.from === 'left' || this.config.from === 'right') {
-    //   let __suitableHeight = analyticResult.max_strength * 50 + 100
-    //   if (__suitableHeight < this.graphSetting.viewSize.height + 300)__suitableHeight = this.graphSetting.viewSize.height + 300
-    //   this.graphSetting.canvasSize.height = __suitableHeight
-    //   let __suitableWidth = analyticResult.max_deep * 1000 + 600
-    //   if (__suitableWidth < this.graphSetting.viewSize.width + 500)__suitableWidth = this.graphSetting.viewSize.width + 500
-    //   this.graphSetting.canvasSize.width = __suitableWidth
-    // } else {
-    //   let __suitableWidth = analyticResult.max_strength * 320 + 1000
-    //   if (__suitableWidth < this.graphSetting.viewSize.width + 500)__suitableWidth = this.graphSetting.viewSize.width + 500
-    //   this.graphSetting.canvasSize.width = __suitableWidth
-    //   let __suitableHeight = analyticResult.max_deep * 400 + 200
-    //   if (__suitableHeight < this.graphSetting.viewSize.height + 300)__suitableHeight = this.graphSetting.viewSize.height + 300
-    //   this.graphSetting.canvasSize.height = __suitableHeight
-    // }
-    // if (this.graphSetting.heightByContent) {
-    //   console.log('根据数据调整视窗高度')
-    //   if (this.config.from === 'left' || this.config.from === 'right') {
-    //     this.graphSetting.viewSize.height = this.graphSetting.canvasSize.height
-    //   } else {
-    //     this.graphSetting.viewSize.height = analyticResult.max_deep * 500 + 300
-    //   }
-    // }
-    // this.graphSetting.canvasOffset.x = this.graphSetting.viewNVInfo.width / 2 - 100
-    // this.graphSetting.canvasOffset.y = this.graphSetting.viewNVInfo.height / 2 - 100
   }
   placeNodesPosition(rootNode, allNodes, analyticResult) {
     const __mapWidth = this.graphSetting.viewSize.width;
     const __mapHeight = this.graphSetting.viewSize.height;
-    // console.log('analysisNodes:', analyticResult, allNodes)
-    // this.graphSetting.canvasOffset.x = 0
-    // this.graphSetting.canvasOffset.y = 0
-    // const __offsetX = rootNode.offset_x || 0;
-    // const __offsetY = rootNode.offset_y || 0;
     const __offsetX = 0;
     const __offsetY = 0;
-    // console.log('#############Seeks graph viewSize:Tree layout:', this.graphSetting.viewSize.width, this.graphSetting.viewSize.height)
-    // console.log('[layout canvasOffset]', __mapHeight, this.graphSetting, this.graphSetting.canvasSize, this.config)
-    // console.log('[Layout:AnalyticResult]', analyticResult)
     if (rootNode.fixed !== true) {
       const _center_offset_x = parseInt(this.config.centerOffset_x) || 0;
       const _center_offset_y = parseInt(this.config.centerOffset_y) || 0;
@@ -254,7 +212,6 @@ export class SeeksBidirectionalTreeLayouter {
         return;
       }
       if (!RGGraphMath.isAllowShowNode(thisNode)) return;
-      // console.log(thisNode.text, thisNode.offset_x, thisNode.offset_y)
       const __offsetX = thisNode.offset_x || 0;
       const __offsetY = thisNode.offset_y || 0;
       thisNode.x = thisNode.offset_x + thisNode.lot.x + __offsetX;
@@ -278,8 +235,6 @@ export class SeeksBidirectionalTreeLayouter {
         if (thisNode.fixed === true) return;
         if (thisNode.lot.placed === true) return;
         if (thisNode === rootNode) return;
-        // console.log('Place node:', thisNode.text, thisNode)
-        // console.log('Place node lot:', thisNode.lot.subling.level, thisNode.lot.index_of_level, 'of', thisNode.lot.subling.all_size, thisNode.lot.subling.all_strength)
         if (this.config.from === 'right') {
           thisNode.lot.x = rootNode.lot.x - this.getLevelDistance(thisNode, thisNode.lot.subling.level, __per_width);
         } else {
@@ -307,19 +262,15 @@ export class SeeksBidirectionalTreeLayouter {
         if (thisNode.fixed === true) return;
         if (thisNode.lot.placed === true) return;
         if (thisNode === rootNode) return;
-        // console.log('Place node:', thisNode.text, thisNode)
-        // console.log('Place node lot:', thisNode.lot.subling.level, thisNode.lot.index_of_level, 'of', thisNode.lot.subling.all_size, thisNode.lot.subling.all_strength)
         if (this.config.from === 'bottom') {
           thisNode.lot.y = rootNode.lot.y - this.getLevelDistance(thisNode, thisNode.lot.subling.level, __per_height);
         } else {
-          // console.log('Place node xxxx:', rootNode.lot.y, thisNode.lot.subling.level, __per_height)
           thisNode.lot.y = rootNode.lot.y + this.getLevelDistance(thisNode, thisNode.lot.subling.level, __per_height);
         }
       });
       this.allNodes.forEach(thisNode => {
         if (thisNode.fixed === true) return;
         if (thisNode.lot.level !== 0) {
-          // console.log('Place node xxxx:', thisNode.lot.strengthWithChilds_from, thisNode.lot.strengthWithChilds, __per_width)
           thisNode.lot.x = rootNode.lot.x + __per_width * ((analyticResult.max_strength / -2) + thisNode.lot.strengthWithChilds_from + thisNode.lot.strengthWithChilds / 2);
           // thisNode.lot.x = rootNode.lot.x
         }

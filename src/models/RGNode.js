@@ -1,7 +1,7 @@
 
 export const json2Node = (originData) => {
   if (originData.id === undefined) { throw Error('node must has option[id]:', originData); }
-  originData.text = originData.text || originData.name || originData.id;
+  // originData.text = originData.text || originData.name || originData.id;
   const jsonData = {
     id: originData.id,
     text: originData.text !== undefined ? originData.text : '',

@@ -5,6 +5,7 @@ export class RelationGraphWithZoom extends RelationGraphWithDom {
   constructor() {
     super(...arguments);
   }
+
   zoom(buff, userZoomCenter) {
     // devLog('[zoom]', buff, 'from:', userZoomCenter);
     if ((this.options.canvasZoom + buff) < 10) {
@@ -26,11 +27,14 @@ export class RelationGraphWithZoom extends RelationGraphWithDom {
     this.options.canvasZoom = __new_zoom_value;
     this.refreshNVAnalysisInfo();
   }
+
   setZoom(finalZoom, userZoomCenter) {
     const buff = Math.floor(finalZoom - this.options.canvasZoom);
     this.zoom(buff);
   }
+
   zoomCenter_of_newSize = { x: 0, y: 0 };
+
   showZoomCenter(userZoomCenter, zoomBuff) {
     if (!this.$dom) {
       return;
@@ -76,6 +80,7 @@ export class RelationGraphWithZoom extends RelationGraphWithDom {
       buff_x, buff_y
     };
   }
+
   analysisByZoom(zoom, userZoomCenter) {
     const result = {
       NMViewPosition: { x: 0, y: 0 },

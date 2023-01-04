@@ -122,13 +122,6 @@ export default {
       downloadPanelWidth: 106
     };
   },
-  // watch: {
-  //   'relationGraph.options.layoutName': function(newV, oldV) {
-  //     console.log('change layout:', newV, oldV)
-  //     RGLayouterController.switchLayout(newV, this.graphSetting)
-  //     this.refresh()
-  //   }
-  // },
   mounted() {
     if (this.relationGraph.listeners.onDownloadExcel !== null) {
       this.downloadPanelWidth += 50;
