@@ -35,7 +35,6 @@ export class RelationGraphWithLine extends RelationGraphWithImage {
     let f_W = from.el.offsetWidth || from.width || from.w;
     let f_H = from.el.offsetHeight || from.height || from.h;
     if (isNaN(f_W) || isNaN(f_H)) {
-      // console.log('error from node size:', f_W, f_H)
       relationData.textPositon.x = 50;
       relationData.textPositon.y = 50;
       relationData.textPositon.rotate = 0;
@@ -44,7 +43,6 @@ export class RelationGraphWithLine extends RelationGraphWithImage {
     let t_W = to.el.offsetWidth || to.width || to.w;
     let t_H = to.el.offsetHeight || to.height || to.h;
     if (isNaN(t_W) || isNaN(t_H)) {
-      // console.log('error to node size:', f_W, f_H)
       relationData.textPositon.x = 50;
       relationData.textPositon.y = 50;
       relationData.textPositon.rotate = 0;
@@ -150,7 +148,6 @@ export class RelationGraphWithLine extends RelationGraphWithImage {
       if (__lineDirection === 'v') {
         __path = 'M' + fx + ',' + fy + ' c' + (0) + ',' + (__buff_y * distanceRate) + ' ' + (0) + ',' + (0) + ' ' + __buff_x + ',' + __buff_y;
       } else {
-        // console.log('start:', __start, __end, __buff_x, __buff_y)
         __path = 'M' + fx + ',' + fy + ' c' + (__buff_type * 30) + ',' + (0) + ' ' + (__buff_type * -10) + ',' + (__buff_y * distanceRate) + ' ' + __buff_x + ',' + __buff_y;
       }
     } else if (__lineShape === 5) {
@@ -164,16 +161,6 @@ export class RelationGraphWithLine extends RelationGraphWithImage {
       } else {
         __path = 'M' + fx + ',' + fy + ' c' + (0) + ',' + (0) + ' ' + (__buff_x * distanceRate) + ',' + (0) + ' ' + __buff_x + ',' + __buff_y; // 鱼尾
       }
-      // __path = 'M' + fx + ',' + fy + ' c' + (0) + ',' + (0) + ' ' + (0) + ',' + (__buff_y * 0.5) + ' ' + __buff_x + ',' + __buff_y
-      // __path = 'M' + fx + ',' + fy + ' c' + (0) + ',' + (0) + ' ' + (-100) + ',' + (__buff_y * 0.5) + ' ' + __buff_x + ',' + __buff_y
-      // __path = 'M' + fx + ',' + fy + ' c' + (30) + ',' + (0) + ' ' + (-10) + ',' + (__buff_y * 0.5) + ' ' + __buff_x + ',' + __buff_y
-      // __path = 'M' + fx + ',' + fy + ' c' + (50) + ',' + (0) + ' ' + (-50) + ',' + (__buff_y * 0.5) + ' ' + __buff_x + ',' + __buff_y
-      // __path = 'M' + fx + ',' + fy + ' c' + (100) + ',' + (0) + ' ' + (10) + ',' + (__buff_y * 0.5) + ' ' + __buff_x + ',' + __buff_y
-      // __path = 'M' + fx + ',' + fy + ' c' + (0) + ',' + (0) + ' ' + (__buff_x * 0.5) + ',' + (0) + ' ' + __buff_x + ',' + __buff_y // 类似鱼尾
-      // __path = 'M' + fx + ',' + fy + ' c' + (__buff_x * 0.5) + ',' + (0) + ' ' + (0) + ',' + (0) + ' ' + __buff_x + ',' + __buff_y // 三角
-      // __path = 'M' + fx + ',' + fy + ' c' + (0) + ',' + (0) + ' ' + (__buff_x * 0.5) + ',' + (0) + ' ' + __buff_x + ',' + __buff_y // 鱼尾
-      // __path = 'M' + fx + ',' + fy + ' c' + (50) + ',' + (__buff_y * 0.5) + ' ' + (0) + ',' + (0) + ' ' + __buff_x + ',' + __buff_y //
-      // __path = 'M' + fx + ',' + fy + ' c' + (50) + ',' + (__buff_y * 0.5) + ' ' + (0) + ',' + (0) + ' ' + __buff_x + ',' + __buff_y
     } else {
       const _angle_type = RGGraphMath.getAngleType(__buff_x, __buff_y);
       relationData.textPositon.rotate = RGGraphMath.getTextAngle(fx, fy, tx, ty);
@@ -184,7 +171,6 @@ export class RelationGraphWithLine extends RelationGraphWithImage {
       relationData.textPositon.y = Math.round(__start.y + __buff_y / 2 - _y);
       if (isNaN(relationData.textPositon.rotate)) {
         relationData.textPositon.rotate = 0;
-        // console.log('NaN rotate:', relationData);
       }
       // this.lineProps.text = relationData.text.rotate
       __path = 'M ' + fx + ' ' + fy + ' L ' + (tx) + ' ' + (ty);
@@ -204,7 +190,6 @@ export class RelationGraphWithLine extends RelationGraphWithImage {
   }
   getArrow(thisRelation, link, isStartArrow) {
     const checked = link.seeks_id === this.options.checkedLineId;
-    // console.log('xxxxxxxxxxxx')
     if (thisRelation.isHideArrow) {
       return 'none';
     } else {

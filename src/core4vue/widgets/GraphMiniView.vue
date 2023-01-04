@@ -83,7 +83,6 @@ export default {
       let _view_y = (this.relationGraph.options.viewNVInfo.y - this.relationGraph.options.canvasNVInfo.y) * _r * (this.relationGraph.options.canvasZoom / 100);
       _view_x = _view_x * 100 / _width;
       _view_y = _view_y * 100 / _width;
-      // console.log('Mini View style:', _view_center_x, _canvas_center_x)
       const style = {
         width: _width + 'px',
         height: _height + 'px',

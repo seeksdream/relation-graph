@@ -142,10 +142,8 @@ export const RGGraphMath = {
     return { x: tx - __x, y: ty - __y };
   },
   getCirclePoint4MultiLine: function(x1, y1, x2, y2, n1w, n1h, n2w, n2h, isReserve, allSize, indexOfAll) {
-    // console.log(indexOfAll, 'of', allSize, isReserve)
     if (isReserve) {
       indexOfAll = allSize - indexOfAll - 1;
-      // console.log(indexOfAll, 'of', allSize, '|indexOfAll changed!')
     }
     const to_x = x2 + n2w / 2;
     const to_y = y2 + n2h / 2;
@@ -310,7 +308,6 @@ export const RGGraphMath = {
     let __thisLevel_index = 0;
     // var __prev_node
     thisLevelNodes.forEach(thisNode => {
-      // console.log('Build node::', thisNode.name, thisNode.targetNodes.length)
       let __thisNode_child_size = 0;
       if (thisNode.targetNodes) {
         let __thisTargetIndex = 0;
@@ -329,7 +326,6 @@ export const RGGraphMath = {
               __thisNode_child_size++;
             } else {
               thisNode.lot.childs.push(thisTarget);
-              // console.log('hide node:', thisTarget.name, 'from:', thisNode.text)
             }
           }
         });
@@ -344,9 +340,7 @@ export const RGGraphMath = {
     if (__thisLOT_subling.all_strength > analyticResult.max_strength) {
       analyticResult.max_strength = __thisLOT_subling.all_strength;
     }
-    // console.log(thisDeep, 'next level nodes:', newLevelNodes.length)
     if (newLevelNodes.length > 0) {
-      // console.log('thisLevelNodes.length:', thisLevelNodes, thisLevelNodes.length)
       this.analysisNodes(willLayoutNodes, newLevelNodes, thisDeep + 1, analyticResult, config);
     } else {
       willLayoutNodes.forEach(thisNode => {
@@ -391,7 +385,6 @@ export const RGGraphMath = {
     thisLevelNodes.forEach(thisNode => {
       let __thisNode_child_size = 0;
       if (levelDirect === 0) {
-        // console.log('Build node::from::', thisNode.name, thisNode.targetNodes.length)
         let __thisTargetIndex = 0;
         thisNode.targetNodes.forEach((thisTarget) => {
           if (!thisTarget.lot)thisTarget.lot = { eached: false };
@@ -408,14 +401,10 @@ export const RGGraphMath = {
               __thisNode_child_size++;
             } else {
               thisNode.lot.childs.push(thisTarget);
-              // console.log('hide node:', thisTarget.text, 'from:', thisNode.text)
             }
-          } else {
-            // console.log('solved node:', thisTarget.text, 'from:', thisNode.text)
           }
         });
       } else if (levelDirect === -1) {
-        // console.log('Build node::from::', thisNode.name, thisNode.targetFrom.length)
         let __thisTargetIndex = 0;
         thisNode.targetFrom.forEach((thisTarget) => {
           if (!thisTarget.lot)thisTarget.lot = { eached: false };
@@ -432,12 +421,10 @@ export const RGGraphMath = {
               __thisNode_child_size++;
             } else {
               thisNode.lot.childs.push(thisTarget);
-              // console.log('hide node:', thisTarget.name, 'from:', thisNode.text)
             }
           }
         });
       } else {
-        // console.log('Build node::to::', thisNode.name, thisNode.targetTo.length)
         let __thisTargetIndex = 0;
         thisNode.targetTo.forEach((thisTarget) => {
           if (!thisTarget.lot)thisTarget.lot = { eached: false };
@@ -454,7 +441,6 @@ export const RGGraphMath = {
               __thisNode_child_size++;
             } else {
               thisNode.lot.childs.push(thisTarget);
-              // console.log('hide node:', thisTarget.name, 'from:', thisNode.text)
             }
           }
         });
@@ -469,9 +455,7 @@ export const RGGraphMath = {
     if (__thisLOT_subling.all_strength > analyticResult.max_strength) {
       analyticResult.max_strength = __thisLOT_subling.all_strength;
     }
-    // console.log(thisDeep, 'next level nodes:', newLevelNodes.length)
     if (newLevelNodes.length > 0) {
-      // console.log('thisLevelNodes.length:', thisLevelNodes, thisLevelNodes.length)
       RGGraphMath.analysisNodes4Didirectional(willLayoutNodes, newLevelNodes, thisDeep + (levelDirect === -1 ? -1 : 1), analyticResult, levelDirect);
     } else {
       willLayoutNodes.forEach(thisNode => {
@@ -502,7 +486,6 @@ export const RGGraphMath = {
     const newLevelNodes = [];
     let currentLevelStrengthWidthChilds = 0;
     thisLevelNodes.forEach(thisNode => {
-      // console.log('Place node aaaaaa:', levelDirect, thisNode.text, (thisNode.lot.level < 0 ? -1 : 1))
       if (thisNode.lot.level === 0 || levelDirect === (thisNode.lot.level < 0 ? -1 : 1)) {
         if (thisNode.lot.childs_size > 0) {
           thisNode.lot.childs.forEach((thisTarget) => {
@@ -516,7 +499,6 @@ export const RGGraphMath = {
         currentLevelStrengthWidthChilds += thisNode.lot.strengthWithChilds;
       }
     });
-    // console.log(thisDeep, 'next level nodes:', newLevelNodes.length)
     if (newLevelNodes.length > 0) {
       this.analysisDataTree(newLevelNodes, thisDeep + levelDirect, levelDirect);
     }
@@ -535,7 +517,6 @@ export const RGGraphMath = {
   // },
   isAllowShowNode: function(thisNode) {
     const _r = thisNode.isShow !== false && thisNode.isHide !== true && (!thisNode.lot.parent || this.isAllowShowNode(thisNode.lot.parent, false) === true);
-    // if (derict !== false && _r === false) console.log('hide node by:', thisNode.isShow !== false, thisNode.isHide !== true)
     return _r;
   }
 };

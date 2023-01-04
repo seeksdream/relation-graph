@@ -96,9 +96,8 @@ export class RelationGraphWithImage extends RelationGraphWithEvent {
     const canvas = document.createElement('canvas'); // 创建一个canvas节点
     canvas.width = _image_width * pixelRatio; // 定义canvas 宽度 * 缩放
     canvas.height = _image_height * pixelRatio; // 定义canvas高度 *缩放
-    // console.log('exportDom:', exportDom);
     canvas.style.backgroundColor = getComputedStyle(exportDom.parentElement, null).backgroundColor;
-    console.log('canvas.style.backgroundColor:', canvas.style.backgroundColor);
+    devLog('canvas.style.backgroundColor:', canvas.style.backgroundColor);
     canvas.style.width = _image_width * pixelRatio + 'px';
     canvas.style.height = _image_height * pixelRatio + 'px';
     canvas.getContext('2d').scale(1, 1); // 获取context,设置scale

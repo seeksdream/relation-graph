@@ -31,16 +31,6 @@ export default {
       currentLayoutName: ''
     };
   },
-  // computed: mapState({
-  //   graphSetting: () => _parent.graphSetting
-  // }),
-  // watch: {
-  //   'graphSetting.layoutName': function(newV, oldV) {
-  //     console.log('change layout:', newV, oldV)
-  //     RGLayouterController.switchLayout(newV, this.graphSetting)
-  //     this.$parent.refresh()
-  //   }
-  // },
   methods: {
     toggleSettingPanel() {
       this.showSettingPanel = !this.showSettingPanel;

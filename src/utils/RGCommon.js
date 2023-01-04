@@ -21,7 +21,6 @@ export const getLightColor = (col) => {
   let _st = col.substring(col.indexOf('(') + 1);
   _st = _st.substring(0, _st.indexOf(')'));
   const _rgb_string = _st.split(',');
-  // console.log('getLightColor444:', _st, ':', _rgb_string.join(','))
   if (_rgb_string.length >= 3) {
     const _rgb_number = [
       parseInt(parseInt(_rgb_string[0]) * 0.9),

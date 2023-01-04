@@ -76,7 +76,6 @@ export default {
     },
     isAllowShowNode: function(thisNode) {
       const _r = thisNode.isShow !== false && thisNode.isHide !== true && (!thisNode.lot.parent || this.isAllowShowNode(thisNode.lot.parent, false) === true);
-      // if (derict !== false && _r === false) console.log('be hide node:', thisNode.text)
       return _r;
     },
     flash() {
