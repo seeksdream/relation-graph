@@ -115,8 +115,11 @@ export class RelationGraphWithEffect extends RelationGraphWithZoom {
   setCanvasCenter(x, y) {
     const viewX = this.options.viewSize.width / 2;
     const viewY = this.options.viewSize.height / 2;
-    this.options.canvasOffset.x = viewX - x;
-    this.options.canvasOffset.y = viewY - y;
+    this.setCanvasOffset(viewX - x, viewY - y);
+  }
+  setCanvasOffset(x, y) {
+    this.options.canvasOffset.x = x;
+    this.options.canvasOffset.y = y;
   }
   playShowEffect(callback) {
     if (this.graphData.nodes.length === 0) {
@@ -147,7 +150,6 @@ export class RelationGraphWithEffect extends RelationGraphWithZoom {
       devLog('rootNode.x is NaN, graph is currently hidden?');
       return;
     }
-    // console.log(this.options.layoutName);
     if (this.options.layoutName !== 'force') {
       this.placeSingleNode();
     }
@@ -174,7 +176,7 @@ export class RelationGraphWithEffect extends RelationGraphWithZoom {
       }
     });
     if (singleNodeSize > 0) {
-      console.log(this.graphData.nodes.map(n => { return { x: n.x, y: n.y, t: n.text }; }));
+      devLog('sigle nodes:', singleNodeSize);
       const forceLayout = new SeeksForceLayouter({}, {});
       forceLayout.__origin_nodes = this.graphData.nodes;
       forceLayout.justLayoutSingleNode = true;

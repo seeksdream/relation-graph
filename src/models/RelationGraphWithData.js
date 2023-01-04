@@ -396,6 +396,10 @@ export class RelationGraphWithData extends RelationGraph {
     devLog('relation-graph:focusRootNode');
     this.handleSelect(this.graphData.rootNode);
   }
+  setNodePosition(node, x, y) {
+    node.x = x;
+    node.y = y;
+  }
   focusNodeById(nodeId) {
     this.graphData.nodes.forEach(thisNode => {
       if (thisNode.id === nodeId) {

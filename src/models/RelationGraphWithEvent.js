@@ -52,27 +52,27 @@ export class RelationGraphWithEvent extends RelationGraphWithEffect {
   }
   expandOrCollapseNode(node, e) {
     if (node.expanded === false) {
-      node.expanded = true;
-      node.lot.childs.forEach(thisNode => {
-        thisNode.isShow = true;
-      });
-      this.onNodeExpand(node, e);
+      this.expandNode(node, e);
     } else {
-      node.expanded = false;
-      node.lot.childs.forEach(thisNode => {
-        thisNode.isShow = false;
-      });
-      this.onNodeCollapse(node, e);
+      this.collapseNode(node, e);
     }
   }
-  onNodeExpand(node, e) {
+  expandNode(node, e) {
     devLog('onNodeExpand:', node);
+    node.expanded = true;
+    node.lot.childs.forEach(thisNode => {
+      thisNode.isShow = true;
+    });
     if (this.listeners.onNodeExpand) {
       this.listeners.onNodeExpand(node, e);
     }
   }
-  onNodeCollapse(node, e) {
+  collapseNode(node, e) {
     devLog('onNodeCollapse:', node);
+    node.expanded = false;
+    node.lot.childs.forEach(thisNode => {
+      thisNode.isShow = false;
+    });
     if (this.listeners.onNodeCollapse) {
       this.listeners.onNodeCollapse(node, e);
     }

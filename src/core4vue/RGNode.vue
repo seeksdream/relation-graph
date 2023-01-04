@@ -46,7 +46,6 @@ import RGEffectUtils from '../utils/RGEffectUtils';
 import { devLog } from '../utils/RGCommon';
 export default {
   name: 'SeeksRGNode',
-  components: { },
   props: {
     relationGraph: {
       mustUseProp: true,
@@ -77,7 +76,6 @@ export default {
   mounted() {
     this.refreshNodeProperties();
     // this.leave(this.$refs.seeksRGNode)
-    // console.log('node show:', this.nodeProps.text, this.$parent.$slots.node)
   },
   updated() {
     this.refreshNodeProperties();
@@ -101,11 +99,14 @@ export default {
       }
       this.dragging = true;
       this.hovering = false;
-      RGEffectUtils.startDrag(e, this.nodeProps, this.onNodeDraged);
+      RGEffectUtils.startDrag(e, this.nodeProps, this.onNodeDraged, (offsetX, offsetY, basePosition) => {
+        const x = offsetX / (this.relationGraph.options.canvasZoom / 100) + basePosition.x;
+        const y = offsetY / (this.relationGraph.options.canvasZoom / 100) + basePosition.y;
+        this.relationGraph.setNodePosition(this.nodeProps, x, y);
+      });
     },
     onNodeDraged(x_buff, y_buff, e) {
       if (x_buff === 0 && y_buff === 0) {
-        console.log('click2:');
         this.relationGraph.onNodeClick(this.nodeProps, e);
         return;
       }
@@ -128,7 +129,6 @@ export default {
       if (this.dragging) {
         return;
       }
-      // console.log(this.relationGraph.options.disableNodeClickEffect, this.nodeProps.disableDefaultClickEffect);
       if (this.relationGraph.options.disableNodeClickEffect !== true && this.nodeProps.disableDefaultClickEffect !== true) {
         this.hovering = true;
       }
@@ -139,7 +139,6 @@ export default {
       }
     },
     onclick(e) {
-      // console.log('click');
       if (this.dragging) {
         return;
       }
