@@ -1,20 +1,22 @@
-import { isSupportTouch } from '@/utils/RGCommon';
+import { devLog, isSupportTouch } from '@/utils/RGCommon';
 
-const __tmp_basePosition = { x: 0, y: 0 };
-let __tmp_positionModel = { x: 0, y: 0 };
-let __ondraged;
-const __start_info = { x: 0, y: 0 };
+let __tmp_startPositionModel = { x: 0, y: 0 };
+const __tmp_startNodeInfo = { x: 0, y: 0 };
+const __tmp_startEventInfo = { x: 0, y: 0 };
+let callback_ondragging;
+let callback_ondraged;
 const getClientPosition = (e) => {
   const clientPosition = {
     clientX: 0,
     clientY: 0
   };
   if (isSupportTouch) {
-    if (!e.targetTouches) {
+    const touches = e.touches || e.targetTouches;
+    if (!touches) {
       throw new Error('error targetTouches');
     }
-    clientPosition.clientX = e.targetTouches[0].clientX;
-    clientPosition.clientY = e.targetTouches[0].clientY;
+    clientPosition.clientX = touches[0].clientX;
+    clientPosition.clientY = touches[0].clientY;
   } else {
     clientPosition.clientX = e.clientX;
     clientPosition.clientY = e.clientY;
@@ -22,18 +24,29 @@ const getClientPosition = (e) => {
   return clientPosition;
 };
 const RGEffectUtils = {
-  startDrag(e, positionModel, ondraged) {
-    __ondraged = ondraged;
-    // console.log('startDrag:', __tmp_basePosition, e.clientX, e.clientY)
-    __tmp_positionModel = positionModel;
-    __start_info.x = __tmp_positionModel.x;
-    __start_info.y = __tmp_positionModel.y;
+  startDrag(e, startPositionModel, ondraged, ondragging) {
+    if (ondragging) {
+      callback_ondragging = (ex, ey, event) => {
+        const offsetX = (ex - __tmp_startEventInfo.x);
+        const offsetY = (ey - __tmp_startEventInfo.y);
+        ondragging(offsetX, offsetY, __tmp_startNodeInfo, __tmp_startEventInfo, event);
+      };
+    } else {
+      callback_ondragging = (ex, ey) => {
+        __tmp_startPositionModel.x = __tmp_startNodeInfo.x + (ex - __tmp_startEventInfo.x);
+        __tmp_startPositionModel.y = __tmp_startNodeInfo.y + (ey - __tmp_startEventInfo.y);
+      };
+    }
+    callback_ondraged = ondraged;
+    __tmp_startPositionModel = startPositionModel;
+    __tmp_startNodeInfo.x = __tmp_startPositionModel.x;
+    __tmp_startNodeInfo.y = __tmp_startPositionModel.y;
 
-    // console.log('[canvas]onDragStart...', isSupportTouch, e);
+    devLog('[canvas]onDragStart...', isSupportTouch, e);
     try {
       const clientPosition = getClientPosition(e);
-      __tmp_basePosition.x = Math.round(__tmp_positionModel.x) - clientPosition.clientX;
-      __tmp_basePosition.y = Math.round(__tmp_positionModel.y) - clientPosition.clientY;
+      __tmp_startEventInfo.x = clientPosition.clientX;
+      __tmp_startEventInfo.y = clientPosition.clientY;
       if (isSupportTouch) {
         // e.stopPropagation();
         e.preventDefault();
@@ -49,12 +62,9 @@ const RGEffectUtils = {
   },
   onNodeMove(e) {
     const clientPosition = getClientPosition(e);
-    // console.log('move', __tmp_basePosition, clientPosition, e);
-    __tmp_positionModel.x = clientPosition.clientX + __tmp_basePosition.x;
-    __tmp_positionModel.y = clientPosition.clientY + __tmp_basePosition.y;
+    callback_ondragging(clientPosition.clientX, clientPosition.clientY, e);
   },
   onNodeDragend(e) {
-    // console.log('onNodeDragend', __tmp_positionModel.x - __start_info.x, __tmp_positionModel.y - __start_info.y)
     if (isSupportTouch) {
       document.body.removeEventListener('touchmove', RGEffectUtils.onNodeMove);
       document.body.removeEventListener('touchend', RGEffectUtils.onNodeDragend);
@@ -62,10 +72,11 @@ const RGEffectUtils = {
       document.body.removeEventListener('mousemove', RGEffectUtils.onNodeMove);
       document.body.removeEventListener('mouseup', RGEffectUtils.onNodeDragend);
     }
-    if (__ondraged) {
-      __ondraged(
-        __tmp_positionModel.x - __start_info.x,
-        __tmp_positionModel.y - __start_info.y,
+    devLog('Node dragend');
+    if (callback_ondraged) {
+      callback_ondraged(
+        __tmp_startPositionModel.x - __tmp_startNodeInfo.x,
+        __tmp_startPositionModel.y - __tmp_startNodeInfo.y,
         e
       );
     }

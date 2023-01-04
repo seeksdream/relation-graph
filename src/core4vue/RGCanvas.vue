@@ -119,7 +119,7 @@ import RGEffectUtils from '../utils/RGEffectUtils';
 import SeeksRGNode from './RGNode';
 import SeeksRGLink from './RGLink';
 import SeeksRGLinePath from './RGLinePath';
-import { devLog } from '../utils/RGCommon';
+import { devLog, isSupportTouch } from '../utils/RGCommon';
 
 export default {
   name: 'RelationGraphCanvas',
@@ -167,14 +167,8 @@ export default {
       this.$refs.rgCanvas.style.setProperty('--markerStart', 'url(\'#' + this.relationGraph.options.instanceId + '-arrow-default\')');
       this.$refs.rgCanvas.style.setProperty('--markerEndChecked', 'url(\'#' + this.relationGraph.options.instanceId + '-arrow-checked\')');
       this.$refs.rgCanvas.style.setProperty('--markerStartChecked', 'url(\'#' + this.relationGraph.options.instanceId + '-start-arrow-checked\')');
-      // console.log('#############Seeks graph viewSize:', this.options.viewSize.width, this.options.viewSize.height)
     },
     mouseListener(e) {
-      // if (e.target !== this.$refs.seeksRGCanvas) {
-      //   return
-      // }
-      // e.stopPropagation()
-      // console.log('mouseListener')
       if (this.relationGraph.options.disableZoom) {
         e.cancelBubble = false;
         return true;
@@ -194,9 +188,10 @@ export default {
       if (_deltaY === undefined) {
         _deltaY = e.wheelDelta;
       }
-      const _isMac = /macintosh|mac os x/i.test(navigator.userAgent);
-      // console.log('mouseListenerEmpty:', _isMac, e.deltaY, e.wheelDelta, e.which, e.detail)
-      const _zoomDirection = _isMac ? 1 : -1;
+      // #25 https://github.com/seeksdream/relation-graph/issues/25
+      // const _isMac = /macintosh|mac os x/i.test(navigator.userAgent);
+      // const _zoomDirection = _isMac ? 1 : -1;
+      const _zoomDirection = -1;
       // const _zoomDirection = 1;
       if (_deltaY > 0) {
         this.relationGraph.zoom(5 * _zoomDirection, userZoomCenter);
@@ -208,7 +203,37 @@ export default {
       if (this.relationGraph.options.disableDragCanvas) {
         return;
       }
-      RGEffectUtils.startDrag(e, this.relationGraph.options.canvasOffset, this.onDragEnd);
+      let draggingCallback;
+      if (isSupportTouch) {
+        let baseEventPosition2 = null;
+        let baseZoom = null;
+        draggingCallback = (x, y, basePosition, baseEventPosition, e) => {
+          const touches = e.touches || e.targetTouches;
+          const touchPointer1 = touches[0];
+          if (touches && touches.length > 1) { // 双指操作
+            e.preventDefault();
+            const touchPointer2 = touches[1];
+            if (!baseEventPosition2) {
+              baseEventPosition2 = { x: touchPointer2.clientX, y: touchPointer2.clientY };
+              baseZoom = this.relationGraph.options.canvasZoom;
+            }
+            const touchPointer1Postion = { x: touchPointer1.clientX, y: touchPointer1.clientY };
+            const touchPointer2Postion = { x: touchPointer2.clientX, y: touchPointer2.clientY };
+            const baseDistance = Math.hypot(baseEventPosition2.x - baseEventPosition.x, baseEventPosition2.y - baseEventPosition.y);
+            const currentDistance = Math.hypot(touchPointer2Postion.x - touchPointer1Postion.x, touchPointer2Postion.y - touchPointer1Postion.y);
+            const zoom = currentDistance / baseDistance;
+            const newZoom = baseZoom * zoom;
+            this.relationGraph.setZoom(newZoom);
+          } else {
+            const ex = touchPointer1.clientX;
+            const ey = touchPointer1.clientY;
+            const x = basePosition.x + (ex - baseEventPosition.x);
+            const y = basePosition.y + (ey - baseEventPosition.y);
+            this.relationGraph.setCanvasOffset(x, y);
+          }
+        };
+      }
+      RGEffectUtils.startDrag(e, this.relationGraph.options.canvasOffset, this.onDragEnd, draggingCallback);
     },
     onDragEnd() {
     }
