@@ -85,11 +85,11 @@ export default {
         lines: []
       };
       // 添加根节点和虚拟节点
-      const rootNode = { id: graphData.rootId, name: _orign_data.entname, styleClass: 'c-g-center', color: '#A4C1FF', width: 250, height: 50, x: _center.x - 125, y: _center.y - 25 };
-      const invRootNode = { id: 'invRoot', name: '股东', styleClass: 'c-g-group-node', color: '#FFC5A6', width: 100, height: 50 };
-      const personRootNode = { id: 'personRoot', name: '高管', styleClass: 'c-g-group-node', color: '#B9FFA7', width: 100, height: 50 };
-      const asinvRootNode = { id: 'asinvRoot', name: '对外投资', styleClass: 'c-g-group-node', color: '#FFBEC1', width: 100, height: 50 };
-      const branchRootNode = { id: 'branchRoot', name: '分支机构', styleClass: 'c-g-group-node', color: '#FFA1F8', width: 100, height: 50 };
+      const rootNode = { id: graphData.rootId, text: _orign_data.entname, styleClass: 'c-g-center', color: '#A4C1FF', width: 250, height: 50, x: _center.x - 125, y: _center.y - 25 };
+      const invRootNode = { id: 'invRoot', text: '股东', styleClass: 'c-g-group-node', color: '#FFC5A6', width: 100, height: 50 };
+      const personRootNode = { id: 'personRoot', text: '高管', styleClass: 'c-g-group-node', color: '#B9FFA7', width: 100, height: 50 };
+      const asinvRootNode = { id: 'asinvRoot', text: '对外投资', styleClass: 'c-g-group-node', color: '#FFBEC1', width: 100, height: 50 };
+      const branchRootNode = { id: 'branchRoot', text: '分支机构', styleClass: 'c-g-group-node', color: '#FFA1F8', width: 100, height: 50 };
       invRootNode.x = _center.x - 200 - invRootNode.width;
       invRootNode.y = _center.y - 130;
       personRootNode.x = _center.x - 200 - personRootNode.width;

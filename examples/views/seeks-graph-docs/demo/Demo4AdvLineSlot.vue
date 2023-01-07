@@ -50,13 +50,13 @@ export default {
         rootId: '2',
         nodes: [
           // 注意：在节点配置信息中，你的自定义属性需要像下面这样放到data标签中，否则数据会丢失
-          { id: '1', name: '节点-1', data: { myicon: 'el-icon-star-on' }},
-          { id: '2', name: '节点-2', data: { myicon: 'el-icon-setting' }},
-          { id: '4', name: '节点-4', data: { myicon: 'el-icon-star-on' }},
-          { id: '6', name: '节点-6', data: { myicon: 'el-icon-setting' }},
-          { id: '7', name: '节点-7', data: { myicon: 'el-icon-setting' }},
-          { id: '8', name: '节点-8', data: { myicon: 'el-icon-star-on' }},
-          { id: '9', name: '节点-9', data: { myicon: 'el-icon-headset' }}
+          { id: '1', text: '节点-1', data: { myicon: 'el-icon-star-on' }},
+          { id: '2', text: '节点-2', data: { myicon: 'el-icon-setting' }},
+          { id: '4', text: '节点-4', data: { myicon: 'el-icon-star-on' }},
+          { id: '6', text: '节点-6', data: { myicon: 'el-icon-setting' }},
+          { id: '7', text: '节点-7', data: { myicon: 'el-icon-setting' }},
+          { id: '8', text: '节点-8', data: { myicon: 'el-icon-star-on' }},
+          { id: '9', text: '节点-9', data: { myicon: 'el-icon-headset' }}
         ],
         lines: [
           { from: '1', to: '2', text: '投资' },

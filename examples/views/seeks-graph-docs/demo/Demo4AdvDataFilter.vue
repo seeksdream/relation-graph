@@ -34,7 +34,7 @@
 // import RelationGraph from 'relation-graph';
 export default {
   name: 'SeeksRelationGraphDemo',
-  components: { },
+  components: { }, // 如果您没有在main.js文件中使用Vue.use(RelationGraph); 就需要在这里注册：components: { RelationGraph }
   data() {
     return {
       g_loading: true,
