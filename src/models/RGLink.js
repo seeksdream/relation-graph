@@ -1,11 +1,11 @@
 
 export const json2Line = (originData) => {
   if (originData.from === undefined) {
-    throw Error('error,link must has option[from]:', originData);
+    throw Error('error,line must has option[from]:', originData);
   }
-  if (originData.to === undefined) { throw Error('error,link must has option[to]:', originData); }
-  if (typeof originData.from !== 'string') { throw Error('error link from, must be string:', originData); }
-  if (typeof originData.to !== 'string') { throw Error('error link to, must be string:', originData); }
+  if (originData.to === undefined) { throw Error('error,line must has option[to]:', originData); }
+  if (typeof originData.from !== 'string') { throw Error('error line from, must be string:', originData); }
+  if (typeof originData.to !== 'string') { throw Error('error line to, must be string:', originData); }
   const jsonData = {
     from: originData.from,
     to: originData.to,
@@ -21,6 +21,7 @@ export const json2Line = (originData) => {
       originData.styleClass !== undefined ? originData.styleClass : undefined,
     isHide: originData.isHide !== undefined ? originData.isHide : false,
     arrow: originData.arrow !== undefined ? originData.arrow : undefined,
+    disableDefaultClickEffect: originData.disableDefaultClickEffect !== undefined ? originData.disableDefaultClickEffect : false,
     showStartArrow: originData.showStartArrow !== undefined ? originData.showStartArrow : false,
     showEndArrow: originData.showEndArrow !== undefined ? originData.showEndArrow : true,
     useTextPath: originData.useTextPath !== undefined ? originData.useTextPath : false,

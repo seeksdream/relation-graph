@@ -103,7 +103,7 @@ export default {
     if (Vue.version.substring(0, 4) === '2.5.') slotAlert = true;
     if (Vue.version.substring(0, 4) === '2.6.' && parseInt(Vue.version.split('.')[2]) <= 12) slotAlert = true;
     if (slotAlert) {
-      console.error('您的Vue版本：' + Vue.version + '注意：当你使用的vue版本等于低于2.6.12时，你只能通过插槽slot[node]来显示节点和线条，示例请参考：http://relation-graph.com/#/demo/adv-slot');
+      console.error('您的Vue版本：' + Vue.version + '注意：当你使用的vue版本等于低于2.6.12时，图谱会显示不正常，参考这个连接解决这个问题：https://github.com/seeksdream/relation-graph/issues/113');
     }
     if (!screenfull) {
       console.error('[relation-graph]Please introduce component screenfull, for example:https://cdnjs.cloudflare.com/ajax/libs/screenfull.js/5.1.0/screenfull.min.js');
