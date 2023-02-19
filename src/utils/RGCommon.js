@@ -23,9 +23,9 @@ export const getLightColor = (col) => {
   const _rgb_string = _st.split(',');
   if (_rgb_string.length >= 3) {
     const _rgb_number = [
-      parseInt(parseInt(_rgb_string[0]) * 0.9),
-      parseInt(parseInt(_rgb_string[1]) * 0.9),
-      parseInt(parseInt(_rgb_string[2]) * 0.9)
+      Math.round(parseInt(_rgb_string[0]) * 0.9),
+      Math.round(parseInt(_rgb_string[1]) * 0.9),
+      Math.round(parseInt(_rgb_string[2]) * 0.9)
     ];
     devLog('getLightColor2:', col, ':', _rgb_number.join(','));
     this.borderColor = 'rgb(' + _rgb_number.join(',') + ', 0.3)';

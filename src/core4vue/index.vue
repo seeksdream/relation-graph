@@ -25,9 +25,9 @@
 </template>
 
 <script>
-import { version } from '../../package.json';
+import { version } from '/Users/xiaohei/WebstormProjects/relation-graph/package.json';
 import '../utils/RGGraphIconfont';
-import Vue from 'vue';
+import * as Vue from 'vue';
 import screenfull from 'screenfull';
 import RGCanvas from './RGCanvas';
 import GraphDebugPanel from './widgets/GraphDebugPanel';
@@ -100,10 +100,18 @@ export default {
       'background:transparent'
     );
     let slotAlert = false;
+    // console.error(`vue version:${Vue.version}`);
+    if (!Vue || !Vue.version || Vue.version.startsWith('3')) {
+      console.error('如果您使用的是vue3或react，你需要注意import时使用的名称：');
+      console.error(`vue2:import RelationGraph from 'relation-graph'`);
+      console.error(`vue3:import RelationGraph from 'relation-graph/vue3'`);
+      console.error(`react:import RelationGraph from 'relation-graph/react'`);
+      return;
+    }
     if (Vue.version.substring(0, 4) === '2.5.') slotAlert = true;
     if (Vue.version.substring(0, 4) === '2.6.' && parseInt(Vue.version.split('.')[2]) <= 12) slotAlert = true;
     if (slotAlert) {
-      console.error('您的Vue版本：' + Vue.version + '注意：当你使用的vue版本等于低于2.6.12时，你只能通过插槽slot[node]来显示节点和线条，示例请参考：http://relation-graph.com/#/demo/adv-slot');
+      console.error('您的Vue版本：' + Vue.version + '注意：当你使用的vue版本等于低于2.6.12时，图谱会显示不正常，参考这个连接解决这个问题：https://github.com/seeksdream/relation-graph/issues/113');
     }
     if (!screenfull) {
       console.error('[relation-graph]Please introduce component screenfull, for example:https://cdnjs.cloudflare.com/ajax/libs/screenfull.js/5.1.0/screenfull.min.js');

@@ -118,8 +118,8 @@ export default {
       const _new_node_id2 = 'xiaodi-' + _index2;
       const __graph_json_data = {
         nodes: [
-          { id: _new_node_id, name: '小弟-' + _index },
-          { id: _new_node_id2, name: '小弟-' + _index2 }
+          { id: _new_node_id, text: '小弟-' + _index },
+          { id: _new_node_id2, text: '小弟-' + _index2 }
         ],
         lines: [
           { from: 'N1', to: _new_node_id, text: '手下' },

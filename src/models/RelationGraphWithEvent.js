@@ -36,7 +36,7 @@ export class RelationGraphWithEvent extends RelationGraphWithEffect {
   }
   onLineClick(line, link, e) {
     devLog('onLineClick:', 'line:', line, 'link:', link);
-    if (this.options.disableLineClickEffect !== true && link.disableDefaultClickEffect !== true) {
+    if (this.options.disableLineClickEffect !== true && line.disableDefaultClickEffect !== true) {
       this.setCheckedLine(link.seeks_id);
       this.selectNode(link.fromNode, true);
       this.selectNode(link.toNode, true);
@@ -47,7 +47,7 @@ export class RelationGraphWithEvent extends RelationGraphWithEffect {
       }, 2000);
     }
     if (this.listeners.onLineClick) {
-      this.listeners.onLineClick(link, link, e);
+      this.listeners.onLineClick(line, link, e);
     }
   }
   expandOrCollapseNode(node, e) {

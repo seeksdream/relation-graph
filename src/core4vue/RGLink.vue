@@ -45,7 +45,7 @@ export default {
       this.relationGraph.onLineClick(line, this.linkProps, e);
     },
     isAllowShowNode: function(thisNode) {
-      const _r = thisNode.isShow !== false && thisNode.isHide !== true && (!thisNode.lot.parent || this.isAllowShowNode(thisNode.lot.parent, false) === true);
+      const _r = thisNode.isShow !== false && thisNode.isHide !== true && (!thisNode.lot.parent || this.isAllowShowNode(thisNode.lot.parent) === true);
       return _r;
     },
     flash() {

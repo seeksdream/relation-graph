@@ -18,10 +18,10 @@ export class RelationGraphWithEffect extends RelationGraphWithZoom {
     devLog('node size：', this.graphData.nodes.length);
     this.options.layouter.placeNodes(this.graphData.nodes, this.graphData.rootNode, this.graphSetting);
   }
-  refresh() {
+  refresh(callback) {
     this.resetViewSize();
     this.options.layouter.refresh();
-    this.playShowEffect();
+    this.playShowEffect(callback);
   }
   resetViewSize() {
     if (!this.options) {
@@ -75,17 +75,17 @@ export class RelationGraphWithEffect extends RelationGraphWithZoom {
     let maxX = 0;
     let maxY = 0;
     this.graphData.nodes.forEach(thisNode => {
-      if (thisNode.lot.x < minX) {
-        minX = thisNode.lot.x;
+      if (thisNode.x < minX) {
+        minX = thisNode.x;
       }
-      if (thisNode.lot.x > maxX) {
-        maxX = thisNode.lot.x + thisNode.el.offsetWidth;
+      if (thisNode.x > maxX) {
+        maxX = thisNode.x + thisNode.el.offsetWidth;
       }
-      if (thisNode.lot.y < minY) {
-        minY = thisNode.lot.y;
+      if (thisNode.y < minY) {
+        minY = thisNode.y;
       }
-      if (thisNode.lot.y > maxY) {
-        maxY = thisNode.lot.y + thisNode.el.offsetHeight;
+      if (thisNode.y > maxY) {
+        maxY = thisNode.y + thisNode.el.offsetHeight;
       }
     });
     const padding = 100;
