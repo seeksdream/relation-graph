@@ -2,13 +2,17 @@
 
 *relation-graph*
 ---
-当前版本：v2.0.3 (v2.x支持vue2)
+当前版本：v2.0.12 (支持vue2和vue3)
 
+----
+**2023-02-19 最新版本v2.0.12起开始支持vue3**
 
+vue2使用方法： import RelationGraph from 'relation-graph'
 
-预计1月5号之前发布支持v3.0 (v3.x支持vue3，功能与v2.x一致)
+vue3使用方法： import RelationGraph from 'relation-graph/vue3'
 
-之后，v2和v3将同步更新
+vue3完整小示例：https://github.com/seeksdream/relation-graph-vue3-demo
+
 
 ---
 

@@ -1,3 +1,4 @@
+import { version } from '../package.json';
 import RelationGraph from './core4vue/index.vue';
 import { RelationGraphFinal } from '@/models/RelationGraphFinal';
 import BidirectionalTreeLayouter from '@/layouters/SeeksBidirectionalTreeLayouter';
@@ -40,5 +41,6 @@ export default {
   RGOptions,
   RGLink,
   RGNode,
+  version,
   install
 };
