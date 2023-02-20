@@ -29,12 +29,12 @@
 <script>
 // 如果您没有在main.js文件中使用Vue.use(RelationGraph); 就需要使用下面这一行代码来引入relation-graph
 // import RelationGraph from 'relation-graph';
-import Slot1 from '../options-tools/components/node-slot/slot1';
-import Slot2 from '../options-tools/components/node-slot/slot2';
-import Slot3 from '../options-tools/components/node-slot/slot3';
-import Slot4 from '../options-tools/components/node-slot/slot4';
-import Slot5 from '../options-tools/components/node-slot/slot5';
-import Slot6 from '../options-tools/components/node-slot/slot6';
+import Slot1 from './node-slots/slot1';
+import Slot2 from './node-slots/slot2';
+import Slot3 from './node-slots/slot3';
+import Slot4 from './node-slots/slot4';
+import Slot5 from './node-slots/slot5';
+import Slot6 from './node-slots/slot6';
 
 export default {
   name: 'Demo',
