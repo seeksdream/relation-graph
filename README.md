@@ -1,26 +1,25 @@
 <a href="http://relation-graph.com" target="_blank"><img src="http://relation-graph.com/website/logo" width="60" /></a>
 
 *relation-graph*
+
 ---
-当前版本：v2.0.12 (支持vue2和vue3)
+
+当前版本：v2.0.19 (支持Vue2、Vue3、React)
 
 ----
+
+
 **2023-02-19 最新版本v2.0.12起开始支持vue3**
 
 **2023-02-24 最新版本v2.0.19起开始支持react**
-
+```shell script
 Vue2使用方法： import RelationGraph from 'relation-graph'
-
 Vue3使用方法： import RelationGraph from 'relation-graph/vue3'
-
 React使用方法： import RelationGraph from 'relation-graph/react'
-
 vue2完整小示例：https://github.com/seeksdream/relation-graph-vue2-demo
-
 vue3完整小示例：https://github.com/seeksdream/relation-graph-vue3-demo
-
 React完整小示例：https://github.com/seeksdream/relation-graph-react-demo
-
+```
 
 ---
 
@@ -37,18 +36,17 @@ React完整小示例：https://github.com/seeksdream/relation-graph-react-demo
 ---
 *快速使用：*
 
-注意：relation-graph支持Vue2、Vue3、React, 但引入的包名称都是【relation-graph】
 ```shell script
 npm install --save relation-graph
 ```
-注意：在使用时，根据你的环境，需要引入不同的名称
-
+```shell script
+注意：
+relation-graph支持Vue2、Vue3、React, 引入的包名称都是【relation-graph】
+但在使用时，根据你的环境，需要引入不同的名称
 Vue2使用方法： import RelationGraph from 'relation-graph'
-
 Vue3使用方法： import RelationGraph from 'relation-graph/vue3'
-
 React使用方法： import RelationGraph from 'relation-graph/react'
-
+```
 
 **示例代码：**
 ```vue
@@ -149,11 +147,9 @@ https://github.com/seeksdream/relation-graph-vue2-demo
 
 ---
 
-**最新版本v2.0.3：**
+**v2.x版本重要新特性：**
 
 修改问题：
-* 对v1.x代码重构，结构更清晰，方便大家修改，欢迎一起完善
-* 处理了很多issues，解决不少问题
 * 修改了线条文字的展示方式，现在线条文字会跟随线条轨迹走
 * 新增线条插槽
 * 新增画布插槽
