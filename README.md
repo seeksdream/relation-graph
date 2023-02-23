@@ -7,11 +7,19 @@
 ----
 **2023-02-19 最新版本v2.0.12起开始支持vue3**
 
-vue2使用方法： import RelationGraph from 'relation-graph'
+**2023-02-24 最新版本v2.0.19起开始支持react**
 
-vue3使用方法： import RelationGraph from 'relation-graph/vue3'
+Vue2使用方法： import RelationGraph from 'relation-graph'
+
+Vue3使用方法： import RelationGraph from 'relation-graph/vue3'
+
+React使用方法： import RelationGraph from 'relation-graph/react'
+
+vue2完整小示例：https://github.com/seeksdream/relation-graph-vue2-demo
 
 vue3完整小示例：https://github.com/seeksdream/relation-graph-vue3-demo
+
+React完整小示例：https://github.com/seeksdream/relation-graph-react-demo
 
 
 ---
@@ -28,9 +36,27 @@ vue3完整小示例：https://github.com/seeksdream/relation-graph-vue3-demo
 
 ---
 *快速使用：*
+
+注意：relation-graph支持Vue2、Vue3、React, 但引入的包名称都是【relation-graph】
 ```shell script
 npm install --save relation-graph
 ```
+注意：在使用时，根据你的环境，需要引入不同的名称
+
+Vue2使用方法： import RelationGraph from 'relation-graph'
+
+Vue3使用方法： import RelationGraph from 'relation-graph/vue3'
+
+React使用方法： import RelationGraph from 'relation-graph/react'
+
+
+**示例代码：**
+```vue
+//（以下为Vue2示例代码，如果你使用的是Vue3或者React）
+// Vue3完整小示例：https://github.com/seeksdream/relation-graph-vue3-demo
+// React完整小示例：https://github.com/seeksdream/relation-graph-react-demo
+```
+
 ```vue
 <template>
    <div>

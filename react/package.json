@@ -1,0 +1,17 @@
+{
+  "name": "relation-graph/react",
+  "main": "relation-graph.umd.js",
+  "module": "relation-graph.mjs",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "types": "index.d.ts",
+      "import": "relation-graph.mjs",
+      "require": "relation-graph.umd.js"
+    }
+  },
+  "dependencies": {
+    "html2canvas": "^1.4.1",
+    "screenfull": "^5.1.0"
+  }
+}

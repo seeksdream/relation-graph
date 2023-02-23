@@ -1,6 +1,6 @@
 {
   "name": "relation-graph",
-  "version": "2.0.12",
+  "version": "2.0.19",
   "description": "relation-graph，Vue 关联关系图谱组件，可以展示如组织机构图谱、股权架构图谱、集团关系图谱等知识图谱，可提供多种图谱布局，包括树状布局、中心布局、力学布局自动布局等。Vue component for relationship graph , which can display knowledge graphs, such as organization graph, equity structure graph, group relationship graph, etc.",
   "main": "vue2/relation-graph.umd.js",
   "module": "vue2/relation-graph.mjs",
@@ -24,9 +24,10 @@
     }
   },
   "scripts": {
-    "build": "vue-cli-service build --target lib --dest lib --name relation-graph src/index.js",
-    "lib": "webpack --display-error-details --config webpack.config.js.cc",
-    "lint": "vue-cli-service lint"
+    "build-vue2": "cd ./relation-graph-vue2 && yarn build && cp ../typings/RelationGraph.d.ts ../vue2/RelationGraph.d.ts",
+    "build-vue3": "cd ./relation-graph-vue3 && yarn build && cp ../typings/RelationGraph.d.ts ../vue3/RelationGraph.d.ts",
+    "build-react": "cd ./relation-graph-react && yarn build && cp ../typings/RelationGraph.d.ts ../react/RelationGraph.d.ts",
+    "build-all": "yarn build-vue2 && yarn build-vue3 && yarn build-react"
   },
   "author": "seeks<seeksdream@qq.com>",
   "license": "MIT",
@@ -53,5 +54,24 @@
   "dependencies": {
     "html2canvas": "^1.4.1",
     "screenfull": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "*",
+    "eslint": "^8.18.0",
+    "@typescript-eslint/eslint-plugin": "^5.30.0",
+    "@typescript-eslint/parser": "^5.30.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-define-config": "^1.5.1",
+    "eslint-plugin-eslint-comments": "^3.2.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jsonc": "^2.3.0",
+    "eslint-plugin-markdown": "^3.0.0",
+    "eslint-plugin-prettier": "^4.1.0",
+    "eslint-plugin-unicorn": "^42.0.0",
+    "eslint-plugin-vue": "^9.1.1",
+    "jsonc-eslint-parser": "^2.1.0",
+    "prettier": "^2.7.1",
+    "typescript": "^4.7.4",
+    "yaml-eslint-parser": "^1.0.1"
   }
 }
