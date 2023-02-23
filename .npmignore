@@ -13,6 +13,10 @@ doc/
 web/
 npm/
 public/
+relation-graph-react/
+relation-graph-vue2/
+relation-graph-vue3/
+play/
 /public
 package-lock.json
 webpack.config.js.cc
