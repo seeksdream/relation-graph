@@ -35,7 +35,7 @@ var We = !function(n) {
     o.readyState == "complete" && (o.onreadystatechange = null, c());
   });
 }(window);
-const Ge = We, ke = "2.0.19", j = Symbol(), Ve = () => window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width, Re = () => window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height, Oe = (n) => {
+const Ge = We, ke = "2.0.20", j = Symbol(), Ve = () => window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width, Re = () => window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height, Oe = (n) => {
   if (!n)
     return 0;
   let t = 0;
@@ -1416,7 +1416,7 @@ class pt extends ft {
     !this.options || (_("resetViewSize"), this.options.viewSize.width = this.$dom.getBoundingClientRect().width, this.options.viewSize.height = this.$dom.getBoundingClientRect().height, this.options.canvasZoom = 100, this.options.canvasOffset.x = this.options.viewNVInfo.width / 2, this.options.canvasOffset.y = this.options.viewNVInfo.height / 2, this.refreshNVAnalysisInfo());
   }
   dataUpdated() {
-    this.options.canvasOffset.x += 1, this.options.canvasOffset.y += 1, this.options.canvasOffset.x -= 1, this.options.canvasOffset.y -= 1;
+    this.zoom(1), this.zoom(-1);
   }
   refreshNVAnalysisInfo() {
     if (!this.$dom) {

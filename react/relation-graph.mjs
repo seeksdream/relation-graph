@@ -665,7 +665,7 @@ Check the top-level render call using <` + y + ">.");
   process.env.NODE_ENV === "production" ? t.exports = Bt() : t.exports = Dt();
 })(xe);
 const de = xe.exports.Fragment, p = xe.exports.jsx, L = xe.exports.jsxs;
-const It = "2.0.19", jt = () => window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width, Tt = () => window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height, Ft = (t) => {
+const It = "2.0.20", jt = () => window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width, Tt = () => window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height, Ft = (t) => {
   if (!t)
     return 0;
   let e = 0;

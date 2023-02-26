@@ -44,10 +44,8 @@ export class RelationGraphWithEffect extends RelationGraphWithZoom {
     this.refreshNVAnalysisInfo()
   }
   dataUpdated() {
-    this.options.canvasOffset.x += 1
-    this.options.canvasOffset.y += 1
-    this.options.canvasOffset.x -= 1
-    this.options.canvasOffset.y -= 1
+    this.zoom(1);
+    this.zoom(-1);
   }
   refreshNVAnalysisInfo() {
     // devLog('[refreshNVAnalysisInfo]');
