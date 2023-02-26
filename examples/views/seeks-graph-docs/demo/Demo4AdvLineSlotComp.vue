@@ -101,7 +101,7 @@ export default {
       this.position = position;
       this.createFlower();
     },
-    onLineClick(lineObject, $event) {
+    onLineClick(lineObject, linkObject, $event) {
       console.log('onLineClick:', lineObject);
     }
   }

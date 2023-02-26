@@ -71,7 +71,7 @@ export default {
         // 这些写上当图谱初始化完成后需要执行的代码
       });
     },
-    onLineClick(lineObject, $event) {
+    onLineClick(lineObject, linkObject, $event) {
       console.log('onLineClick:', lineObject);
     },
     lineSlotOver(lineObject) {

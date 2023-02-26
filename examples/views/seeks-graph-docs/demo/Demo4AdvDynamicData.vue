@@ -149,7 +149,7 @@ export default {
     onNodeClick(nodeObject, $event) {
       console.log('onNodeClick:', nodeObject);
     },
-    onLineClick(lineObject, $event) {
+    onLineClick(lineObject, linkObject, $event) {
       console.log('onLineClick:', lineObject);
     }
   }
