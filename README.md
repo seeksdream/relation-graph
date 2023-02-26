@@ -1,10 +1,8 @@
-<a href="http://relation-graph.com" target="_blank"><img src="http://relation-graph.com/website/logo" width="60" /></a>
-
-*relation-graph*
+<img src="doc/relation-graph-yellow-small.png" width="60" />
 
 ---
 
-当前版本：v2.0.19 (支持Vue2、Vue3、React)
+relation-graph 当前版本：v2.0.19 (支持Vue2、Vue3、React)
 
 ----
 
@@ -119,8 +117,9 @@ React使用方法： import RelationGraph from 'relation-graph/react'
 
 完整的、可运行的示例项目：
 
-https://github.com/seeksdream/relation-graph-vue2-demo
-
+vue2完整小示例：https://github.com/seeksdream/relation-graph-vue2-demo
+vue3完整小示例：https://github.com/seeksdream/relation-graph-vue3-demo
+React完整小示例：https://github.com/seeksdream/relation-graph-react-demo
 
 
 *上面代码的效果：*
@@ -149,14 +148,11 @@ https://github.com/seeksdream/relation-graph-vue2-demo
 
 **v2.x版本重要新特性：**
 
-修改问题：
 * 修改了线条文字的展示方式，现在线条文字会跟随线条轨迹走
 * 新增线条插槽
 * 新增画布插槽
 
 这个项目使用典型的vue编程方式，代码简单易懂，如果需要实现一些高级功能，你还可以直接使用源码作为一个component放到你的项目中去用，如果有一些优化或者新特性，欢迎提交pull request。
-
-如果这个项目能帮到大家，有更多的人关注，后续我会开发用于小程序、react、angular的版本，以及基于canvas的实现。
 
 **有问题可以加QQ：3235808353，提bug、提建议、一起交流分享前端开发心得，第一获取新版本发布消息。**
 
