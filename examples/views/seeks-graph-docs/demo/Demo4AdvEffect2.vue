@@ -1,16 +1,7 @@
 <template>
   <div>
-    <div style="height:110px;padding-top:6px;padding-left: 30px;padding-right:30px;border-bottom: #efefef solid 1px;color: #555555;font-size: 12px;">
-      <el-button type="success" class="c-show-code-button"><el-link href="https://github.com/seeksdream/relation-graph/blob/master/examples/views/seeks-graph-docs/demo/Demo4AdvEffect.vue" target="_blank" style="color: #ffffff;">查看代码</el-link></el-button>
-      <div style="">
-        <el-button @click="doAction1()">定位到祁同伟</el-button>
-        <el-button @click="doAction2()">让高育良变透明</el-button>
-        <el-button @click="doAction3('N3')">让高小琴到祁同伟身边</el-button>
-        <el-button @click="doAction3('N6')">让高小琴到高育良身边</el-button>
-      </div>
-      <div style="padding-top:10px;">
-        <el-button @click="doAction6()">给侯亮平加两个小弟</el-button>
-      </div>
+    <div style="height:50px;padding-top:6px;padding-left: 30px;padding-right:30px;border-bottom: #efefef solid 1px;color: #555555;font-size: 12px;">
+      <el-button type="success" class="c-show-code-button"><el-link href="https://github.com/seeksdream/relation-graph/blob/master/examples/views/seeks-graph-docs/demo/Demo4AdvEffect2.vue" target="_blank" style="color: #ffffff;">查看代码</el-link></el-button>
     </div>
     <div style="margin-top:0px;width: calc(100% - 10px);height:calc(100vh - 100px);">
       <RelationGraph ref="seeksRelationGraph" :options="graphOptions" :on-node-click="onNodeClick" :on-line-click="onLineClick" />
@@ -71,109 +62,45 @@ export default {
     },
     onNodeClick(nodeObject, $event) {
       console.log('onNodeClick:', nodeObject);
-      this.$notify({
-        title: '点击节点：',
-        message: '点击了节点:' + nodeObject.text
+      const allLinks = this.$refs.seeksRelationGraph.getLinks();
+      allLinks.forEach(link => { // 还原所有样式
+        link.relations.forEach(line => {
+          if (line.data.orignColor) {
+            line.color = line.data.orignColor;
+          }
+          if (line.data.orignFontColor) {
+            line.fontColor = line.data.orignColor;
+          }
+          if (line.data.orignLineWidth) {
+            line.lineWidth = line.data.orignLineWidth;
+          }
+        });
       });
+      // 让与{nodeObject}相关的所有连线高亮
+      allLinks.filter(link => (link.fromNode === nodeObject || link.toNode === nodeObject)).forEach(link => {
+        link.relations.forEach(line => {
+          console.log('line:', line);
+          line.data.orignColor = line.color;
+          line.data.orignFontColor = line.fontColor || line.color;
+          line.data.orignLineWidth = line.lineWidth || 1;
+          line.color = '#ff0000';
+          line.fontColor = '#ff0000';
+          line.lineWidth = 3;
+        });
+      });
+      // 有时候更改一些属性后，并不能马上同步到视图，这需要以下方法让视图强制根据数据同步到最新
+      this.$refs.seeksRelationGraph.getInstance().dataUpdated();
     },
     onLineClick(lineObject, linkObject, $event) {
       console.log('onLineClick:', lineObject);
       this.$notify({
         title: '点击连线：',
         type: 'success',
-        message: '点击了线:' + lineObject.fromNode.text + ' to ' + lineObject.toNode.text
+        message: '点击了线:' + linkObject.fromNode.text + ' to ' + linkObject.toNode.text
       });
-    },
-    doAction1() {
-      const graph = this.$refs.seeksRelationGraph.getInstance();
-      graph.focusNodeById('N3');
-      graph.getNodeById('N3').borderColor = '#000000';
-      graph.getNodeById('N3').fontColor = '#000000';
-    },
-    doAction2() {
-      const graph = this.$refs.seeksRelationGraph.getInstance();
-      graph.getNodeById('N6').opacity = 0.3;
-    },
-    doAction3(targetNodeId) {
-      const graph = this.$refs.seeksRelationGraph.getInstance();
-      const _node_8 = graph.getNodeById('N8');
-      const _target_node = graph.getNodeById(targetNodeId);
-      // 直接改变位置
-      // _node_8.x = _node_3.x - 100
-      // _node_8.y = _node_3.y
-      // 通过动画改变位置
-      animateTo(_node_8, _target_node.x - 50, _target_node.y);
-    },
-    doAction5() {
-      const graph = this.$refs.seeksRelationGraph.getInstance();
-      const _node_8 = graph.getNodeById('N8');
-      _node_8.width = 200;
-      _node_8.height = 200;
-    },
-    doAction6() {
-      const graph = this.$refs.seeksRelationGraph.getInstance();
-      const _index = graph.getNodes().length + 1;
-      const _index2 = graph.getNodes().length + 2;
-      const _new_node_id = 'xiaodi-' + _index;
-      const _new_node_id2 = 'xiaodi-' + _index2;
-      const __graph_json_data = {
-        nodes: [
-          { id: _new_node_id, text: '小弟-' + _index },
-          { id: _new_node_id2, text: '小弟-' + _index2 }
-        ],
-        lines: [
-          { from: 'N1', to: _new_node_id, text: '手下' },
-          { from: 'N1', to: _new_node_id2, text: '手下' }
-        ]
-      };
-      graph.addNodes(__graph_json_data.nodes);
-      graph.addLines(__graph_json_data.lines);
-      graph.doLayout();
-      // graph.appendJsonData(__graph_json_data, true, (graphInstance) => {
-      //   // 这些写上当图谱初始化完成后需要执行的代码
-      // });
     }
   }
 };
-function animateTo(node, x, y, buff_x, buff_y, direction_x, direction_y) {
-  if (buff_x === undefined) {
-    window.$tmp_x = x;
-    window.$tmp_y = y;
-    buff_x = node.x - x;
-    buff_y = node.y - y;
-    direction_x = buff_x < 0 ? -1 : 1;
-    direction_y = buff_y < 0 ? -1 : 1;
-  }
-  let _speed_x = Math.abs(node.x - x) / 20;
-  let _speed_y = Math.abs(node.y - y) / 20;
-  if (_speed_x < 4) _speed_x = 4;
-  if (_speed_y < 4) _speed_y = 4;
-  console.log('animateTo', _speed_x, _speed_y);
-  let _stop = true;
-  if (direction_x === -1) {
-    if (node.x < window.$tmp_x) {
-      node.x += _speed_x;
-      _stop = false;
-    }
-  } else {
-    if (node.x > window.$tmp_x) {
-      node.x -= _speed_x;
-      _stop = false;
-    }
-  }
-  if (direction_y === -1) {
-    if (node.y < window.$tmp_y) {
-      node.y += _speed_y;
-      _stop = false;
-    }
-  } else {
-    if (node.y > window.$tmp_y) {
-      node.y -= _speed_y;
-      _stop = false;
-    }
-  }
-  if (!_stop) setTimeout(() => { animateTo(node, x, y, buff_x, buff_y, direction_x, direction_y); }, 50);
-}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
