@@ -629,7 +629,7 @@ Check the top-level render call using <` + y + ">.");
             var J = bt(I);
             J ? $ += J : $ += Ze();
             var F;
-            c === null ? F = "null" : Array.isArray(c) ? F = "array" : c !== void 0 && c.$$typeof === n ? (F = "<" + (A(c.type) || "Unknown") + " />", $ = " Did you accidentally export a JSX literal instead of a component?") : F = typeof c, T("React.jsx: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s", F, $);
+            c === null ? F = "null" : Array.isArray(c) ? F = "array" : c !== void 0 && c.$$typeof === n ? (F = "<" + (A(c.type) || "Unknown") + " />", $ = " Did you accidentally export a JSX literal instead of a component?") : F = typeof c, T("React.jsx: type is invalid -- expected a string (for built-in demo) or a class/function (for composite demo) but got: %s.%s", F, $);
           }
           var H = wt(c, m, y, I, j);
           if (H == null)
