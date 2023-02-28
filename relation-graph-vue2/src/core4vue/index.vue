@@ -181,7 +181,7 @@ export default {
         callback = reLayout;
         reLayout = true;
       }
-      this.relationGraph.appendJsonData(jsonData, isRelayout, callback);
+      this.relationGraph.appendJsonData(jsonData, reLayout, callback);
     },
     setLayouter(layouterInstance) {
       this.relationGraph.setLayouter(layouterInstance);
