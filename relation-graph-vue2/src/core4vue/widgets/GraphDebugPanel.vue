@@ -13,7 +13,7 @@
 
 <script>
 
-import { devLog } from '@/utils/RGCommon';
+import { devLog } from '../../utils/RGCommon';
 
 export default {
   name: 'GraphSettingPanel',

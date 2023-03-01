@@ -148,9 +148,10 @@ export class RelationGraphWithEffect extends RelationGraphWithZoom {
       devLog('rootNode.x is NaN, graph is currently hidden?');
       return;
     }
-    if (this.options.layoutName !== 'force') {
-      this.placeSingleNode();
-    }
+    this.placeSingleNode();
+    // if (this.options.layoutName !== 'force') {
+    //   this.placeSingleNode();
+    // }
   }
   zoomToFitWhenRefresh(callback) {
     if (this.options.zoomToFitWhenRefresh) {
@@ -166,30 +167,44 @@ export class RelationGraphWithEffect extends RelationGraphWithZoom {
     })
   }
   placeSingleNode() {
-    let singleNodeSize = 0;
+    // let singleNodeSize = 0;
     const defaultGroupNodes = []
     this.findChilds(this.graphData.rootNode, defaultGroupNodes)
+    const secondaryGroup = []
+    const singleNodes = []
     this.graphData.nodes.forEach((thisNode) => {
       if (defaultGroupNodes.includes(thisNode)) {
         return
       }
-      thisNode.x = Math.floor(Math.random() * 200) - 100
-      thisNode.y = Math.floor(Math.random() * 200) - 100
-      thisNode.singleNode = true
-      if (!thisNode.lot) {
-        thisNode.lot = {childs:[]}
+      if (thisNode.targetNodes && thisNode.targetNodes.length === 0) {
+        thisNode.x = Math.floor(Math.random() * 200) - 100
+        thisNode.y = Math.floor(Math.random() * 200) - 100
+        // thisNode.singleNode = true
+        if (!thisNode.lot) {
+          thisNode.lot = {childs:[]}
+        }
+        thisNode.lot.placed = true
+        singleNodes.push(thisNode)
+      } else {
+        secondaryGroup.push(thisNode)
       }
-      thisNode.lot.placed = true
-      singleNodeSize++
     })
-    if (singleNodeSize > 0) {
-      devLog('sigle nodes:', singleNodeSize);
+    if (singleNodes.length > 0) {
+      devLog('sigle nodes:', secondaryGroup.length);
       const forceLayout = new SeeksForceLayouter({}, {});
       forceLayout.__origin_nodes = this.graphData.nodes;
       forceLayout.justLayoutSingleNode = true;
-      forceLayout.byLine = false;
       forceLayout.maxLayoutTimes = 100;
       forceLayout.autoLayout();
+    }
+    if (secondaryGroup.length > 0) {
+      devLog('secondaryGroup nodes:', secondaryGroup.length);
+      const forceLayout = new SeeksForceLayouter({}, {});
+      forceLayout.__origin_nodes = secondaryGroup;
+      forceLayout.rootNode = secondaryGroup[0];
+      forceLayout.justLayoutSingleNode = true;
+      forceLayout.maxLayoutTimes = 100;
+      forceLayout.refresh();
     }
   }
   zoomToFit(callback) {

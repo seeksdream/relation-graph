@@ -32,6 +32,7 @@ export class SeeksForceLayouter {
       this.initNodesPosition();
     } else {
       this.__origin_nodes.forEach(thisNode => {
+        if (thisNode.fixed === true) return;
         if (!thisNode.lot.placed) {
           if (!thisNode.x) thisNode.x = Math.floor(Math.random() * 200) - 100;
           if (!thisNode.x) thisNode.y = Math.floor(Math.random() * 200) - 100;
@@ -132,6 +133,9 @@ export class SeeksForceLayouter {
         if (this.justLayoutSingleNode && !__node1.singleNode) {
           continue;
         }
+        if (__node1.fixed) {
+          continue;
+        }
         if (__node1.lot.placed === true) {
           // var __thisNode = this.__origin_nodes[i]
           // __thisNode.targetNodes.forEach(thisTN_level1 => {
@@ -157,6 +161,9 @@ export class SeeksForceLayouter {
     }
     if (this.byLine) {
       for (const i in this.__origin_nodes) {
+        if (this.__origin_nodes[i].fixed) {
+          continue;
+        }
         // 循环线,设置每个点承受点力及力点方向
         if (this.__origin_nodes[i].lot.parent) {
           this.addElasticByLine(this.__origin_nodes[i].lot.parent, this.__origin_nodes[i]);
@@ -226,6 +233,7 @@ export class SeeksForceLayouter {
     node.Fy += y;
   }
   applyToNodePosition(node) {
+    if (node.fixed) return;
     const __buff_x = Math.round(node.Fx);
     const __buff_y = Math.round(node.Fy);
     node.x = node.x + __buff_x;

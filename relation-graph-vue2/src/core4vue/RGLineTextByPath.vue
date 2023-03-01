@@ -84,7 +84,7 @@ export default {
 };
 </script>
 
-<style type="">
+<style scoped>
   /*.RGLine-enter-active {*/
     /*transition: all .3s ease;*/
   /*}*/
