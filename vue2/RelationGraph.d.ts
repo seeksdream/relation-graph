@@ -36,6 +36,7 @@ export declare interface RGOptions {
   hideNodeContentByZoom?: boolean // UI
   defaultJunctionPoint?: RGJunctionPoint // UI
   disableDragCanvas?: boolean // UI
+  placeSingleNode?: boolean
   lineUseTextPath?: boolean // UI
   defaultLineMarker?: {
     markerWidth: number

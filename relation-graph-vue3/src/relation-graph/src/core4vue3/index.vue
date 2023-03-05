@@ -9,29 +9,14 @@ import RGCanvas from './RGCanvas.vue'
 import GraphDebugPanel from './widgets/GraphDebugPanel.vue'
 import GraphMiniView from './widgets/GraphMiniView.vue'
 import GraphMiniToolBar from './widgets/GraphMiniToolBar.vue'
-import type { RGJsonData ,
+import type {
+  RGJsonData,
   RGLayouter,
-  RGLine,
-  RGLink,
   RGListeners,
-  RGNode,
   RGOptions,
   RGRefreshCallback,
-  RelationGraphInstance,
+  RelationGraphInstance, RelationGraphProps
 } from '../RelationGraph';
-export interface RelationGraphProps {
-  options: any
-  relationGraphCore?: any
-  onNodeClick?: (node: RGNode, e: MouseEvent | TouchEvent) => boolean
-  onNodeExpand?: (node: RGNode, e: MouseEvent | TouchEvent) => boolean
-  onNodeCollapse?: (node: RGNode, e: MouseEvent | TouchEvent) => boolean
-  onLineClick?: (
-    line: RGLine,
-    link: RGLink,
-    e: MouseEvent | TouchEvent
-  ) => boolean
-  onImageDownload?: (dom: HTMLElement, format: string) => boolean
-}
 devLog('appendIconSvg:', appendIconSvg);
 const props = defineProps<RelationGraphProps>()
 const seeksRelationGraph$ = ref<HTMLElement>()

@@ -629,7 +629,7 @@ Check the top-level render call using <` + y + ">.");
             var J = bt(I);
             J ? $ += J : $ += Ze();
             var F;
-            c === null ? F = "null" : Array.isArray(c) ? F = "array" : c !== void 0 && c.$$typeof === n ? (F = "<" + (A(c.type) || "Unknown") + " />", $ = " Did you accidentally export a JSX literal instead of a component?") : F = typeof c, T("React.jsx: type is invalid -- expected a string (for built-in demo) or a class/function (for composite demo) but got: %s.%s", F, $);
+            c === null ? F = "null" : Array.isArray(c) ? F = "array" : c !== void 0 && c.$$typeof === n ? (F = "<" + (A(c.type) || "Unknown") + " />", $ = " Did you accidentally export a JSX literal instead of a component?") : F = typeof c, T("React.jsx: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s", F, $);
           }
           var H = wt(c, m, y, I, j);
           if (H == null)
@@ -665,7 +665,7 @@ Check the top-level render call using <` + y + ">.");
   process.env.NODE_ENV === "production" ? t.exports = Bt() : t.exports = Dt();
 })(xe);
 const de = xe.exports.Fragment, p = xe.exports.jsx, L = xe.exports.jsxs;
-const It = "2.0.20", jt = () => window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width, Tt = () => window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height, Ft = (t) => {
+const It = "2.0.21", jt = () => window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width, Tt = () => window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height, Ft = (t) => {
   if (!t)
     return 0;
   let e = 0;
@@ -1793,7 +1793,7 @@ class we {
     this.__origin_nodes.forEach((i) => {
       i.lot.placed && n++;
     }), this.analysisNodes(), n === 0 ? this.initNodesPosition() : this.__origin_nodes.forEach((i) => {
-      i.lot.placed || (i.x || (i.x = Math.floor(Math.random() * 200) - 100), i.x || (i.y = Math.floor(Math.random() * 200) - 100), i.lot.placed = !0);
+      i.fixed !== !0 && (i.lot.placed || (i.x || (i.x = Math.floor(Math.random() * 200) - 100), i.x || (i.y = Math.floor(Math.random() * 200) - 100), i.lot.placed = !0));
     }), _("Start Auto Layout....."), this.autoLayout(!0);
   }
   analysisNodes() {
@@ -1864,7 +1864,7 @@ class we {
     }), this.byNode)
       for (const o in this.__origin_nodes) {
         const n = this.__origin_nodes[o];
-        if (!(this.justLayoutSingleNode && !n.singleNode) && n.lot.placed === !0)
+        if (!(this.justLayoutSingleNode && !n.singleNode) && !n.fixed && n.lot.placed === !0)
           for (const i in this.__origin_nodes) {
             const s = this.__origin_nodes[i];
             s.lot.placed === !0 && o !== i && this.addGravityByNode(n, s);
@@ -1872,7 +1872,7 @@ class we {
       }
     if (this.byLine)
       for (const o in this.__origin_nodes)
-        this.__origin_nodes[o].lot.parent && this.addElasticByLine(
+        this.__origin_nodes[o].fixed || this.__origin_nodes[o].lot.parent && this.addElasticByLine(
           this.__origin_nodes[o].lot.parent,
           this.__origin_nodes[o]
         );
@@ -1907,6 +1907,8 @@ class we {
     this.justLayoutSingleNode && !e.singleNode || Number.isNaN(o) || Number.isNaN(n) || (o = o / (e.lot.strength || 1), n = n / (e.lot.strength || 1), o > 50 && (o = 50), n > 50 && (n = 50), o < -50 && (o = -50), n < -50 && (n = -50), e.Fx += o, e.Fy += n);
   }
   applyToNodePosition(e) {
+    if (e.fixed)
+      return;
     const o = Math.round(e.Fx), n = Math.round(e.Fy);
     e.x = e.x + o, e.y = e.y + n, e.Fx = 0, e.Fy = 0;
   }
@@ -2576,6 +2578,7 @@ const lt = (t, e) => {
     hideNodeContentByZoom: !1,
     defaultJunctionPoint: "border",
     disableDragCanvas: !1,
+    placeSingleNode: !0,
     lineUseTextPath: !1,
     viewSize: { width: 300, height: 300 },
     viewELSize: { width: 1300, height: 800, left: 0, top: 100 },
@@ -3130,7 +3133,7 @@ class wo extends xo {
       _("rootNode.x is NaN, graph is currently hidden?");
       return;
     }
-    this.options.layoutName !== "force" && this.placeSingleNode();
+    this.options.placeSingleNode && this.placeSingleNode();
   }
   zoomToFitWhenRefresh(e) {
     this.options.zoomToFitWhenRefresh ? this.zoomToFit(e) : e && e(this);

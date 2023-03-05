@@ -35,7 +35,7 @@ var We = !function(n) {
     o.readyState == "complete" && (o.onreadystatechange = null, c());
   });
 }(window);
-const Ge = We, ke = "2.0.20", j = Symbol(), Ve = () => window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width, Re = () => window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height, Oe = (n) => {
+const Ge = We, ke = "2.0.21", j = Symbol(), Ve = () => window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width, Re = () => window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height, Oe = (n) => {
   if (!n)
     return 0;
   let t = 0;
@@ -370,7 +370,7 @@ class Ue {
     this.__origin_nodes.forEach((o) => {
       o.lot.placed && s++;
     }), this.analysisNodes(), s === 0 ? this.initNodesPosition() : this.__origin_nodes.forEach((o) => {
-      o.lot.placed || (o.x || (o.x = Math.floor(Math.random() * 200) - 100), o.x || (o.y = Math.floor(Math.random() * 200) - 100), o.lot.placed = !0);
+      o.fixed !== !0 && (o.lot.placed || (o.x || (o.x = Math.floor(Math.random() * 200) - 100), o.x || (o.y = Math.floor(Math.random() * 200) - 100), o.lot.placed = !0));
     }), _("Start Auto Layout....."), this.autoLayout(!0);
   }
   analysisNodes() {
@@ -441,7 +441,7 @@ class Ue {
     }), this.byNode)
       for (const e in this.__origin_nodes) {
         const s = this.__origin_nodes[e];
-        if (!(this.justLayoutSingleNode && !s.singleNode) && s.lot.placed === !0)
+        if (!(this.justLayoutSingleNode && !s.singleNode) && !s.fixed && s.lot.placed === !0)
           for (const o in this.__origin_nodes) {
             const i = this.__origin_nodes[o];
             i.lot.placed === !0 && e !== o && this.addGravityByNode(s, i);
@@ -449,7 +449,7 @@ class Ue {
       }
     if (this.byLine)
       for (const e in this.__origin_nodes)
-        this.__origin_nodes[e].lot.parent && this.addElasticByLine(
+        this.__origin_nodes[e].fixed || this.__origin_nodes[e].lot.parent && this.addElasticByLine(
           this.__origin_nodes[e].lot.parent,
           this.__origin_nodes[e]
         );
@@ -484,6 +484,8 @@ class Ue {
     this.justLayoutSingleNode && !t.singleNode || Number.isNaN(e) || Number.isNaN(s) || (e = e / (t.lot.strength || 1), s = s / (t.lot.strength || 1), e > 50 && (e = 50), s > 50 && (s = 50), e < -50 && (e = -50), s < -50 && (s = -50), t.Fx += e, t.Fy += s);
   }
   applyToNodePosition(t) {
+    if (t.fixed)
+      return;
     const e = Math.round(t.Fx), s = Math.round(t.Fy);
     t.x = t.x + e, t.y = t.y + s, t.Fx = 0, t.Fy = 0;
   }
@@ -528,6 +530,7 @@ const fe = Ue, me = (n) => {
     hideNodeContentByZoom: !1,
     defaultJunctionPoint: "border",
     disableDragCanvas: !1,
+    placeSingleNode: !0,
     lineUseTextPath: !1,
     viewSize: { width: 300, height: 300 },
     viewELSize: { width: 1300, height: 800, left: 0, top: 100 },
@@ -1488,7 +1491,7 @@ class pt extends ft {
       _("rootNode.x is NaN, graph is currently hidden?");
       return;
     }
-    this.options.layoutName !== "force" && this.placeSingleNode();
+    this.options.placeSingleNode && this.placeSingleNode();
   }
   zoomToFitWhenRefresh(t) {
     this.options.zoomToFitWhenRefresh ? this.zoomToFit(t) : t && t(this);

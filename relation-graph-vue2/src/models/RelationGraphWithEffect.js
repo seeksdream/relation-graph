@@ -148,10 +148,9 @@ export class RelationGraphWithEffect extends RelationGraphWithZoom {
       devLog('rootNode.x is NaN, graph is currently hidden?');
       return;
     }
-    this.placeSingleNode();
-    // if (this.options.layoutName !== 'force') {
-    //   this.placeSingleNode();
-    // }
+    if (this.options.placeSingleNode) {
+      this.placeSingleNode();
+    }
   }
   zoomToFitWhenRefresh(callback) {
     if (this.options.zoomToFitWhenRefresh) {
@@ -190,22 +189,23 @@ export class RelationGraphWithEffect extends RelationGraphWithZoom {
       }
     })
     if (singleNodes.length > 0) {
-      devLog('sigle nodes:', secondaryGroup.length);
+      devLog('sigle nodes:', singleNodes.length);
       const forceLayout = new SeeksForceLayouter({}, {});
       forceLayout.__origin_nodes = this.graphData.nodes;
       forceLayout.justLayoutSingleNode = true;
       forceLayout.maxLayoutTimes = 100;
+      forceLayout.byLine = false;
       forceLayout.autoLayout();
     }
-    if (secondaryGroup.length > 0) {
-      devLog('secondaryGroup nodes:', secondaryGroup.length);
-      const forceLayout = new SeeksForceLayouter({}, {});
-      forceLayout.__origin_nodes = secondaryGroup;
-      forceLayout.rootNode = secondaryGroup[0];
-      forceLayout.justLayoutSingleNode = true;
-      forceLayout.maxLayoutTimes = 100;
-      forceLayout.refresh();
-    }
+    // if (secondaryGroup.length > 0) {
+    //   devLog('secondaryGroup nodes:', secondaryGroup.length);
+    //   const forceLayout = new SeeksForceLayouter({}, {});
+    //   forceLayout.__origin_nodes = secondaryGroup;
+    //   forceLayout.rootNode = secondaryGroup[0];
+    //   forceLayout.justLayoutSingleNode = true;
+    //   forceLayout.maxLayoutTimes = 100;
+    //   forceLayout.refresh();
+    // }
   }
   zoomToFit(callback) {
     const stuffSize = this.getStuffSize();
