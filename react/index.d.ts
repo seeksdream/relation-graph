@@ -1,13 +1,14 @@
 import React from 'react';
+import type { RGOptions, RelationGraphExpose } from './RelationGraph';
 import type { ForwardRefExoticComponent, RefAttributes } from 'react';
 import type {
-  RelationGraphInstance,
-  RGLine, RGLineSlotProps,
-  RGLink,
+  RGLine,
+  RGLineSlotProps, RGLink,
   RGNode,
-  RGNodeSlotProps
-} from "./RelationGraph";
-import { RelationGraphExpose, RGOptions } from "./RelationGraph";
+  RGNodeSlotProps,
+  RelationGraphInstance
+} from './RelationGraph';
+import type {RGJsonData, RGLayouter, RGRefreshCallback} from 'relation-graph/react/RelationGraph';
 
 export * from './RelationGraph'
 
@@ -30,6 +31,35 @@ export interface RelationGraphProps {
   lineSlot?: React.FC<RGLineSlotProps>
   canvasPlugSlot?: React.FC<{relationGraph: RelationGraphInstance}>
 }
-declare const ReactRelationGraph: React.ForwardRefExoticComponent<RelationGraphExpose, RelationGraphProps>;
+declare class ReactRelationGraph extends React.Component<RelationGraphExpose, RelationGraphProps>{
+  props: RelationGraphProps
+  getInstance(): RelationGraphInstance
+  setOptions(
+    options: RGOptions,
+    callback?: (graphInstance: RelationGraphInstance) => void
+  )
+  setJsonData(
+    jsonData: RGJsonData,
+    reLayoutOrCallback?: boolean | RGRefreshCallback,
+    callback?: (graphInstance: RelationGraphInstance) => void
+  )
+  appendJsonData(
+    jsonData: RGJsonData,
+    reLayout?: boolean | RGRefreshCallback,
+    callback?: (graphInstance: RelationGraphInstance) => void
+  )
+  setLayouter(layouterInstance: RGLayouter)
+  onGraphResize()
+  refresh(callback?: RGRefreshCallback)
+  focusRootNode()
+  focusNodeById(nodeId: string)
+  getNodeById(nodeId: string)
+  removeNodeById(nodeId: string)
+  getNodes()
+  getLinks()
+  getGraphJsonData()
+  getGraphJsonOptions()
+  updateView()
+}
 
 export default ReactRelationGraph
