@@ -12,6 +12,11 @@
       "import": "vue2/relation-graph.mjs",
       "require": "vue2/relation-graph.umd.js"
     },
+    "./react": {
+      "import": "react/relation-graph.mjs",
+      "require": "react/relation-graph.umd.js",
+      "types": "react/index.d.ts"
+    },
     "./vue2": {
       "import": "vue2/relation-graph.mjs",
       "require": "vue2/relation-graph.umd.js",
@@ -29,12 +34,12 @@
     "build-react": "cd ./relation-graph-react && yarn build && cp ../typings/RelationGraph.d.ts ../react/RelationGraph.d.ts && cp ../typings/react.d.ts ../react/index.d.ts",
     "build-all": "yarn build-vue2 && yarn build-vue3 && yarn build-react"
   },
-  "author": "seeks<seeksdream@qq.com>",
+  "author": "seeks <seeksdream@qq.com>",
   "license": "MIT",
   "private": false,
   "repository": {
     "type": "git",
-    "url": "https://github.com/seeksdream/relation-graph"
+    "url": "git+https://github.com/seeksdream/relation-graph.git"
   },
   "homepage": "http://relation-graph.com",
   "keywords": [
@@ -73,5 +78,9 @@
     "prettier": "^2.7.1",
     "typescript": "^4.7.4",
     "yaml-eslint-parser": "^1.0.1"
+  },
+  "directories": {
+    "doc": "doc",
+    "example": "examples"
   }
 }
