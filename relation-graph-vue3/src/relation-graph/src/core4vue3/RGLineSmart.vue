@@ -42,7 +42,7 @@ const onClick = (line:RGLine, e: MouseEvent | TouchEvent) => {
     <!-- 常规方式 -->
     <path
       :d="pathData"
-      :class="['c-rg-line', checked ? 'c-rg-line-checked' : '']"
+      :class="['c-rg-line', relation.styleClass, checked ? 'c-rg-line-checked' : '']"
       :stroke="
         checked
           ? relationGraph.options.checkedLineColor
@@ -51,6 +51,7 @@ const onClick = (line:RGLine, e: MouseEvent | TouchEvent) => {
           : relationGraph.options.defaultLineColor
       "
       :style="{
+        'opacity': relation.opacity,
         'stroke-width':
           (relation.lineWidth
             ? relation.lineWidth
@@ -77,6 +78,7 @@ const onClick = (line:RGLine, e: MouseEvent | TouchEvent) => {
         :x="0"
         :y="0"
         :style="{
+          opacity: relation.opacity,
           fill: checked
             ? relationGraph.options.checkedLineColor
             : relation.fontColor

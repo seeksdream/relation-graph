@@ -155,6 +155,7 @@ export declare type JsonLine = {
   color?: string
   fontColor?: string
   lineWidth?: number
+  opacity?: number
   lineShape?: RGLineShape
   styleClass?: string
   isHide?: boolean

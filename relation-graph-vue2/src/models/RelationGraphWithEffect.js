@@ -148,7 +148,7 @@ export class RelationGraphWithEffect extends RelationGraphWithZoom {
       devLog('rootNode.x is NaN, graph is currently hidden?');
       return;
     }
-    if (this.options.placeSingleNode) {
+    if (this.options.placeSingleNode && this.options.layoutName !== 'fixed') {
       this.placeSingleNode();
     }
   }
@@ -175,7 +175,7 @@ export class RelationGraphWithEffect extends RelationGraphWithZoom {
       if (defaultGroupNodes.includes(thisNode)) {
         return
       }
-      if (thisNode.targetNodes && thisNode.targetNodes.length === 0) {
+      if (thisNode.targetNodes && thisNode.targetNodes.length === 0 && thisNode.fixed !== true) {
         thisNode.x = Math.floor(Math.random() * 200) - 100
         thisNode.y = Math.floor(Math.random() * 200) - 100
         // thisNode.singleNode = true

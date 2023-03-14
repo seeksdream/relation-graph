@@ -19,6 +19,7 @@ stroke={checked
     ? relation.color
     : relationGraph.options.defaultLineColor}
 style={{
+  opacity: relation.opacity,
   strokeWidth:
     `${relation.lineWidth
       ? relation.lineWidth
@@ -26,7 +27,7 @@ style={{
 }}
 markerStart={relation.showStartArrow ? relationGraph.getArrow(relation, link, true) : ''}
 markerEnd={relation.showEndArrow ? relationGraph.getArrow(relation, link, false) : ''}
-className={[checked ? 'c-rg-line-checked' : ''].join(' ')}
+className={[relation.styleClass, checked ? 'c-rg-line-checked' : ''].join(' ')}
 fill="none"
   />;
 };

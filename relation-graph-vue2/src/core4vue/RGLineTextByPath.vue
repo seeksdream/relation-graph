@@ -6,7 +6,10 @@
         @click="onClick(relation, $event)" />
     <text
         class="c-rg-line-text"
-        :style="{fill:(checked ? relationGraph.options.checkedLineColor : (relation.fontColor?relation.fontColor:(relation.color?relation.color:undefined)))}"
+        :style="{
+          opacity: relation.opacity,
+          fill:(checked ? relationGraph.options.checkedLineColor : (relation.fontColor?relation.fontColor:(relation.color?relation.color:undefined)))
+        }"
         @click="onClick(relation, $event)"
         :x="textOffset"
         y="0"
