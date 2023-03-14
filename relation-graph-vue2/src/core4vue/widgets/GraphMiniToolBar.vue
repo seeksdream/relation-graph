@@ -103,8 +103,8 @@
 </template>
 
 <script>
-import { switchLayout } from '@/models/RGLayouter';
-import { devLog } from '@/utils/RGCommon';
+import { switchLayout } from '../../models/RGLayouter';
+import { devLog } from '../../utils/RGCommon';
 
 export default {
   name: 'GraphMiniToolBar',

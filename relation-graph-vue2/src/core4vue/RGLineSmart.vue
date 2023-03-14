@@ -3,7 +3,7 @@
     <!-- 常规方式 -->
     <path
       :d="pathData"
-      :class="['c-rg-line', checked ? 'c-rg-line-checked' : '']"
+      :class="['c-rg-line', relation.styleClass, checked ? 'c-rg-line-checked' : '']"
       :stroke="
         checked
           ? relationGraph.options.checkedLineColor
@@ -12,6 +12,7 @@
           : relationGraph.options.defaultLineColor
       "
       :style="{
+        'opacity': relation.opacity,
         'stroke-width':
           (relation.lineWidth
             ? relation.lineWidth
@@ -38,6 +39,7 @@
         :x="0"
         :y="0"
         :style="{
+          opacity: relation.opacity,
           fill: checked
             ? relationGraph.options.checkedLineColor
             : relation.fontColor
@@ -140,7 +142,7 @@ export default {
 };
 </script>
 
-<style type="">
+<style scoped>
 /*.RGLine-enter-active {*/
 /*transition: all .3s ease;*/
 /*}*/
@@ -199,7 +201,7 @@ export default {
   /*stroke: #FD8B37;*/
   stroke-linejoin: bevel;
   /* firefox bug fix - won't rotate at 90deg angles */
-  -moz-transform: rotate(-89deg) translateX(-190px);
+  /*-moz-transform: rotate(-89deg) translateX(-190px);*/
   animation-timing-function: linear;
   animation: ACTRGLineChecked 10s;
 }

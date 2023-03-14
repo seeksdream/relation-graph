@@ -55,53 +55,5 @@ export default {
 };
 </script>
 
-<style type="">
-  /*.RGLine-enter-active {*/
-    /*transition: all .3s ease;*/
-  /*}*/
-  /*.RGLine-leave-active {*/
-    /*transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);*/
-  /*}*/
-  .c-rg-line-text {
-    fill: #888888;
-    font-size: 12px;
-  }
-  .c-rg-line {
-    z-index: 1000;
-    fill-rule: nonzero;
-    /*marker-end: url('#arrow');*/
-    /* firefox bug fix - won't rotate at 90deg angles */
-    /*-moz-transform: rotate(-89deg) translateX(-190px);*/
-    /*animation-timing-function:linear;*/
-    /*animation: ACTRGLineInit 1s;*/
-  }
-  .c-rg-line-tool {
-    stroke-dasharray: 5,5,5;
-  }
-  .c-rg-line-flash {
-    /* firefox bug fix - won't rotate at 90deg angles */
-    -moz-transform: rotate(-89deg) translateX(-190px);
-    animation-timing-function:linear;
-    animation: ACTRGLineChecked 10s;
-  }
-  @keyframes ACTRGLineInit {
-    from {
-      stroke-dashoffset: 10px;
-      stroke-dasharray: 20,20,20;
-    }
-
-    to {
-      stroke-dashoffset: 0;
-      stroke-dasharray: 0,0,0;
-    }
-  }
-  @keyframes ACTRGLineChecked {
-    from {
-      stroke-dashoffset: 352px;
-    }
-
-    to {
-      stroke-dashoffset: 0;
-    }
-  }
+<style scoped>
 </style>

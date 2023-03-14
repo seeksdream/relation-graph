@@ -1,6 +1,6 @@
 {
   "name": "relation-graph",
-  "version": "2.0.20",
+  "version": "2.0.23",
   "description": "relation-graph，Vue 关联关系图谱组件，可以展示如组织机构图谱、股权架构图谱、集团关系图谱等知识图谱，可提供多种图谱布局，包括树状布局、中心布局、力学布局自动布局等。Vue component for relationship graph , which can display knowledge graphs, such as organization graph, equity structure graph, group relationship graph, etc.",
   "main": "vue2/relation-graph.umd.js",
   "module": "vue2/relation-graph.mjs",
@@ -29,9 +29,9 @@
     }
   },
   "scripts": {
-    "build-vue2": "cd ./relation-graph-vue2 && yarn build && cp ../typings/RelationGraph.d.ts ../vue2/RelationGraph.d.ts",
-    "build-vue3": "cd ./relation-graph-vue3 && yarn build && cp ../typings/RelationGraph.d.ts ../vue3/RelationGraph.d.ts",
-    "build-react": "cd ./relation-graph-react && yarn build && cp ../typings/RelationGraph.d.ts ../react/RelationGraph.d.ts",
+    "build-vue2": "cd ./relation-graph-vue2 && yarn build && cp ../typings/RelationGraph.d.ts ../vue2/RelationGraph.d.ts && cp ../typings/vue2.d.ts ../vue2/index.d.ts",
+    "build-vue3": "cd ./relation-graph-vue3 && yarn build && cp ../typings/RelationGraph.d.ts ../vue3/RelationGraph.d.ts && cp ../typings/vue3.d.ts ../vue3/index.d.ts",
+    "build-react": "cd ./relation-graph-react && yarn build && cp ../typings/RelationGraph.d.ts ../react/RelationGraph.d.ts && cp ../typings/react.d.ts ../react/index.d.ts",
     "build-all": "yarn build-vue2 && yarn build-vue3 && yarn build-react"
   },
   "author": "seeks <seeksdream@qq.com>",
