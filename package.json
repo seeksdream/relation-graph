@@ -12,6 +12,11 @@
       "import": "vue2/relation-graph.mjs",
       "require": "vue2/relation-graph.umd.js"
     },
+    "./react": {
+      "import": "react/relation-graph.mjs",
+      "require": "react/relation-graph.umd.js",
+      "types": "react/index.d.ts"
+    },
     "./vue2": {
       "import": "vue2/relation-graph.mjs",
       "require": "vue2/relation-graph.umd.js",
