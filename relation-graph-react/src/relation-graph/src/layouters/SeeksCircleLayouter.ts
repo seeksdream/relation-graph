@@ -111,24 +111,14 @@ export class SeeksCircleLayouter
       thisNode.lot.index_of_p_childs = 0;
       thisNode.lot.strength = 0;
     });
-    this.allNodes = [];
+    this.allNodes = allNodes;
     devLog('max before:', this.__max_deep, this.__max_length);
-    this.checkMaxDeepAndLength([this.rootNode], 0);
+    // this.checkMaxDeepAndLength([this.rootNode], 0);
     devLog('max after:', this.__max_deep, this.__max_length);
-    // this.graphOptions.canvasSize.width = 4000
-    // this.graphOptions.canvasSize.height = 4000
-    // this.graphOptions.resetViewSize(this.graphOptions)
-    const __mapWidth = this.graphOptions.viewSize.width;
-    const __mapHeight = this.graphOptions.viewSize.height;
-    const __offsetX = this.graphOptions.canvasOffset.x;
-    const __offsetY = this.graphOptions.canvasOffset.y;
     const __center = {
-      x: __mapWidth / 2 - __offsetX,
-      y: __mapHeight / 2 - __offsetY,
+      x: 0,
+      y: 0
     };
-    if (__center.y > 800 - __offsetY) {
-      __center.y = 800 - __offsetY;
-    }
     const __all_size = this.allNodes.length;
     let __circle_r = (__all_size * 90) / Math.PI / 2;
     if (__circle_r < 200) __circle_r = 200;

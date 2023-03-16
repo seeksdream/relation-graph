@@ -7,9 +7,9 @@ relation-graph 当前版本：v2.0.19 (支持Vue2、Vue3、React)
 ----
 
 
-**2023-02-19 最新版本v2.0.12起开始支持vue3**
+**2023-02-19 版本v2.0.12起开始支持vue3**
 
-**2023-02-24 最新版本v2.0.19起开始支持react**
+**2023-02-24 版本v2.0.19起开始支持react**
 ```shell script
 Vue2使用方法： import RelationGraph from 'relation-graph'
 Vue3使用方法： import RelationGraph from 'relation-graph/vue3'
@@ -18,6 +18,14 @@ vue2完整小示例：https://github.com/seeksdream/relation-graph-vue2-demo
 vue3完整小示例：https://github.com/seeksdream/relation-graph-vue3-demo
 React完整小示例：https://github.com/seeksdream/relation-graph-react-demo
 ```
+
+**2023-02-24 最新版本v2.0.24**
+
+新增circle布局，环形布局
+
+**2023-02-24 最新版本v2.0.25**
+
+将默认选项options.moveToCenterWhenRefresh的默认值修改为true
 
 ---
 

@@ -107,21 +107,14 @@ export class SeeksCenterLayouter {
       thisNode.lot.prevNode = undefined;
       thisNode.lot.nextNode = undefined;
     });
-    this.allNodes = [];
+    this.allNodes = allNodes;
     devLog('max before:', this.__max_deep, this.__max_length);
-    this.checkMaxDeepAndLength([this.rootNode], 0);
+    // this.checkMaxDeepAndLength([this.rootNode], 0);
     devLog('max after:', this.__max_deep, this.__max_length);
-    const __mapWidth = this.setting.viewSize.width;
-    const __mapHeight = this.setting.viewSize.height;
-    const __offsetX = this.setting.canvasOffset.x;
-    const __offsetY = this.setting.canvasOffset.y;
     const __center = {
-      x: (__mapWidth) / 2 - __offsetX,
-      y: (__mapHeight) / 2 - __offsetY
+      x: 0,
+      y: 0
     };
-    if (__center.y > 800 - __offsetY) {
-      __center.y = 800 - __offsetY;
-    }
     const __all_size = this.allNodes.length;
     let __circle_r = __all_size * 90 / Math.PI / 2;
     if (__circle_r < 200)__circle_r = 200;

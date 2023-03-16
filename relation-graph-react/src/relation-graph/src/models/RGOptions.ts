@@ -16,7 +16,7 @@ export const createDefaultOptions = (userOptions: RGOptions): RGOptionsFull => {
     downloadImageFileName: '', // UI
     disableZoom: false, // UI
     disableDragNode: false, // UI
-    moveToCenterWhenRefresh: false, // UI
+    moveToCenterWhenRefresh: true, // UI
     zoomToFitWhenRefresh: true, // UI
     useAnimationWhenRefresh: true, // UI
     defaultFocusRootNode: true, // UI
