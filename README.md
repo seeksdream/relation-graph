@@ -23,6 +23,10 @@ React完整小示例：https://github.com/seeksdream/relation-graph-react-demo
 
 新增circle布局，环形布局
 
+**2023-02-24 最新版本v2.0.25**
+
+将默认选项options.moveToCenterWhenRefresh的默认值修改为true
+
 ---
 
 这是一个Vue关系图谱组件，可以展示如组织机构图谱、股权架构图谱、集团关系图谱等知识图谱，可提供多种图谱布局，包括树状布局、中心布局、力学布局自动布局等。
