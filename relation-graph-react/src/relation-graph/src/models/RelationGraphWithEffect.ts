@@ -1,7 +1,6 @@
 import { devLog } from '../utils/RGCommon'
 import SeeksForceLayouter from '../layouters/SeeksForceLayouter'
 import { RelationGraphWithZoom } from './RelationGraphWithZoom'
-import { createDefaultOptions } from './RGOptions'
 import type {
   RGListeners, RGNode,
   RGOptions,
@@ -172,7 +171,7 @@ export class RelationGraphWithEffect extends RelationGraphWithZoom {
       devLog('rootNode.x is NaN, graph is currently hidden?')
       return
     }
-    if (this.options.layoutName !== 'force') {
+    if (this.options.placeSingleNode && this.options.layoutName !== 'fixed') {
       this.placeSingleNode()
     }
   }
@@ -191,34 +190,36 @@ export class RelationGraphWithEffect extends RelationGraphWithZoom {
     })
   }
   placeSingleNode() {
-    let singleNodeSize = 0
     const defaultGroupNodes: RGNode[] = []
     this.findChilds(this.graphData.rootNode!, defaultGroupNodes)
+    const secondaryGroup = []
+    const singleNodes = []
     this.graphData.nodes.forEach((thisNode) => {
       if (defaultGroupNodes.includes(thisNode)) {
         return
       }
-      thisNode.x = Math.floor(Math.random() * 200) - 100
-      thisNode.y = Math.floor(Math.random() * 200) - 100
-      thisNode.singleNode = true
-      if (!thisNode.lot) {
-        thisNode.lot = {childs:[]}
+      if (thisNode.targetNodes && thisNode.targetNodes.length === 0 && thisNode.fixed !== true) {
+        thisNode.x = Math.floor(Math.random() * 200) - 100
+        thisNode.y = Math.floor(Math.random() * 200) - 100
+        // thisNode.singleNode = true
+        if (!thisNode.lot) {
+          thisNode.lot = {childs:[]}
+        }
+        thisNode.lot.placed = true
+        singleNodes.push(thisNode)
+      } else {
+        secondaryGroup.push(thisNode)
       }
-      thisNode.lot.placed = true
-      singleNodeSize++
     })
-    if (singleNodeSize > 0) {
-      devLog('sigle nodes:', singleNodeSize)
-      const forceOptions = createDefaultOptions({})
-      const forceLayout = new SeeksForceLayouter(
-        { layoutName: 'FixSingleNodes' },
-        forceOptions
-      )
-      forceLayout.__origin_nodes = this.graphData.nodes
-      forceLayout.justLayoutSingleNode = true
-      forceLayout.byLine = false
-      forceLayout.maxLayoutTimes = 100
-      forceLayout.autoLayout()
+    if (singleNodes.length > 0) {
+      devLog('sigle nodes:', singleNodes.length);
+      // @ts-ignore
+      const forceLayout = new SeeksForceLayouter({layoutName:'fixed'}, {});
+      forceLayout.__origin_nodes = this.graphData.nodes;
+      forceLayout.justLayoutSingleNode = true;
+      forceLayout.maxLayoutTimes = 100;
+      forceLayout.byLine = false;
+      forceLayout.autoLayout();
     }
   }
   zoomToFit(callback: RGRefreshCallback) {

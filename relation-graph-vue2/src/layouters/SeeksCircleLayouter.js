@@ -111,13 +111,6 @@ export class SeeksCenterLayouter {
     devLog('max before:', this.__max_deep, this.__max_length);
     this.checkMaxDeepAndLength([this.rootNode], 0);
     devLog('max after:', this.__max_deep, this.__max_length);
-    this.setting.canvasSize.width = 4000;
-    this.setting.canvasSize.height = 4000;
-    if (this.setting.heightByContent) {
-      devLog('根据数据调整视窗高度');
-      this.setting.viewSize.height = 1600;
-    }
-    this.setting.resetViewSize(this.setting);
     const __mapWidth = this.setting.viewSize.width;
     const __mapHeight = this.setting.viewSize.height;
     const __offsetX = this.setting.canvasOffset.x;

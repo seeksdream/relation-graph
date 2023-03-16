@@ -1,9 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
-import RelationGraph, {RelationGraphExpose} from 'relation-graph/react';
+import RelationGraph from 'relation-graph/react';
 import type { MutableRefObject} from 'react';
-import type { RGJsonData, RGOptions, RGNodeSlotProps } from 'relation-graph/react';
+import type { RelationGraphExpose, RGJsonData, RGNodeSlotProps, RGOptions } from 'relation-graph/react';
 const NodeSlot: React.FC<RGNodeSlotProps> = ({node}) => {
   return <div>slot:{node.text}</div>
 }

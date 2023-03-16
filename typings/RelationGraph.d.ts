@@ -36,6 +36,7 @@ export declare interface RGOptions {
   hideNodeContentByZoom?: boolean // UI
   defaultJunctionPoint?: RGJunctionPoint // UI
   disableDragCanvas?: boolean // UI
+  placeSingleNode?: boolean
   lineUseTextPath?: boolean // UI
   defaultLineMarker?: {
     markerWidth: number
@@ -154,6 +155,7 @@ export declare type JsonLine = {
   color?: string
   fontColor?: string
   lineWidth?: number
+  opacity?: number
   lineShape?: RGLineShape
   styleClass?: string
   isHide?: boolean

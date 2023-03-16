@@ -39,6 +39,7 @@ const pathData = computed(() => {
         : relationGraph.options.defaultLineColor
     "
     :style="{
+      'opacity': relation.opacity,
       'stroke-width':
         (relation.lineWidth
           ? relation.lineWidth
@@ -50,7 +51,7 @@ const pathData = computed(() => {
     :marker-end="
       relation.showEndArrow && relationGraph.getArrow(relation, link, false)
     "
-    :class="[checked ? 'c-rg-line-checked' : '']"
+    :class="[relation.styleClass, checked ? 'c-rg-line-checked' : '']"
     fill="none"
   />
 </template>
