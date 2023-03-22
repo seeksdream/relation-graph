@@ -1,4 +1,4 @@
-import React from 'react';
+import type React from 'react';
 import type { RGOptions, RelationGraphExpose } from './RelationGraph';
 import type { ForwardRefExoticComponent, RefAttributes } from 'react';
 import type {
@@ -19,9 +19,9 @@ export interface RelationGraphProps {
   onNodeExpand?: (node: RGNode, e: MouseEvent | TouchEvent) => boolean
   onNodeCollapse?: (node: RGNode, e: MouseEvent | TouchEvent) => boolean
   onLineClick?: (
-    line: RGLine,
-    link: RGLink,
-    e: MouseEvent | TouchEvent
+      line: RGLine,
+      link: RGLink,
+      e: MouseEvent | TouchEvent
   ) => boolean
   onImageDownload?: (dom: HTMLElement, format: string) => boolean
   GraphMiniToolBar?: React.FC<{relationGraph: RelationGraphInstance}>
@@ -31,35 +31,7 @@ export interface RelationGraphProps {
   lineSlot?: React.FC<RGLineSlotProps>
   canvasPlugSlot?: React.FC<{relationGraph: RelationGraphInstance}>
 }
-declare class ReactRelationGraph extends React.Component<RelationGraphExpose, RelationGraphProps>{
-  props: RelationGraphProps
-  getInstance(): RelationGraphInstance
-  setOptions(
-    options: RGOptions,
-    callback?: (graphInstance: RelationGraphInstance) => void
-  )
-  setJsonData(
-    jsonData: RGJsonData,
-    reLayoutOrCallback?: boolean | RGRefreshCallback,
-    callback?: (graphInstance: RelationGraphInstance) => void
-  )
-  appendJsonData(
-    jsonData: RGJsonData,
-    reLayout?: boolean | RGRefreshCallback,
-    callback?: (graphInstance: RelationGraphInstance) => void
-  )
-  setLayouter(layouterInstance: RGLayouter)
-  onGraphResize()
-  refresh(callback?: RGRefreshCallback)
-  focusRootNode()
-  focusNodeById(nodeId: string)
-  getNodeById(nodeId: string)
-  removeNodeById(nodeId: string)
-  getNodes()
-  getLinks()
-  getGraphJsonData()
-  getGraphJsonOptions()
-  updateView()
-}
+declare const ReactRelationGraph: React.ForwardRefExoticComponent<RelationGraphProps & React.RefAttributes<RelationGraphExpose>>;
+
 
 export default ReactRelationGraph
