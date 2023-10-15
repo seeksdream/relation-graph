@@ -18,7 +18,7 @@ This project is not only easy to use, but the code also follows the typical Vue/
 
 [https://relation-graph.com](https://relation-graph.com)  （国内用户，无需科学上网）
 
-[https://relation-graph.github.io](https://seeksdream.github.io)（For regions outside of China）
+[https://relation-graph.github.io](https://relation-graph.github.io)（For regions outside of China）
 
 上面的网站中包含使用文档、在线demo，以及可视化的配置工具。
 
@@ -251,9 +251,9 @@ React完整小示例：https://github.com/seeksdream/relation-graph-react-demo
 
 *更多效果及使用方法：*
 
-[http://relation-graph.com](http://relation-graph.com)  （国内用户，无需科学上网）
+[https://relation-graph.com](https://relation-graph.com)  （国内用户，无需科学上网）
 
-[https://seeksdream.github.io](https://seeksdream.github.io)（For regions outside of China）
+[https://relation-graph.github.io](https://relation-graph.github.io)（For regions outside of China）
 
 
 **有问题可以加QQ：3235808353**
