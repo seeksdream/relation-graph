@@ -36,9 +36,9 @@ const RGCanvas: React.FC<RGCanvasProps> = (canvasProps) => {
     devLog('[RGCanvas mounted]')
     init()
     relationGraph.setCanvasDom(seeksRGCanvas$.current!)
-    seeksRGCanvas$.current!.parentElement!.addEventListener('wheel', mouseListener, { passive: false, capture: true })
+    seeksRGCanvas$.current?.parentElement?.addEventListener('wheel', mouseListener, { passive: false, capture: true })
     return () => {
-      seeksRGCanvas$.current!.parentElement!.removeEventListener('wheel', mouseListener)
+      seeksRGCanvas$.current?.parentElement?.removeEventListener('wheel', mouseListener)
     }
   }, [])
   const init = () => {

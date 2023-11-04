@@ -1,1 +1,1 @@
-export * from '../../../../typings/RelationGraph'
+export * from '../../../../typings/vue3'

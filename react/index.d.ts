@@ -1,13 +1,14 @@
-import React from 'react';
+import type React from 'react';
+import type { RGOptions, RelationGraphExpose } from './RelationGraph';
 import type { ForwardRefExoticComponent, RefAttributes } from 'react';
 import type {
-  RelationGraphInstance,
-  RGLine, RGLineSlotProps,
-  RGLink,
+  RGLine,
+  RGLineSlotProps, RGLink,
   RGNode,
-  RGNodeSlotProps
-} from "./RelationGraph";
-import { RelationGraphExpose, RGOptions } from "./RelationGraph";
+  RGNodeSlotProps,
+  RelationGraphInstance
+} from './RelationGraph';
+import type {RGJsonData, RGLayouter, RGRefreshCallback} from 'relation-graph/react/RelationGraph';
 
 export * from './RelationGraph'
 
@@ -18,9 +19,9 @@ export interface RelationGraphProps {
   onNodeExpand?: (node: RGNode, e: MouseEvent | TouchEvent) => boolean
   onNodeCollapse?: (node: RGNode, e: MouseEvent | TouchEvent) => boolean
   onLineClick?: (
-    line: RGLine,
-    link: RGLink,
-    e: MouseEvent | TouchEvent
+      line: RGLine,
+      link: RGLink,
+      e: MouseEvent | TouchEvent
   ) => boolean
   onImageDownload?: (dom: HTMLElement, format: string) => boolean
   GraphMiniToolBar?: React.FC<{relationGraph: RelationGraphInstance}>
@@ -30,6 +31,7 @@ export interface RelationGraphProps {
   lineSlot?: React.FC<RGLineSlotProps>
   canvasPlugSlot?: React.FC<{relationGraph: RelationGraphInstance}>
 }
-declare const ReactRelationGraph: React.ForwardRefExoticComponent<RelationGraphExpose, RelationGraphProps>;
+declare const ReactRelationGraph: React.ForwardRefExoticComponent<RelationGraphProps & React.RefAttributes<RelationGraphExpose>>;
+
 
 export default ReactRelationGraph

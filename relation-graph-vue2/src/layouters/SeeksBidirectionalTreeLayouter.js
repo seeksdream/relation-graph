@@ -278,13 +278,14 @@ export class SeeksBidirectionalTreeLayouter {
     }
   }
   getLevelDistance(node, level, perSize) {
+    const absLevel = Math.abs(level);
     if (this.config.levelDistanceArr && this.config.levelDistanceArr.length > 0) {
       let _distance = 0;
-      for (let i = 0; i < level; i++) {
+      for (let i = 0; i < absLevel; i++) {
         const _thisLevelDistance = this.config.levelDistanceArr[i] || 100;
         _distance += _thisLevelDistance;
       }
-      return _distance;
+      return level > 0 ? _distance : _distance * -1;
     } else {
       return level * perSize;
     }

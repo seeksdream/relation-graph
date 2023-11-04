@@ -51,6 +51,7 @@ const isAllowShowNode = (thisNode:RGNode):boolean => {
     <text
       class="c-rg-line-text"
       :style="{
+        opacity: relation.opacity,
         fill: checked
           ? relationGraph.options.checkedLineColor
           : relation.fontColor

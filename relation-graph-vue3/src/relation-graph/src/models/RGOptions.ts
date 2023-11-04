@@ -16,7 +16,7 @@ export const createDefaultOptions = (userOptions: RGOptions): RGOptionsFull => {
     downloadImageFileName: '', // UI
     disableZoom: false, // UI
     disableDragNode: false, // UI
-    moveToCenterWhenRefresh: false, // UI
+    moveToCenterWhenRefresh: true, // UI
     zoomToFitWhenRefresh: true, // UI
     useAnimationWhenRefresh: true, // UI
     defaultFocusRootNode: true, // UI
@@ -47,6 +47,7 @@ export const createDefaultOptions = (userOptions: RGOptions): RGOptionsFull => {
     hideNodeContentByZoom: false, // UI
     defaultJunctionPoint: 'border', // UI
     disableDragCanvas: false, // UI
+    placeSingleNode: true,
     lineUseTextPath: false, // UI
     viewSize: { width: 300, height: 300 },
     viewELSize: { width: 1300, height: 800, left: 0, top: 100 },

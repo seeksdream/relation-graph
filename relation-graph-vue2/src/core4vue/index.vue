@@ -157,7 +157,7 @@ export default {
     onFullscreen() {
       this.relationGraph.fullscreen(screenfull.isFullscreen);
     },
-    getInstance(options, callback) {
+    getInstance() {
       return this.relationGraph;
     },
     setOptions(options, callback) {
@@ -181,7 +181,7 @@ export default {
         callback = reLayout;
         reLayout = true;
       }
-      this.relationGraph.appendJsonData(jsonData, isRelayout, callback);
+      this.relationGraph.appendJsonData(jsonData, reLayout, callback);
     },
     setLayouter(layouterInstance) {
       this.relationGraph.setLayouter(layouterInstance);

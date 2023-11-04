@@ -3,10 +3,10 @@
       :id="relationGraph.options.instanceId + '-' + link.seeks_id + '-' + relationIndex"
       :d="pathData"
       :stroke="checked ? relationGraph.options.checkedLineColor : (relation.color?relation.color:relationGraph.options.defaultLineColor)"
-      :style="{'stroke-width': (relation.lineWidth?relation.lineWidth:relationGraph.options.defaultLineWidth) + 'px'}"
+      :style="{'opacity': relation.opacity, 'stroke-width': (relation.lineWidth?relation.lineWidth:relationGraph.options.defaultLineWidth) + 'px'}"
       :marker-start="relation.showStartArrow && relationGraph.getArrow(relation, link, true)"
       :marker-end="relation.showEndArrow && relationGraph.getArrow(relation, link, false)"
-      :class="[checked?'c-rg-line-checked':'']"
+      :class="[relation.styleClass, checked?'c-rg-line-checked':'']"
       fill="none" />
 </template>
 <script>

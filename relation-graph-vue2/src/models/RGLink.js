@@ -11,6 +11,7 @@ export const json2Line = (originData) => {
     to: originData.to,
     text: originData.text !== undefined ? originData.text : '',
     color: originData.color !== undefined ? originData.color : undefined,
+    opacity: originData.opacity !== undefined ? originData.opacity : 1,
     fontColor:
       originData.fontColor !== undefined ? originData.fontColor : undefined,
     lineWidth:

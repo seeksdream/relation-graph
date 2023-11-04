@@ -31,13 +31,14 @@ const RGLineSmart: React.FC<RGLineProps> = ({link,relation,relationIndex}) => {
 return <g>
   <path
   d={path}
-  className={['c-rg-line', checked ? 'c-rg-line-checked' : ''].join(' ')}
+  className={['c-rg-line', relation.styleClass, checked ? 'c-rg-line-checked' : ''].join(' ')}
   stroke={checked
     ? relationGraph.options.checkedLineColor
     : relation.color
       ? relation.color
       : relationGraph.options.defaultLineColor}
   style={{
+    opacity: relation.opacity,
     strokeWidth:
       `${relation.lineWidth
         ? relation.lineWidth
@@ -54,6 +55,7 @@ return <g>
   x="0"
   y="0"
   style={{
+    opacity: relation.opacity,
     fill: checked
       ? relationGraph.options.checkedLineColor
       : relation.fontColor

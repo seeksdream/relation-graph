@@ -8,7 +8,7 @@ import GraphDebugPanel from './widgets/GraphDebugPanel'
 import GraphMiniView from './widgets/GraphMiniView'
 import GraphMiniToolBar from './widgets/GraphMiniToolBar'
 import type { MutableRefObject } from 'react';
-import type { RelationGraphProps } from '../../../../../react';
+import type { RelationGraphProps } from '../RelationGraph';
 const Graph: React.FC<RelationGraphProps> = (props) => {
   const relationGraph = useContext(RelationGraphStoreContext);
   const updateView = useContext(RGUpdateContext);
