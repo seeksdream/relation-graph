@@ -6,12 +6,10 @@
 
 ---
 
-- **relation-graph** 支持Vue2、Vue3、React、PC & 移动端 的关系图谱展示组件，支持通过【插槽】让使用者用【html+css编写的vue/react组件】来完全自定义图形元素，使用css样式/动画来完全自定义样式效果。让你快速构建可交互的复杂图形应用。
+- **relation-graph** 支持Vue2、Vue3、React、PC & 移动端 的关系数据展示组件，支持通过【插槽】让使用者用【html+css编写的vue/react组件】来完全自定义图形元素，使用css样式/动画来完全自定义样式效果。让你快速构建可交互的复杂图形应用。
 
 - **relation-graph** is a relationship graph display component that supports Vue2, Vue3, React.
 Allowing you to fully customize the graphical elements using HTML/CSS and Vue or React components through slots.
-
----
 
 ### Docs & Examples  文档 & 示例：
 
@@ -19,11 +17,8 @@ Allowing you to fully customize the graphical elements using HTML/CSS and Vue or
 
 - [https://relation-graph.github.io](https://relation-graph.github.io)（For regions outside of China）
 
-上面的网站中包含使用文档、在线demo，以及可视化的配置工具。<br>
+上面的网站中包含使用文档、在线示例，以及可视化的配置工具。<br>
 The website above includes documentation, online demos, and a visual configuration tool for software developers.
-
-
----
 
 ### Getting Started  快速使用：
 
@@ -111,7 +106,7 @@ export default {
 ```
 
 
-### Sample code effects:  上面代码的效果：
+### Sample code effects  上面代码的效果：
 ![简单示例效果图](doc/images/relation-graph-simple.png)
 
 ### Example Projects  完整的示例代码：
@@ -126,7 +121,7 @@ export default {
 - https://github.com/seeksdream/relation-graph-vue2-demo
 
 
-### More demo:  更多示例：
+### More Examples   更多示例：
 - [https://relation-graph.com/#/demo](https://relation-graph.com/#/demo)  （国内用户，无需科学上网）
 
 - [https://relation-graph.github.io/#/demo](https://relation-graph.github.io/#/demo)（For regions outside of China）
@@ -155,7 +150,7 @@ export default {
 - https://github.com/seeksdream/relation-graph-react-demo
 
 
-###More info  更多效果及使用方法：
+### More info  更多效果及使用方法：
 
 - [https://relation-graph.com](https://relation-graph.com)  （国内用户，无需科学上网）
 
