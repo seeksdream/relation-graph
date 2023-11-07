@@ -1,16 +1,9 @@
 {
   "name": "relation-graph-vue2",
-  "version": "2.0.9",
+  "version": "0.0.1",
   "description": "relation-graph，Vue 关联关系图谱组件，可以展示如组织机构图谱、股权架构图谱、集团关系图谱等知识图谱，可提供多种图谱布局，包括树状布局、中心布局、力学布局自动布局等。Vue component for relationship graph , which can display knowledge graphs, such as organization graph, equity structure graph, group relationship graph, etc.",
   "main": "dist/relation-graph.umd.js",
   "module": "dist/relation-graph.mjs",
-  "exports": {
-    ".": {
-      "types": "dist/index.d.ts",
-      "import": "dist/relation-graph.mjs",
-      "require": "dist/relation-graph.umd.js"
-    }
-  },
   "unpkg": "dist/relation-graph.umd.js",
   "jsdelivr": "dist/relation-graph.umd.js",
   "scripts": {
@@ -50,7 +43,9 @@
   },
   "dependencies": {
     "html2canvas": "^1.4.1",
-    "screenfull": "^5.1.0"
+    "sass": "^1.30.0",
+    "screenfull": "^5.1.0",
+    "typescript": "^5.2.2"
   },
   "peerDependencies": {
     "vue": "2.7.14"

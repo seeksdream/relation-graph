@@ -1,45 +1,67 @@
 <template>
-  <div ref="seeksRelationGraph" :style="{width: '100%',height : '100%'}" style="box-sizing:border-box;">
-    <template v-if="relationGraph && relationGraph.options">
-      <GraphDebugPanel v-if="relationGraph.options.showDebugPanel" :relation-graph="relationGraph" />
-      <slot v-if="relationGraph.options.allowShowMiniToolBar===true" name="miniToolBar" :relation-graph="relationGraph">
-        <GraphMiniToolBar :relation-graph="relationGraph" />
+  <div ref="seeksRelationGraph" class="relation-graph" :style="{width: '100%',height : '100%'}" style="box-sizing:border-box;position: relative;">
+    <template v-if="graph.instance && graph.options">
+      <GraphDebugPanel v-if="graph.options.showDebugPanel" />
+      <template v-if="graph.options.allowShowMiniToolBar===true">
+        <GraphToolBar v-if="graph.options.oldVueVersion && !graph.options.ovUseToolbarSlot" />
+        <slot v-else name="tool-bar">
+          <GraphToolBar v-if="graph.options.toolBarVersion==='v2'" />
+          <GraphMiniToolBar v-else />
+        </slot>
+      </template>
+      <slot v-if="graph.options.allowShowMiniView===true" name="mini-view">
+        <GraphMiniView />
       </slot>
-      <slot v-if="relationGraph.options.allowShowMiniView===true" name="miniViewPanel" :relation-graph="relationGraph">
-        <GraphMiniView :relation-graph="relationGraph" />
-      </slot>
-      <slot name="graph-plug" :relation-graph="relationGraph" />
-      <RGCanvas :relation-graph="relationGraph">
-        <template #node="{node}" >
-          <slot :node="node" :relation-graph="relationGraph" name="node" />
+      <slot name="graph-plug" />
+      <RGCanvas>
+        <template #node="{node}">
+          <slot :node="node" name="node" />
         </template>
-        <template #line="{line, link}" >
-          <slot :line="line" :link="link" :relation-graph="relationGraph" name="line" />
+        <template #line="{line, link}">
+          <slot :line="line" :link="link" name="line" />
         </template>
         <template #canvas-plug>
-          <slot :relation-graph="relationGraph" name="canvas-plug" />
+          <slot name="canvas-plug" />
+        </template>
+        <template #node-expand-holder="{nodeProps, expandHolderPosition, expandButtonClass, color, expandOrCollapseNode}">
+          <slot
+              name="node-expand-holder"
+              :nodeProps="nodeProps"
+              :expandHolderPosition="expandHolderPosition"
+              :expandButtonClass="expandButtonClass"
+              :color="color"
+              :expandOrCollapseNode="expandOrCollapseNode"
+          />
         </template>
       </RGCanvas>
+      <GraphOperateStuff>
+        <template #node-template="{node}">
+          <slot name="node-template" :node="node" />
+        </template>
+      </GraphOperateStuff>
     </template>
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import Vue from 'vue';
 import screenfull from 'screenfull';
 import html2canvas from 'html2canvas';
 import '../utils/RGGraphIconfont';
-import { version } from '../../../package.json';
+import { version } from '../constants';
 import { devLog } from '../utils/RGCommon';
 import { RelationGraphFinal } from '../models/RelationGraphFinal';
 import RGCanvas from './RGCanvas';
 import GraphDebugPanel from './widgets/GraphDebugPanel';
 import GraphMiniView from './widgets/GraphMiniView';
 import GraphMiniToolBar from './widgets/GraphMiniToolBar';
+import GraphToolBar from './widgets/GraphToolBar';
+import GraphOperateStuff from './widgets/GraphOperateStuff';
+import {getEventListeners} from "../utils/RGIntergration";
 
 export default {
   name: 'SeeksRelationGraph',
-  components: { GraphMiniToolBar, GraphMiniView, RGCanvas, GraphDebugPanel },
+  components: { GraphOperateStuff, GraphMiniToolBar, GraphToolBar, GraphMiniView, RGCanvas, GraphDebugPanel },
   props: {
     options: {
       mustUseProp: false,
@@ -71,6 +93,31 @@ export default {
       default: () => { return () => {}; },
       type: Function
     },
+    onNodeDragEnd: {
+      mustUseProp: false,
+      default: () => { return () => {}; },
+      type: Function
+    },
+    onCanvasDragEnd: {
+      mustUseProp: false,
+      default: () => { return () => {}; },
+      type: Function
+    },
+    beforeChangeLayout: {
+      mustUseProp: false,
+      default: () => { return () => {}; },
+      type: Function
+    },
+    onContextmenu: {
+      mustUseProp: false,
+      default: () => { return () => {}; },
+      type: Function
+    },
+    onCanvasClick: {
+      mustUseProp: false,
+      default: () => { return () => {}; },
+      type: Function
+    },
     onDownloadExcel: {
       mustUseProp: false,
       default: null,
@@ -80,13 +127,39 @@ export default {
       mustUseProp: false,
       default: null,
       type: Function
+    },
+    onImageSaveAsFile: {
+      mustUseProp: false,
+      default: null,
+      type: Function
+    },
+    onCanvasSelectionEnd: {
+      mustUseProp: false,
+      default: null,
+      type: Function
     }
   },
   data() {
     // this.relationGraph = null;
     return {
-      relationGraph: null,
-      graphSetting: null
+      graphData: {
+        rootNode: null,
+        nodes: [],
+        links: []
+      },
+      graph: {
+        options: null,
+        allLineColors: [],
+        instance: null
+      },
+      oldVueVersion: false,
+      relationGraph: null
+    };
+  },
+  provide() {
+    return {
+      graphData: this.graphData,
+      graph: this.graph
     };
   },
   created() {
@@ -111,7 +184,8 @@ export default {
     if (Vue.version.slice(0, 4) === '2.5.') slotAlert = true;
     if (Vue.version.slice(0, 4) === '2.6.' && Number.parseInt(Vue.version.split('.')[2]) <= 12) slotAlert = true;
     if (slotAlert) {
-      console.error(`您的Vue版本：${  Vue.version  }注意：当你使用的vue版本等于低于2.6.12时，图谱会显示不正常，参考这个连接解决这个问题：https://github.com/seeksdream/relation-graph/issues/113`);
+      this.oldVueVersion = true;
+      console.error(`您的Vue版本：${Vue.version}注意：当你使用的vue版本等于低于2.6.12时，图谱会显示不正常，参考这个连接解决这个问题：https://github.com/seeksdream/relation-graph/issues/113`);
     }
     if (!screenfull) {
       console.error('[relation-graph]Please introduce component screenfull, for example:https://cdnjs.cloudflare.com/ajax/libs/screenfull.js/5.1.0/screenfull.min.js');
@@ -122,25 +196,32 @@ export default {
   },
   mounted() {
     devLog('---------------------------graph mounted---------------------------');
-    const listeners = {
-      onNodeClick: this.onNodeClick,
-      onNodeExpand: this.onNodeExpand,
-      onNodeCollapse: this.onNodeCollapse,
-      onLineClick: this.onLineClick,
-      onDownloadExcel: this.onDownloadExcel,
-      onImageDownload: this.onImageDownload
-    };
+    // const listeners = {
+    //   onNodeClick: this.onNodeClick,
+    //   onNodeExpand: this.onNodeExpand,
+    //   onNodeCollapse: this.onNodeCollapse,
+    //   onLineClick: this.onLineClick,
+    //   onDownloadExcel: this.onDownloadExcel,
+    //   onImageDownload: this.onImageDownload,
+    //   onNodeDragEnd: this.onNodeDragEnd,
+    //   onCanvasDragEnd: this.onCanvasDragEnd,
+    //   beforeChangeLayout: this.beforeChangeLayout,
+    //   onContextmenu: this.onContextmenu,
+    //   onCanvasClick: this.onCanvasClick,
+    //   onCanvasSelectionEnd: this.onCanvasSelectionEnd,
+    //   onImageSaveAsFile: this.onImageSaveAsFile
+    // };
     // devLog(this.relationGraphCore);
     // const rgClass = this.relationGraphCore || RelationGraphFinal;
     // const newRGCoreInstance = Object.create(rgClass.prototype);
     // const relationGraph = rgClass.apply(newRGCoreInstance, [this.options, listeners]);
-    const relationGraph = this.relationGraphCore || new RelationGraphFinal(this.options, listeners);
+    const relationGraph = this.relationGraphCore || new RelationGraphFinal(this.options, getEventListeners(this));
+    relationGraph.options.oldVueVersion = this.oldVueVersion;
+    relationGraph.setReactiveData(this.graphData, this.graph);
     relationGraph.setDom(this.$refs.seeksRelationGraph);
     relationGraph.ready();
-    // if (this.jsonData) relationGraph.setJsonData(this.jsonData);
-    this.relationGraph = relationGraph;
-    this.graphSetting = this.relationGraph.options;
-    screenfull.on('change', this.onFullscreen);
+    this.graph.instance = relationGraph;
+    screenfull && screenfull.on && screenfull.on('change', this.onFullscreen);
   },
   beforeUnmount() {
     devLog('---------------------------graph beforeDestroy---------------------------');
@@ -151,73 +232,85 @@ export default {
   updated() {
     devLog('---------------------------graph updated---------------------------');
     // if (this.jsonData) this.relationGraph.setJsonData(this.jsonData);
-    // if (this.jsonData) this.relationGraph.setJsonData(this.jsonData);
+    // if (this.jsonData) this.graph.instance.setJsonData(this.jsonData);
   },
   methods: {
     onFullscreen() {
-      this.relationGraph.fullscreen(screenfull.isFullscreen);
+      this.graph.instance.fullscreen(screenfull.isFullscreen);
     },
     getInstance() {
-      return this.relationGraph;
+      return this.graph.instance;
     },
-    setOptions(options, callback) {
-      this.relationGraph.setOptions(options, callback);
+    async setOptions(options, callback) {
+      await this.graph.instance.setOptions(options);
+      callback && callback(this.graph.instance);
     },
-    setJsonData(jsonData, reLayout, callback) {
+    async setJsonData(jsonData, reLayout, callback) {
       if (arguments.length === 2 && typeof reLayout === 'function') {
         callback = reLayout;
         reLayout = true;
       }
-      this.relationGraph.setJsonData(jsonData, reLayout, (instance) => {
-        this.$nextTick(() => {
-          this.relationGraph.playShowEffect(() => {
-            if (callback) callback(instance);
-          });
+      await this.graph.instance.setJsonData(jsonData, reLayout);
+      return new Promise((resolve, reject) => {
+        this.$nextTick(async() => {
+          await this.graph.instance.playShowEffect();
+          if (callback) callback(this.graph.instance);
+          resolve();
         });
       });
     },
-    appendJsonData(jsonData, reLayout, callback) {
+    async appendJsonData(jsonData, reLayout, callback) {
       if (arguments.length === 2 && typeof reLayout === 'function') {
         callback = reLayout;
         reLayout = true;
       }
-      this.relationGraph.appendJsonData(jsonData, reLayout, callback);
+      await this.graph.instance.appendJsonData(jsonData, reLayout);
+      callback && callback(this.graph.instance);
     },
     setLayouter(layouterInstance) {
-      this.relationGraph.setLayouter(layouterInstance);
+      this.graph.instance.setLayouter(layouterInstance);
     },
-    onGraphResize(jsonData, callback) {
-      this.relationGraph.refreshNVAnalysisInfo();
+    onGraphResize() {
+      this.graph.instance.refreshNVAnalysisInfo();
     },
-    refresh() {
-      this.relationGraph.refresh();
+    async refresh() {
+      await this.graph.instance.refresh();
     },
-    focusRootNode() {
-      this.relationGraph.focusRootNode();
+    async doLayout() {
+      await this.graph.instance.doLayout();
     },
-    focusNodeById(nodeId) {
-      return this.relationGraph.focusNodeById(nodeId);
+    async focusRootNode() {
+      await this.graph.instance.focusRootNode();
+    },
+    async focusNodeById(nodeId) {
+      return await this.graph.instance.focusNodeById(nodeId);
     },
     getNodeById(nodeId) {
-      return this.relationGraph.getNodeById(nodeId);
+      return this.graph.instance.getNodeById(nodeId);
     },
     removeNodeById(nodeId) {
-      return this.relationGraph.removeNodeById(nodeId);
+      return this.graph.instance.removeNodeById(nodeId);
     },
     getNodes() {
-      return this.relationGraph.getNodes();
+      return this.graph.instance.getNodes();
     },
     getLinks() {
-      return this.relationGraph.getLinks();
+      return this.graph.instance.getLinks();
     },
     getGraphJsonData() {
-      return this.relationGraph.getGraphJsonData();
+      return this.graph.instance.getGraphJsonData();
     },
     getGraphJsonOptions() {
-      return this.relationGraph.getGraphJsonOptions();
+      return this.graph.instance.getGraphJsonOptions();
     }
+  },
+  beforeDestroy() {
+    devLog('beforeDestroy:relation-graph');
+    // 通过此标识通知一些定时任务停止
+    this.graph.instance.options.instanceDestroyed = true;
   }
 };
 </script>
-<style scoped>
+<style lang="scss">
+@import "./relation-graph.scss";
 </style>

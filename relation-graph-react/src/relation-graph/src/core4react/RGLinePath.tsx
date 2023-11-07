@@ -4,32 +4,38 @@ import type { RGLineProps } from './RGLineSmart';
 
 const RGLinePath: React.FC<RGLineProps> = ({link,relation,relationIndex}) => {
   const relationGraph = useContext(RelationGraphStoreContext);
-  const checked = link.seeks_id === relationGraph.options.checkedLineId
-  const {path} = relationGraph.createLinePath(link, relation, relationIndex)
-return <path
-    id={`${relationGraph.options.instanceId 
-      }-${ 
-      link.seeks_id 
-      }-${ 
-      relationIndex}`}
-d={path}
-stroke={checked
-  ? relationGraph.options.checkedLineColor
-  : relation.color
-    ? relation.color
-    : relationGraph.options.defaultLineColor}
-style={{
-  opacity: relation.opacity,
-  strokeWidth:
-    `${relation.lineWidth
-      ? relation.lineWidth
-      : relationGraph.options.defaultLineWidth  }px`
-}}
-markerStart={relation.showStartArrow ? relationGraph.getArrow(relation, link, true) : ''}
-markerEnd={relation.showEndArrow ? relationGraph.getArrow(relation, link, false) : ''}
-className={[relation.styleClass, checked ? 'c-rg-line-checked' : ''].join(' ')}
-fill="none"
-  />;
+  const options = relationGraph.options;
+  const checked = link.seeks_id === options.checkedLineId;
+
+  const pathData = () => {
+    const { path } = relationGraph.createLinePath(
+      link,
+      relation,
+      relationIndex
+    );
+    return path;
+  };
+  const showStartArrow = relation.showStartArrow ? relationGraph.getArrow(relation, link, true) : undefined;
+  const showEndArrow = relation.showEndArrow ? relationGraph.getArrow(relation, link, false) : undefined;
+  return (
+    <path
+      id={`${options.instanceId}-${link.seeks_id}-${relationIndex}`}
+      d={pathData()}
+      stroke={relation.color ? relation.color : options.defaultLineColor}
+      style={{
+        opacity: relation.opacity,
+        strokeWidth: `${
+          relation.lineWidth ? relation.lineWidth : options.defaultLineWidth
+        }px`,
+      }}
+      markerStart={showStartArrow}
+      markerEnd={showEndArrow}
+      className={`c-rg-line-path ${relation.styleClass} ${
+        checked ? 'c-rg-line-checked' : ''
+      }`}
+      fill="none"
+    />
+  );
 };
 
 export default RGLinePath;

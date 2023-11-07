@@ -1,5 +1,5 @@
 // For this project development
-import '@vue/runtime-core'
+import '@vue/runtime-core';
 
 
-export {}
+export {};

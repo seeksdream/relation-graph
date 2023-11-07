@@ -1,0 +1,125 @@
+
+/*****************************[toolbar]****************************************/
+.relation-graph {
+    .rel-toolbar {
+        position: absolute;
+        z-index: 99;
+        background-color: rgba(220, 220, 220, 0.2);
+        color: #999999;
+        box-shadow: 0px 0px 2px #cccccc;
+        box-sizing: border-box;
+        border-radius: 5px;
+        padding: 3px;
+        .rg-icon {
+            width: 16px;
+            height: 16px;
+            vertical-align: -3px;
+            fill: currentColor;
+            overflow: hidden;
+        }
+        .c-mb-button svg {
+            margin: auto;
+        }
+
+        .c-mb-button-on {
+            color: #2E74B5;
+        }
+
+        .c-mb-button:hover {
+            background-color: rgba(220, 220, 220, 0.5);
+        }
+
+        .c-loading-icon {
+            animation: turn 1s linear infinite;
+        }
+
+        @keyframes turn {
+            0% {
+                -webkit-transform: rotate(0deg);
+            }
+            25% {
+                -webkit-transform: rotate(90deg);
+            }
+            50% {
+                -webkit-transform: rotate(180deg);
+            }
+            75% {
+                -webkit-transform: rotate(270deg);
+            }
+            100% {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+
+        .c-current-zoom {
+            margin-top: 0px;
+            height: 20px;
+            color: #262626;
+            font-size: 10px;
+            text-align: center;
+            line-height: 20px;
+            border-radius: 3px;
+        }
+
+        .c-mb-button {
+            height: 40px;
+            margin-top: 0px;
+            opacity: 1;
+            text-align: center;
+            padding-top: 3px;
+            cursor: pointer;
+            font-size: 18px;
+            box-sizing: border-box;
+            line-height: 21px;
+            display: flex;
+            align-items: center;
+            border-radius: 3px;
+        }
+    }
+
+    .rel-toolbar-v {
+        width: 45px;
+        max-height: 260px;
+    }
+
+    .rel-toolbar-h {
+        height: 45px;
+        width: 300px;
+    }
+
+    .rel-toolbar-h .c-mb-button {
+        width: 40px;
+        height: 100%;
+        float: left;
+    }
+
+    .rel-toolbar-h .c-current-zoom {
+        width: 40px;
+        height: 100%;
+        float: left;
+        line-height: 40px;
+    }
+    .rel-toolbar-h-right {
+        right: 15px;
+    }
+
+    .rel-toolbar-h-left {
+        left: 15px;
+    }
+
+    .rel-toolbar-h-center {
+        left: calc((100% - 260px) / 2);
+    }
+
+    .rel-toolbar-v-top {
+        top: 15px;
+    }
+
+    .rel-toolbar-v-bottom {
+        bottom: 15px;
+    }
+
+    .rel-toolbar-v-center {
+        top: calc((100% - 260px) / 2);
+    }
+}

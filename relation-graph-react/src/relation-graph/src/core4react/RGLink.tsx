@@ -1,62 +1,51 @@
-import React, { useContext } from 'react';
-import RGLineTextByPath from './RGLineTextByPath'
+import React, {useContext, useEffect} from 'react';
 import RGLineSmart from './RGLineSmart';
-import { RelationGraphStoreContext } from './store/reducers/StockStore';
-import type { RGLineSlotProps, RGLink, RGNode } from '../RelationGraph';
+import RGLineTextByPath from './RGLineTextByPath';
+import RGNodesAnalytic from '../../../../../relation-graph-vue2/src/utils/RGNodesAnalytic';
+import {RelationGraphStoreContext} from './store/reducers/StockStore';
+import type { RGLink, RGNode, RGLineSlotProps } from '../../../../../relation-graph-vue2/src/types';
 export interface RGLinkProps {
   linkProps: RGLink
   LineSlot?: React.FC<RGLineSlotProps>
 }
-const RGLinkFC: React.FC<RGLinkProps> = ({linkProps, LineSlot}) => {
+const SeeksRGLink = ({ linkProps, LineSlot }:RGLinkProps) => {
   const relationGraph = useContext(RelationGraphStoreContext);
-  const isAllowShowNode = (thisNode:RGNode):boolean => {
-    const _r =
-      thisNode.isShow !== false &&
-      thisNode.isHide !== true &&
-      (!thisNode.lot.parent || isAllowShowNode(thisNode.lot.parent) === true)
-    return _r
-  }
-  const isShow = isAllowShowNode(linkProps.fromNode) && isAllowShowNode(linkProps.toNode)
-return <>{isShow && <g
-  className={[
-    relationGraph.options.checkedLineId == linkProps.seeks_id
-      ? 'c-rg-link-checked'
-      : ''
-  ].join(' ')}
-  transform="translate(0,0)"
+  const isAllowShowNode = (thisNode:RGNode) => {
+    return RGNodesAnalytic.isAllowShowNode(thisNode);
+  };
+
+  useEffect(() => {
+    // mounted logic here
+  }, []);
+
+  const options = relationGraph.options;
+  return (
+    <g
+      style={{ display: isAllowShowNode(linkProps.fromNode) && isAllowShowNode(linkProps.toNode) ? 'block' : 'none' }}
+      className={[
+        'rel-link-peel',
+        options.checkedLineId === linkProps.seeks_id ? 'c-rg-link-checked' : ''
+      ].join(' ')}
+      transform="translate(0,0)"
+      data-id={linkProps.seeks_id}
     >
-  {
-    linkProps.relations.filter(thisRelation => thisRelation.isHide === false).map((thisRelation, ri)=>
-      <React.Fragment key={thisRelation.seeks_id}>
-        {
-          LineSlot ?
-            <LineSlot relationGraph={relationGraph} link={linkProps} relation={thisRelation} relationIndex={ri}  />
-            :
-            <>
-              {
-                (relationGraph.options.lineUseTextPath ||
-                  thisRelation.useTextPath)
-                 ? <RGLineTextByPath
-                    key={`l-${  thisRelation.seeks_id}`}
-                    link={linkProps}
-                    relation={thisRelation}
-                    relationIndex={ri}
-                  />
+      {linkProps.relations.map((thisRelation, ri) =>
+        <React.Fragment key={thisRelation.id}>
+          {
+            LineSlot ?
+              <LineSlot relationGraph={relationGraph} link={linkProps} relation={thisRelation} relationIndex={ri}  />
+              :
+              (
+                (thisRelation.useTextPath || options.lineUseTextPath) ?
+                  <RGLineTextByPath link={linkProps} relation={thisRelation} relationIndex={ri} />
                   :
-                  <RGLineSmart
-                    key={`l-${  thisRelation.seeks_id}`}
-                    link={linkProps}
-                    relation={thisRelation}
-                    relationIndex={ri}
-                />
-              }
-            </>
-        }
-      </React.Fragment>
-    )
-  }
-</g>}
-  </>
+                  <RGLineSmart link={linkProps} relation={thisRelation} relationIndex={ri} />
+              )
+          }
+        </React.Fragment>
+      )}
+    </g>
+  );
 };
 
-export default RGLinkFC;
+export default SeeksRGLink;

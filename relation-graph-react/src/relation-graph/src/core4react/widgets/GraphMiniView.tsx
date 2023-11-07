@@ -2,9 +2,9 @@ import React from 'react';
 
 const GraphMiniView: React.FC = () => {
   return (
-  <div className={'h-full bg-white'}>
+    <div className={'h-full bg-white'}>
     not support
-  </div>
+    </div>
   );
 };
 
