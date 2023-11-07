@@ -1,41 +1,45 @@
 <script lang="ts" setup>
-import { nextTick, onBeforeUnmount, onMounted, provide, ref } from 'vue'
+import {nextTick, onBeforeUnmount, onMounted, provide, reactive, ref, toRef} from 'vue'
 import screenfull from 'screenfull'
-import appendIconSvg from '../utils/RGGraphIconfont'
-import { devLog, relationGraphVersionInfo } from '../utils/RGCommon'
-import { RelationGraphFinal } from '../models/RelationGraphFinal'
-import { relationGraphKey } from '../../../constants'
+import appendIconSvg from '../../../../../relation-graph-vue2/src/utils/RGGraphIconfont4Vue'
+import { devLog, relationGraphVersionInfo } from '../../../../../relation-graph-vue2/src/utils/RGCommon'
+import { getEventListeners } from '../../../../../relation-graph-vue2/src/utils/RGIntergration'
+import { RelationGraphFinal } from '../../../../../relation-graph-vue2/src/models/RelationGraphFinal'
+import {graphDataKey, graphInstanceKey, graphKey} from '../../../constants'
 import RGCanvas from './RGCanvas.vue'
 import GraphDebugPanel from './widgets/GraphDebugPanel.vue'
 import GraphMiniView from './widgets/GraphMiniView.vue'
 import GraphMiniToolBar from './widgets/GraphMiniToolBar.vue'
-import type { RGJsonData, RGLayouter, RGLine ,
-  RGLink,
-  RGListeners,
-  RGNode,
+import GraphOperateStuff from './widgets/GraphOperateStuff.vue'
+import type {
+  RGGraphData, RGJsonData, RGLayouter,
   RGOptions,
-  RGRefreshCallback,
-  RelationGraphInstance
-} from '../RelationGraph';
+  RGRefreshCallback
+} from '../../../../../relation-graph-vue2/src/types';
+import {
+  RelationGraphInstance,
+  RelationGraphProps,
+  RGGraphReactiveData
+} from "../../../../../relation-graph-vue2/src/types";
+
+
 devLog('appendIconSvg:', appendIconSvg);
-interface RelationGraphProps {
-  options: any
-  relationGraphCore?: any
-  onNodeClick?: (node: RGNode, e: MouseEvent | TouchEvent) => boolean
-  onNodeExpand?: (node: RGNode, e: MouseEvent | TouchEvent) => boolean
-  onNodeCollapse?: (node: RGNode, e: MouseEvent | TouchEvent) => boolean
-  onLineClick?: (
-    line: RGLine,
-    link: RGLink,
-    e: MouseEvent | TouchEvent
-  ) => boolean
-  onImageDownload?: (dom: HTMLElement, format: string) => boolean
-}
+
 const props = defineProps<RelationGraphProps>()
 const seeksRelationGraph$ = ref<HTMLElement>()
-const relationGraph = ref<RelationGraphInstance>()
-// const p = reactive({ x: 1, y: 2 })
-provide(relationGraphKey, relationGraph)
+const graphInstance$ = ref<RelationGraphInstance>()
+const graphData = reactive<RGGraphData>({
+  rootNode: undefined,
+  nodes: [],
+  links: []
+});
+const graph = reactive<RGGraphReactiveData>({
+  options: undefined,
+  allLineColors: []
+});
+provide(graphInstanceKey, graphInstance$)
+provide(graphDataKey, graphData)
+provide(graphKey, graph)
 defineEmits([
   'on-node-click',
   'on-node-expand',
@@ -43,51 +47,38 @@ defineEmits([
   'on-line-click',
   'on-download-excel',
   'on-image-download',
+  'on-image-save-as-file',
 ])
 devLog('---------------------------graph mounted---------------------------')
 onMounted(() => {
-  relationGraphVersionInfo()
+  relationGraphVersionInfo('vue3')
   // 在元素上做些操作
   devLog('---------------------------graph mounted---------------------------')
-  const listeners: RGListeners = {
-    'on-node-click': props.onNodeClick,
-    'on-node-expand': props.onNodeExpand,
-    'on-node-collapse': props.onNodeCollapse,
-    'on-line-click': props.onLineClick,
-    'on-image-download': props.onImageDownload,
-  }
-  // devLog(this.relationGraphCore);
-  // const rgClass = this.relationGraphCore || RelationGraphFinal;
-  // const newRGCoreInstance = Object.create(rgClass.prototype);
-  // const relationGraph = rgClass.apply(newRGCoreInstance, [this.options, listeners]);
-  const rgInstance =
-    props.relationGraphCore || new RelationGraphFinal(props.options, listeners)
+  const rgInstance = props.relationGraphCore || new RelationGraphFinal(props.options, getEventListeners(props))
+  rgInstance.setReactiveDataVue3(graphData, graph);
   rgInstance.setDom(seeksRelationGraph$.value)
   rgInstance.ready()
-  // if (this.jsonData) relationGraph.setJsonData(this.jsonData);
-  // this.relationGraph = rgInstance
-  relationGraph.value = rgInstance
-  screenfull.on('change', onFullscreen)
+  graphInstance$.value = rgInstance;
+  screenfull && screenfull.on && screenfull.on('change', onFullscreen)
   // console.log(relationGraph.value)
 })
 onBeforeUnmount(() => {
-  screenfull.off('change', onFullscreen)
+  screenfull && screenfull.off && screenfull.off('change', onFullscreen)
 })
 const onFullscreen = () => {
-  relationGraph.value!.fullscreen(screenfull.isFullscreen)
+  graphInstance$.value!.fullscreen(screenfull.isFullscreen)
 }
 defineExpose({
-  onFullscreen,
+  onFullscreen() {
+    onFullscreen();
+  },
   getInstance() {
-    return relationGraph.value!
+    return graphInstance$.value!
   },
-  setOptions(
-    options: RGOptions,
-    callback?: (graphInstance: RelationGraphInstance) => void
-  ) {
-    relationGraph.value!.setOptions(options, callback)
+  async setOptions(options: RGOptions, justUpdateOptionsValue = false) {
+    await graphInstance$.value!.setOptions(options, justUpdateOptionsValue)
   },
-  setJsonData(
+  async setJsonData(
     jsonData: RGJsonData,
     reLayout?: boolean | RGRefreshCallback,
     callback?: (graphInstance: RelationGraphInstance) => void
@@ -97,20 +88,11 @@ defineExpose({
       reLayout = true;
     }
     // console.log('setJsonData:', relationGraph.value)
-    relationGraph.value!.setJsonData(
-      jsonData,
-      reLayout,
-      (instance: RelationGraphInstance) => {
-        nextTick(() => {
-          // console.log('playShowEffect:', relationGraph.value)
-          instance.playShowEffect(() => {
-            if (callback) callback(instance)
-          })
-        })
-      }
-    )
+    await graphInstance$.value!.setJsonData(jsonData, true);
+    await graphInstance$.value!.playShowEffect()
+    if (callback) callback(graphInstance$.value!)
   },
-  appendJsonData(
+  async appendJsonData(
     jsonData: RGJsonData,
     reLayout?: boolean | RGRefreshCallback,
     callback?: (graphInstance: RelationGraphInstance) => void
@@ -119,85 +101,85 @@ defineExpose({
       callback = reLayout;
       reLayout = true;
     }
-    relationGraph.value!.appendJsonData(jsonData, reLayout, callback)
+    await graphInstance$.value!.appendJsonData(jsonData, true)
+    if (callback) callback(graphInstance$.value!)
   },
   setLayouter(layouterInstance: RGLayouter) {
-    relationGraph.value!.setLayouter(layouterInstance)
+    graphInstance$.value!.setLayouter(layouterInstance)
   },
   onGraphResize() {
-    relationGraph.value!.refreshNVAnalysisInfo()
+    graphInstance$.value!.refreshNVAnalysisInfo()
   },
   refresh() {
-    relationGraph.value!.refresh()
+    graphInstance$.value!.refresh()
   },
   focusRootNode() {
-    relationGraph.value!.focusRootNode()
+    graphInstance$.value!.focusRootNode()
   },
   focusNodeById(nodeId: string) {
-    return relationGraph.value!.focusNodeById(nodeId)
+    return graphInstance$.value!.focusNodeById(nodeId)
   },
   getNodeById(nodeId: string) {
-    return relationGraph.value!.getNodeById(nodeId)
+    return graphInstance$.value!.getNodeById(nodeId)
   },
   removeNodeById(nodeId: string) {
-    return relationGraph.value!.removeNodeById(nodeId)
+    return graphInstance$.value!.removeNodeById(nodeId)
   },
   getNodes() {
-    return relationGraph.value!.getNodes()
+    return graphInstance$.value!.getNodes()
   },
   getLinks() {
-    return relationGraph.value!.getLinks()
+    return graphInstance$.value!.getLinks()
   },
   getGraphJsonData() {
-    return relationGraph.value!.getGraphJsonData()
+    return graphInstance$.value!.getGraphJsonData()
   },
   getGraphJsonOptions() {
-    return relationGraph.value!.getGraphJsonOptions()
+    return graphInstance$.value!.getGraphJsonOptions()
   },
 })
 </script>
 <template>
-  <div
-    ref="seeksRelationGraph$"
-    :style="{ width: '100%', height: '100%' }"
-    style="box-sizing: border-box"
-  >
-    <template v-if="relationGraph && relationGraph.options">
-      <GraphDebugPanel v-if="relationGraph.options.showDebugPanel" />
-      <slot
-        v-if="relationGraph.options.allowShowMiniToolBar === true"
-        name="miniToolBar"
-      >
+  <div ref="seeksRelationGraph$" class="relation-graph" :style="{width: '100%',height : '100%'}" style="box-sizing:border-box;position: relative;">
+    <template v-if="graphInstance$ && graph.options">
+      <GraphDebugPanel v-if="graph.options.showDebugPanel" />
+      <slot v-if="graph.options.allowShowMiniToolBar===true" name="tool-bar">
         <GraphMiniToolBar />
       </slot>
-      <slot
-        v-if="relationGraph.options.allowShowMiniView === true"
-        name="miniViewPanel"
-      >
+      <slot v-if="graph.options.allowShowMiniView===true" name="mini-view">
         <GraphMiniView />
       </slot>
-      <slot name="graph-plug" :relation-graph="relationGraph" />
-      <RGCanvas v-if="relationGraph">
-        <template #node="{ node }">
-          <slot :node="node" :relation-graph="relationGraph" name="node" />
+      <slot name="graph-plug" />
+      <RGCanvas>
+        <template #node="{node}">
+          <slot :node="node" name="node" />
         </template>
-        <template #line="{ line, link }">
-          <slot
-            :line="line"
-            :link="link"
-            :relation-graph="relationGraph"
-            name="line"
-          />
+        <template #line="{line, link}">
+          <slot :line="line" :link="link" name="line" />
         </template>
         <template #canvas-plug>
-          <slot :relation-graph="relationGraph" name="canvas-plug" />
+          <slot name="canvas-plug" />
+        </template>
+        <template #node-expand-holder="{nodeProps, expandHolderPosition, expandButtonClass, color, expandOrCollapseNode}">
+          <slot
+              name="node-expand-holder"
+              :nodeProps="nodeProps"
+              :expandHolderPosition="expandHolderPosition"
+              :expandButtonClass="expandButtonClass"
+              :color="color"
+              :expandOrCollapseNode="expandOrCollapseNode"
+          />
         </template>
       </RGCanvas>
+      <GraphOperateStuff>
+        <template #node-template="{node}">
+          <slot name="node-template" :node="node" />
+        </template>
+      </GraphOperateStuff>
     </template>
   </div>
 </template>
-<style scoped>
-.xxxxxxxxx {
-  color: red;
-}
+<style lang="scss">
+@import "../../../../../relation-graph-vue2/src/core4vue/relation-graph.scss";
+@import "../../../../../relation-graph-vue2/src/core4vue/relation-graph-toolbar.scss";
 </style>

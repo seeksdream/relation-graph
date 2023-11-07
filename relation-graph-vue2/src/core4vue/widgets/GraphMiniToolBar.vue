@@ -1,87 +1,87 @@
 <template>
-  <div :style="{'margin-left':(relationGraph.options.viewELSize.width-50)+'px','margin-top':(relationGraph.options.viewELSize.height-260)/2+'px'}" class="c-mini-toolbar">
+  <div :style="{'margin-left':(options.viewELSize.width-50)+'px','margin-top':(options.viewELSize.height-260)/2+'px'}" class="c-mini-toolbar">
     <div class="c-mb-button" style="margin-top: 0px;" @click="relationGraph.fullscreen();">
       <svg class="rg-icon" aria-hidden="true"><use xlink:href="#icon-resize-"></use></svg>
-      <span class="c-mb-text">{{ relationGraph.options.fullscreen?'退出':'全屏' }}</span>
+      <span class="c-mb-text">{{ options.fullscreen?'退出':'全屏' }}</span>
     </div>
-    <div v-if="relationGraph.options.allowShowZoomMenu" class="c-mb-button" @click="relationGraph.zoom(20)">
+    <div v-if="options.allowShowZoomMenu" class="c-mb-button" @click="relationGraph.zoom(20)">
       <svg class="rg-icon" aria-hidden="true"><use xlink:href="#icon-fangda"></use></svg>
       <span class="c-mb-text">放大</span>
     </div>
-    <div v-if="relationGraph.options.allowShowZoomMenu" style="float:left;margin-top:0px;height:20px;width:40px;border-top:0px;border-bottom:0px;background-color: #ffffff;color: #262626;font-size: 10px;background-color: #efefef;text-align: center;line-height: 20px;" @click="printGraphJsonData">{{ relationGraph.options.canvasZoom }}%</div>
+    <div v-if="options.allowShowZoomMenu" style="float:left;margin-top:0px;height:20px;width:40px;border-top:0px;border-bottom:0px;background-color: #ffffff;color: #262626;font-size: 10px;background-color: #efefef;text-align: center;line-height: 20px;" @dblclick="zoomToFit">{{ options.canvasZoom }}%</div>
     <!--<div style="float:left;margin-top:0px;height:20px;width:40px;border-top:0px;border-bottom:0px;background-color: #ffffff;color: #262626;font-size: 10px;background-color: #efefef;text-align: center;line-height: 20px;">{{ hits }}</div>-->
-    <div v-if="relationGraph.options.allowShowZoomMenu" class="c-mb-button" style="margin-top:0px;" @click="relationGraph.zoom(-20)">
+    <div v-if="options.allowShowZoomMenu" class="c-mb-button" style="margin-top:0px;" @click="relationGraph.zoom(-20)">
       <svg class="rg-icon" aria-hidden="true"><use xlink:href="#icon-suoxiao"></use></svg>
       <span class="c-mb-text">缩小</span>
     </div>
-    <div v-if="relationGraph.options.layouts.length > 1" class="c-mb-button">
+    <div v-if="options.layouts.length > 1" class="c-mb-button">
       <svg class="rg-icon" aria-hidden="true"><use xlink:href="#icon-yuanquanfenxiang"></use></svg>
       <span class="c-mb-text">布局</span>
-      <div :style="{width:(relationGraph.options.layouts.length * 70 + 6)+'px','margin-left':(relationGraph.options.layouts.length * -70 - 5)+'px'}" class="c-mb-child-panel">
-        <div v-for="thisLayoutSetting in relationGraph.options.layouts" :key="thisLayoutSetting.label" class="c-mb-button c-mb-button-c" :class="{'c-mb-button-on':relationGraph.options.layoutLabel===thisLayoutSetting.label}" style="width: 70px;" @click="switchLayout(thisLayoutSetting)">
+      <div :style="{width:(options.layouts.length * 70 + 6)+'px','margin-left':(options.layouts.length * -70 - 5)+'px'}" class="c-mb-child-panel">
+        <div v-for="thisLayoutSetting in options.layouts" :key="thisLayoutSetting.label" class="c-mb-button c-mb-button-c" :class="{'c-mb-button-on':options.layoutLabel===thisLayoutSetting.label}" style="width: 70px;" @click="switchLayout(thisLayoutSetting)">
           <svg class="rg-icon" aria-hidden="true"><use xlink:href="#icon-yuanquanfenxiang"></use></svg>
           <span class="c-mb-text">{{ thisLayoutSetting.label }}</span>
         </div>
       </div>
     </div>
-    <div v-if="relationGraph.options.allowSwitchLineShape" class="c-mb-button">
+    <div v-if="options.allowSwitchLineShape" class="c-mb-button">
       <svg class="rg-icon" aria-hidden="true"><use xlink:href="#icon-hj2"></use></svg>
       <span class="c-mb-text">线条</span>
       <div class="c-mb-child-panel" style="width:256px;margin-left:-255px;">
-        <div :class="{'c-mb-button-on':relationGraph.options.defaultLineShape===1}" class="c-mb-button c-mb-button-c" style="width: 50px;" @click="relationGraph.setDefaultLineShape(1)">
+        <div :class="{'c-mb-button-on':options.defaultLineShape===1}" class="c-mb-button c-mb-button-c" style="width: 50px;" @click="relationGraph.setDefaultLineShape(1)">
           <svg class="rg-icon" aria-hidden="true"><use xlink:href="#icon-hj2"></use></svg>
           <span class="c-mb-text">直线</span>
         </div>
-        <div :class="{'c-mb-button-on':relationGraph.options.defaultLineShape===2}" class="c-mb-button c-mb-button-c" style="width: 50px;" @click="relationGraph.setDefaultLineShape(2)">
+        <div :class="{'c-mb-button-on':options.defaultLineShape===2}" class="c-mb-button c-mb-button-c" style="width: 50px;" @click="relationGraph.setDefaultLineShape(2)">
           <svg class="rg-icon" aria-hidden="true"><use xlink:href="#icon-lianjieliu"></use></svg>
           <span class="c-mb-text">简洁</span>
         </div>
-        <div :class="{'c-mb-button-on':relationGraph.options.defaultLineShape===6}" class="c-mb-button c-mb-button-c" style="width: 50px;" @click="relationGraph.setDefaultLineShape(6)">
+        <div :class="{'c-mb-button-on':options.defaultLineShape===6}" class="c-mb-button c-mb-button-c" style="width: 50px;" @click="relationGraph.setDefaultLineShape(6)">
           <svg class="rg-icon" aria-hidden="true"><use xlink:href="#icon-lianjieliu"></use></svg>
           <span class="c-mb-text">生动</span>
         </div>
-        <div :class="{'c-mb-button-on':relationGraph.options.defaultLineShape===5}" class="c-mb-button c-mb-button-c" style="width: 50px;" @click="relationGraph.setDefaultLineShape(5)">
+        <div :class="{'c-mb-button-on':options.defaultLineShape===5}" class="c-mb-button c-mb-button-c" style="width: 50px;" @click="relationGraph.setDefaultLineShape(5)">
           <svg class="rg-icon" aria-hidden="true"><use xlink:href="#icon-lianjieliu"></use></svg>
           <span class="c-mb-text">鱼尾</span>
         </div>
-        <div :class="{'c-mb-button-on':relationGraph.options.defaultLineShape===4}" class="c-mb-button c-mb-button-c" style="width: 50px;" @click="relationGraph.setDefaultLineShape(4)">
+        <div :class="{'c-mb-button-on':options.defaultLineShape===4}" class="c-mb-button c-mb-button-c" style="width: 50px;" @click="relationGraph.setDefaultLineShape(4)">
           <svg class="rg-icon" aria-hidden="true"><use xlink:href="#icon-hj2"></use></svg>
           <span class="c-mb-text">折线</span>
         </div>
       </div>
     </div>
-    <div v-if="relationGraph.options.allowSwitchJunctionPoint" class="c-mb-button">
+    <div v-if="options.allowSwitchJunctionPoint" class="c-mb-button">
       <svg class="rg-icon" aria-hidden="true"><use xlink:href="#icon-lianjie_connecting5"></use></svg>
       <span class="c-mb-text">连接点</span>
       <div class="c-mb-child-panel" style="width:206px;margin-left:-205px;">
-        <div :class="{'c-mb-button-on':relationGraph.options.defaultJunctionPoint==='border'}" class="c-mb-button c-mb-button-c" style="width: 50px;" @click="relationGraph.setDefaultJunctionPoint('border')">
+        <div :class="{'c-mb-button-on':options.defaultJunctionPoint==='border'}" class="c-mb-button c-mb-button-c" style="width: 50px;" @click="relationGraph.setDefaultJunctionPoint('border')">
           <svg class="rg-icon" aria-hidden="true"><use xlink:href="#icon-lianjie_connecting5"></use></svg>
           <span class="c-mb-text">边缘</span>
         </div>
-        <div :class="{'c-mb-button-on':relationGraph.options.defaultJunctionPoint==='ltrb'}" class="c-mb-button c-mb-button-c" style="width: 50px;" @click="relationGraph.setDefaultJunctionPoint('ltrb')">
+        <div :class="{'c-mb-button-on':options.defaultJunctionPoint==='ltrb'}" class="c-mb-button c-mb-button-c" style="width: 50px;" @click="relationGraph.setDefaultJunctionPoint('ltrb')">
           <svg class="rg-icon" aria-hidden="true"><use xlink:href="#icon-lianjie_connecting5"></use></svg>
           <span class="c-mb-text">四点</span>
         </div>
-        <div :class="{'c-mb-button-on':relationGraph.options.defaultJunctionPoint==='tb'}" class="c-mb-button c-mb-button-c" style="width: 50px;" @click="relationGraph.setDefaultJunctionPoint('tb')">
+        <div :class="{'c-mb-button-on':options.defaultJunctionPoint==='tb'}" class="c-mb-button c-mb-button-c" style="width: 50px;" @click="relationGraph.setDefaultJunctionPoint('tb')">
           <svg class="rg-icon" aria-hidden="true"><use xlink:href="#icon-lianjie_connecting5"></use></svg>
           <span class="c-mb-text">上下</span>
         </div>
-        <div :class="{'c-mb-button-on':relationGraph.options.defaultJunctionPoint==='lr'}" class="c-mb-button c-mb-button-c" style="width: 50px;" @click="relationGraph.setDefaultJunctionPoint('lr')">
+        <div :class="{'c-mb-button-on':options.defaultJunctionPoint==='lr'}" class="c-mb-button c-mb-button-c" style="width: 50px;" @click="relationGraph.setDefaultJunctionPoint('lr')">
           <svg class="rg-icon" aria-hidden="true"><use xlink:href="#icon-lianjie_connecting5"></use></svg>
           <span class="c-mb-text">左右</span>
         </div>
       </div>
     </div>
-    <div v-if="relationGraph.options.allowAutoLayoutIfSupport && relationGraph.options.isNeedShowAutoLayoutButton" :title="relationGraph.options.autoLayouting?'点击停止自动布局':'点击开始自动调整布局'" :class="{'c-mb-button-on':relationGraph.options.autoLayouting}" class="c-mb-button" @click="toggleAutoLayout">
-      <svg v-if="!relationGraph.options.autoLayouting" class="rg-icon" aria-hidden="true"><use xlink:href="#icon-zidong"></use></svg>
+    <div v-if="options.allowAutoLayoutIfSupport && options.isNeedShowAutoLayoutButton" :title="options.autoLayouting?'点击停止自动布局':'点击开始自动调整布局'" :class="{'c-mb-button-on':options.autoLayouting}" class="c-mb-button" @click="toggleAutoLayout">
+      <svg v-if="!options.autoLayouting" class="rg-icon" aria-hidden="true"><use xlink:href="#icon-zidong"></use></svg>
       <svg v-else class="c-loading-icon rg-icon" aria-hidden="true"><use xlink:href="#icon-lianjiezhong"></use></svg>
       <span class="c-mb-text">自动</span>
     </div>
-    <div v-if="relationGraph.options.allowShowRefreshButton" class="c-mb-button" @click="refresh">
+    <div v-if="options.allowShowRefreshButton" class="c-mb-button" @click="refresh">
       <svg class="rg-icon" aria-hidden="true"><use xlink:href="#icon-ico_reset"></use></svg>
       <span class="c-mb-text">刷新</span>
     </div>
-    <div v-if="relationGraph.options.allowShowDownloadButton" class="c-mb-button">
+    <div v-if="options.allowShowDownloadButton" class="c-mb-button">
       <svg class="rg-icon" aria-hidden="true"><use xlink:href="#icon-ziyuan"></use></svg>
       <span class="c-mb-text">下载</span>
       <div :style="{width:downloadPanelWidth+'px','margin-left':(downloadPanelWidth*-1)+'px'}" class="c-mb-child-panel">
@@ -102,19 +102,11 @@
   </div>
 </template>
 
-<script>
-import { switchLayout } from '../../models/RGLayouter';
+<script lang="ts">
 import { devLog } from '../../utils/RGCommon';
 
 export default {
   name: 'GraphMiniToolBar',
-  props: {
-    relationGraph: {
-      mustUseProp: true,
-      default: () => { return {}; },
-      type: Object
-    }
-  },
   data() {
     return {
       height: 275,
@@ -122,11 +114,20 @@ export default {
       downloadPanelWidth: 106
     };
   },
+  inject: ['graph'],
+  computed: {
+    relationGraph() {
+      return this.graph.instance;
+    },
+    options() {
+      return this.graph.options;
+    }
+  },
   mounted() {
     if (this.relationGraph.listeners.onDownloadExcel !== null) {
       this.downloadPanelWidth += 50;
     }
-    if (this.relationGraph.options.layouts.length > 1) {
+    if (this.options.layouts.length > 1) {
       this.height -= 40;
     }
   },
@@ -136,26 +137,20 @@ export default {
     },
     switchLayout(layoutConfig) {
       devLog('change layout:', layoutConfig);
-      switchLayout(layoutConfig, this.relationGraph.options);
-      this.refresh();
+      this.relationGraph.switchLayout(layoutConfig);
     },
     toggleAutoLayout() {
-      // devLog('this.relationGraph.options.autoLayouting', this.relationGraph.options.autoLayouting)
+      // devLog('this.options.autoLayouting', this.options.autoLayouting)
       this.relationGraph.startAutoLayout();
     },
     onDownloadExcel() {
-      // devLog('this.relationGraph.options.autoLayouting', this.relationGraph.options.autoLayouting)
+      // devLog('this.options.autoLayouting', this.options.autoLayouting)
       this.relationGraph.listeners.onDownloadExcel();
     },
-    printGraphJsonData() {
-      this.hits++;
-      setTimeout(() => {
-        if (this.hits > 0) this.hits--;
-      }, 2000);
-      if (this.hits > 5) {
-        this.hits = 0;
-        this.relationGraph.printGraphJsonData();
-      }
+    async zoomToFit() {
+      await this.relationGraph.setZoom(100);
+      await this.relationGraph.moveToCenter();
+      await this.relationGraph.zoomToFit();
     }
   }
 };

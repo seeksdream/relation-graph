@@ -1,26 +1,34 @@
 <template>
-  <g v-if="linkProps.isHide !== true && isAllowShowNode(linkProps.fromNode) && isAllowShowNode(linkProps.toNode)" :class="[relationGraph.options.checkedLineId==linkProps.seeks_id?'c-rg-link-checked':'']" ref="seeksRGLink" transform="translate(0,0)">
+  <g
+      v-if="linkProps.isHide !== true && isAllowShowNode(linkProps.fromNode) && isAllowShowNode(linkProps.toNode)"
+      :class="[options.checkedLineId==linkProps.seeks_id?'c-rg-link-checked':'']"
+      ref="seeksRGLink"
+      transform="translate(0,0)"
+      class="rel-link-peel"
+      :data-id="linkProps.seeks_id"
+  >
     <template v-for="(thisRelation, ri) in linkProps.relations">
-      <slot name="line" :line="thisRelation" :relation-index="ri">
-        <RGLineTextByPath v-if="(relationGraph.options.lineUseTextPath || thisRelation.useTextPath) && thisRelation.isHide === false" :key="'l-'+thisRelation.id" :relation-graph="relationGraph" :link="linkProps" :relation="thisRelation" :relation-index="ri" />
-        <RGLineSmart v-else-if="thisRelation.isHide === false" :key="'l-'+thisRelation.id" :relation-graph="relationGraph" :link="linkProps" :relation="thisRelation" :relation-index="ri" />
+      <template v-if="options.oldVueVersion && !options.ovUseLineSlot">
+        <RGLineTextByPath v-if="(options.lineUseTextPath || thisRelation.useTextPath) && thisRelation.isHide === false" :key="'l-'+thisRelation.id" :link="linkProps" :relation="thisRelation" :relation-index="ri" />
+        <RGLineSmart v-else-if="thisRelation.isHide === false" :key="'l-'+thisRelation.id" :link="linkProps" :relation="thisRelation" :relation-index="ri" />
+      </template>
+      <slot v-else name="line" :line="thisRelation" :relation-index="ri">
+        <RGLineTextByPath v-if="(options.lineUseTextPath || thisRelation.useTextPath) && thisRelation.isHide === false" :key="'l-'+thisRelation.id" :link="linkProps" :relation="thisRelation" :relation-index="ri" />
+        <RGLineSmart v-else-if="thisRelation.isHide === false" :key="'l-'+thisRelation.id" :link="linkProps" :relation="thisRelation" :relation-index="ri" />
       </slot>
     </template>
   </g>
 </template>
 
-<script>
+<script lang="ts">
 import RGLineSmart from './RGLineSmart';
 import RGLineTextByPath from './RGLineTextByPath';
+import RGNodesAnalytic from "../utils/RGNodesAnalytic";
+
 export default {
   name: 'SeeksRGLink',
   components: { RGLineSmart, RGLineTextByPath },
   props: {
-    relationGraph: {
-      mustUseProp: true,
-      default: () => { return {}; },
-      type: Object
-    },
     linkProps: {
       mustUseProp: true,
       default: () => { return {}; },
@@ -32,6 +40,15 @@ export default {
       is_flashing: false
     };
   },
+  inject: ['graph'],
+  computed: {
+    options() {
+      return this.graph.options;
+    },
+    relationGraph() {
+      return this.graph.instance;
+    }
+  },
   show() {
     this.isShow = true;
   },
@@ -40,16 +57,8 @@ export default {
   mounted() {
   },
   methods: {
-    onClick(line, e) {
-      // RGStore.commit('setCurrentLineId', this.lineProps.id)
-      this.relationGraph.onLineClick(line, this.linkProps, e);
-    },
     isAllowShowNode(thisNode) {
-      const _r = thisNode.isShow !== false && thisNode.isHide !== true && (!thisNode.lot.parent || this.isAllowShowNode(thisNode.lot.parent) === true);
-      return _r;
-    },
-    flash() {
-
+      return RGNodesAnalytic.isAllowShowNode(thisNode);
     }
   }
 };

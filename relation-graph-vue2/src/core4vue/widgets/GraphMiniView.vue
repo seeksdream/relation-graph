@@ -6,7 +6,7 @@
           height:miniViewHeight()+'px'
         }"
         class="c-mini-canvas">
-      <template v-for="thisNode in relationGraph.graphData.nodes">
+      <template v-for="thisNode in graphData.nodes">
         <div
             v-if="isAllowShowNode(thisNode)"
              :key="thisNode.id"
@@ -23,17 +23,10 @@
   </div>
 </template>
 
-<script>
-import RGGraphMath from '../../utils/RGGraphMath';
+<script lang="ts">
+import {RGNodesAnalytic} from "../../utils/RGNodesAnalytic";
 export default {
   name: 'GraphMiniView',
-  props: {
-    relationGraph: {
-      mustUseProp: true,
-      default: () => { return {}; },
-      type: Object
-    }
-  },
   data() {
     return {
       viewWidth: 100,
@@ -45,6 +38,15 @@ export default {
       zoom: 1
     };
   },
+  inject: ['graph', 'graphData'],
+  computed: {
+    relationGraph() {
+      return this.graph.instance;
+    },
+    options() {
+      return this.graph.options;
+    }
+  },
   mounted() {
   },
   methods: {
@@ -53,8 +55,8 @@ export default {
       let maxX = -9999;
       let minY = 9999;
       let maxY = -9999;
-      for (let i = 0; i < this.relationGraph.graphData.nodes.length; i++) {
-        const thisNode = this.relationGraph.graphData.nodes[i];
+      for (let i = 0; i < this.graphData.nodes.length; i++) {
+        const thisNode = this.graphData.nodes[i];
         if (thisNode.x < minX) {
           minX = thisNode.x;
         }
@@ -76,11 +78,11 @@ export default {
       return this.viewHeight;
     },
     getPositionData() {
-      const _r = this.viewWidth / this.relationGraph.options.canvasNVInfo.width;
-      const _width = this.relationGraph.options.viewNVInfo.width * _r;
-      const _height = this.relationGraph.options.viewNVInfo.height * _r;
-      let _view_x = (this.relationGraph.options.viewNVInfo.x - this.relationGraph.options.canvasNVInfo.x) * _r * (this.relationGraph.options.canvasZoom / 100);
-      let _view_y = (this.relationGraph.options.viewNVInfo.y - this.relationGraph.options.canvasNVInfo.y) * _r * (this.relationGraph.options.canvasZoom / 100);
+      const _r = this.viewWidth / this.options.canvasNVInfo.width;
+      const _width = this.options.viewNVInfo.width * _r;
+      const _height = this.options.viewNVInfo.height * _r;
+      let _view_x = (this.options.viewNVInfo.x - this.options.canvasNVInfo.x) * _r * (this.options.canvasZoom / 100);
+      let _view_y = (this.options.viewNVInfo.y - this.options.canvasNVInfo.y) * _r * (this.options.canvasZoom / 100);
       _view_x = _view_x * 100 / _width;
       _view_y = _view_y * 100 / _width;
       const style = {
@@ -92,7 +94,7 @@ export default {
       return style;
     },
     isAllowShowNode(nodeData) {
-      return RGGraphMath.isAllowShowNode(nodeData);
+      return RGNodesAnalytic.isAllowShowNode(nodeData);
     }
   }
 };

@@ -1,23 +1,18 @@
 <template>
   <path
-      :id="relationGraph.options.instanceId + '-' + link.seeks_id + '-' + relationIndex"
+      :id="options.instanceId + '-' + link.seeks_id + '-' + relationIndex"
       :d="pathData"
-      :stroke="checked ? relationGraph.options.checkedLineColor : (relation.color?relation.color:relationGraph.options.defaultLineColor)"
-      :style="{'opacity': relation.opacity, 'stroke-width': (relation.lineWidth?relation.lineWidth:relationGraph.options.defaultLineWidth) + 'px'}"
+      :stroke="(relation.color?relation.color:options.defaultLineColor)"
+      :style="{'opacity': relation.opacity, 'stroke-width': (relation.lineWidth?relation.lineWidth:options.defaultLineWidth) + 'px'}"
       :marker-start="relation.showStartArrow && relationGraph.getArrow(relation, link, true)"
       :marker-end="relation.showEndArrow && relationGraph.getArrow(relation, link, false)"
-      :class="[relation.styleClass, checked?'c-rg-line-checked':'']"
+      :class="['c-rg-line-path', relation.styleClass, checked?'c-rg-line-checked':'']"
       fill="none" />
 </template>
-<script>
+<script lang="ts">
 export default {
   name: 'SeeksRGLink',
   props: {
-    relationGraph: {
-      mustUseProp: true,
-      default: () => { return {}; },
-      type: Object
-    },
     link: {
       mustUseProp: true,
       default: () => { return {}; },
@@ -34,9 +29,10 @@ export default {
       type: Number
     }
   },
+  inject: ['graph'],
   computed: {
     checked() {
-      return this.link.seeks_id === this.relationGraph.options.checkedLineId;
+      return this.link.seeks_id === this.options.checkedLineId;
     },
     pathData() {
       const { path, textPosition } = this.relationGraph.createLinePath(
@@ -45,6 +41,12 @@ export default {
         this.relationIndex
       );
       return path;
+    },
+    options() {
+      return this.graph.options;
+    },
+    relationGraph() {
+      return this.graph.instance;
     }
   },
   data() {

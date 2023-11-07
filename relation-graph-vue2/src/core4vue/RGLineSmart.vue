@@ -2,53 +2,47 @@
   <g>
     <!-- 常规方式 -->
     <path
-      :d="pathData"
-      :class="['c-rg-line', relation.styleClass, checked ? 'c-rg-line-checked' : '']"
+      :d="pathData.path"
+      class="c-rg-line"
+      :class="[
+            relation.styleClass,
+            relation.dashType ? ('rg-line-dashtype-' + relation.dashType) : undefined,
+            relation.animation ? ('rg-line-anm-' + relation.animation) : undefined,
+            checked ? 'c-rg-line-checked' : undefined
+        ]"
       :stroke="
-        checked
-          ? relationGraph.options.checkedLineColor
-          : relation.color
-          ? relation.color
-          : relationGraph.options.defaultLineColor
+        (relation.color?relation.color:options.defaultLineColor)
       "
       :style="{
         'opacity': relation.opacity,
         'stroke-width':
           (relation.lineWidth
             ? relation.lineWidth
-            : relationGraph.options.defaultLineWidth) + 'px',
+            : options.defaultLineWidth) + 'px',
       }"
-      :marker-start="
-        relation.showStartArrow && relationGraph.getArrow(relation, link, true)
-      "
-      :marker-end="
-        relation.showEndArrow && relationGraph.getArrow(relation, link, false)
-      "
+      :marker-start="showStartArrow"
+      :marker-end="showEndArrow"
       fill="none"
+      @touchstart.stop="onClick(relation, $event)"
       @click="onClick(relation, $event)"
     />
     <g
       v-if="
-        relationGraph.options.defaultShowLineLabel &&
-        relationGraph.options.canvasZoom > 40
+        options.defaultShowLineLabel &&
+        options.canvasZoom > 40
       "
-      :transform="textTransform"
+      :transform="pathData.textTransform"
     >
       <text
         :key="'t-' + relation.seeks_id"
-        :x="0"
-        :y="0"
+        :x="relation.textOffset_x || options.defaultLineTextOffset_x || 0"
+        :y="relation.textOffset_y || options.defaultLineTextOffset_y || 10"
         :style="{
           opacity: relation.opacity,
-          fill: checked
-            ? relationGraph.options.checkedLineColor
-            : relation.fontColor
-            ? relation.fontColor
-            : relation.color
-            ? relation.color
-            : undefined,
+          fill: (relation.fontColor?relation.fontColor:(options.defaultLineFontColor ? options.defaultLineFontColor : (relation.color?relation.color:options.defaultLineColor)))
         }"
         class="c-rg-line-text"
+        @touchstart.stop="onClick(relation, $event)"
         @click="onClick(relation, $event)"
       >
         {{ relation.text }}
@@ -57,17 +51,12 @@
   </g>
 </template>
 
-<script>
+<script lang="ts">
+import {devLog} from "../utils/RGCommon";
+
 export default {
   name: 'SeeksRGLine',
   props: {
-    relationGraph: {
-      mustUseProp: true,
-      default: () => {
-        return {};
-      },
-      type: Object,
-    },
     link: {
       mustUseProp: true,
       default: () => {
@@ -95,31 +84,50 @@ export default {
       is_flashing: false,
     };
   },
+  inject: ['graph'],
   computed: {
     checked() {
-      return this.link.seeks_id === this.relationGraph.options.checkedLineId;
+      return this.link.seeks_id === this.options.checkedLineId;
+    },
+    showStartArrow() {
+      return this.relation.showStartArrow && this.relationGraph.getArrow(this.relation, this.link, true);
+    },
+    showEndArrow() {
+      return this.relation.showEndArrow && this.relationGraph.getArrow(this.relation, this.link, false);
     },
     pathData() {
-      const { path, textPosition } = this.relationGraph.createLinePath(
-        this.link,
-        this.relation,
-        this.relationIndex
-      );
-      return path;
+      try {
+        const { path, textPosition } = this.relationGraph.createLinePath(
+          this.link,
+          this.relation,
+          this.relationIndex
+        );
+        let textTransform = {}
+        try {
+          textTransform = this.relationGraph.getTextTransform(
+              this.relation,
+              textPosition.x,
+              textPosition.y,
+              textPosition.rotate
+          )
+        } catch (e) {
+          devLog(e);
+        }
+        return {
+          path,
+          textTransform
+        };
+      } catch (e) {
+        devLog(e);
+      }
+      return {path:null, textTransform: null};
     },
-    textTransform() {
-      const { path, textPosition } = this.relationGraph.createLinePath(
-        this.link,
-        this.relation,
-        this.relationIndex
-      );
-      return this.relationGraph.getTextTransform(
-        this.relation,
-        textPosition.x,
-        textPosition.y,
-        textPosition.rotate
-      )
+    options() {
+      return this.graph.options;
     },
+    relationGraph() {
+      return this.graph.instance;
+    }
   },
   show() {
     this.isShow = true;
@@ -129,80 +137,10 @@ export default {
     onClick(line, e) {
       // RGStore.commit('setCurrentLineId', this.lineProps.id)
       this.relationGraph.onLineClick(line, this.link, e);
-    },
-    isAllowShowNode(thisNode) {
-      const _r =
-        thisNode.isShow !== false &&
-        thisNode.isHide !== true &&
-        (!thisNode.lot.parent ||
-          this.isAllowShowNode(thisNode.lot.parent, false) === true);
-      return _r;
-    },
-  },
+    }
+  }
 };
 </script>
 
 <style scoped>
-/*.RGLine-enter-active {*/
-/*transition: all .3s ease;*/
-/*}*/
-/*.RGLine-leave-active {*/
-/*transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);*/
-/*}*/
-.c-rg-line-text {
-  fill: #888888;
-  font-size: 12px;
-}
-.c-rg-line {
-  z-index: 1000;
-  fill-rule: nonzero;
-  /*marker-end: url('#arrow');*/
-  /* firefox bug fix - won't rotate at 90deg angles */
-  /*-moz-transform: rotate(-89deg) translateX(-190px);*/
-  /*animation-timing-function:linear;*/
-  /*animation: ACTRGLineInit 1s;*/
-}
-.c-rg-line-tool {
-  stroke-dasharray: 5, 5, 5;
-}
-.c-rg-line-flash {
-  /* firefox bug fix - won't rotate at 90deg angles */
-  -moz-transform: rotate(-89deg) translateX(-190px);
-  animation-timing-function: linear;
-  animation: ACTRGLineChecked 10s;
-}
-@keyframes ACTRGLineInit {
-  from {
-    stroke-dashoffset: 10px;
-    stroke-dasharray: 20, 20, 20;
-  }
-
-  to {
-    stroke-dashoffset: 0;
-    stroke-dasharray: 0, 0, 0;
-  }
-}
-@keyframes ACTRGLineChecked {
-  from {
-    stroke-dashoffset: 352px;
-  }
-
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-.c-rg-line-checked {
-  /*stroke: var(--stroke);*/
-  /*marker-end: var(--markerEndChecked) !important;*/
-  stroke-width: 2px;
-  stroke-dasharray: 5, 5, 5;
-  stroke-dashoffset: 3px;
-  stroke-linecap: butt;
-  /*stroke: #FD8B37;*/
-  stroke-linejoin: bevel;
-  /* firefox bug fix - won't rotate at 90deg angles */
-  /*-moz-transform: rotate(-89deg) translateX(-190px);*/
-  animation-timing-function: linear;
-  animation: ACTRGLineChecked 10s;
-}
 </style>

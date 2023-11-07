@@ -21,7 +21,7 @@ export default defineConfig({
       // the proper extensions will be added
       fileName: 'relation-graph'
     },
-    outDir: resolve(__dirname, '../vue3'),
+    outDir: resolve(__dirname, '../lib/vue3'),
     emptyOutDir: false,
     rollupOptions: {
       // 确保外部化处理那些你不想打包进库的依赖
@@ -30,7 +30,9 @@ export default defineConfig({
         // 在 UMD 构建模式下为这些外部化的依赖提供一个全局变量
         globals: {
           vue: 'Vue',
-        },
+          screenfull: 'screenfull',
+          html2canvas: 'html2canvas'
+        }
       },
     },
   },
