@@ -6,11 +6,10 @@
 
 
 
-- **relation-graph** 支持Vue2、Vue3、React、PC & 移动端 的关系数据展示组件，支持通过【插槽】让使用者用【html+css编写的vue/react组件】来完全自定义图形元素，使用css样式/动画来完全自定义样式效果。让你快速构建可交互的复杂图形应用。
-
-- **relation-graph** is a relationship graph display component that supports Vue2, Vue3, React.
-Allowing you to fully customize the graphical elements using HTML/CSS and Vue or React components through slots.
-
+- **relation-graph** 是支持Vue2、Vue3、React的关系数据展示组件，支持通过【插槽】让使用者使用"普通HTML元素、Vue组件、React组件"来完全自定义图形元素，并提供实用的API接口让使用者轻松构建可交互的图形应用。<br />
+-  除了典型的关系数据展示功能，relation-graph还支持作为一个画板来使用，你可以在画板上放置任何内容，只需要为想要连接的元素设置id，同时定义"元素连线（Element Lines）"即可。轻松实现一个可任意创建连线、可缩放与拖动、支持通过API轻松实现动态交互的画板。
+- **relation-graph** is a relationship data display component that supports Vue 2, Vue 3, and React. It enables users to fully customize graphical elements using "common HTML elements, Vue components, React components" through slots, and provides practical API interfaces to facilitate the development of interactive graphical applications."<br />
+-  In addition to the typical relationship data display functionality, the relation-graph also supports being used as a drawing board. You can place any content on the drawing board, simply by setting an id for the elements you want to connect, and defining "element lines." This allows for the easy creation of a drawing board that supports the creation of arbitrary connections, zooming and dragging, and dynamic interactions through the API.
 ### Docs & Examples  文档 & 示例：
 
 - [https://relation-graph.com](https://relation-graph.com)  （国内用户，无需科学上网）
