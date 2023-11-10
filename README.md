@@ -36,8 +36,13 @@ npm install --save relation-graph
 ```vue
 <template>
   <div>
-    <div style="height:calc(100vh - 60px);">
-      <RelationGraph ref="graphRef" :options="graphOptions" :on-node-click="onNodeClick" :on-line-click="onLineClick" />
+    <div style="height:calc(100vh - 60px);"><!-- The size of the parent element determines the size of the graph. -->
+      <RelationGraph
+        ref="graphRef"
+        :options="graphOptions"
+        :on-node-click="onNodeClick"
+        :on-line-click="onLineClick"
+      />
     </div>
   </div>
 </template>
@@ -51,10 +56,11 @@ export default {
   data() {
     return {
       graphOptions: {
-        allowSwitchLineShape: true,
-        allowSwitchJunctionPoint: true,
         defaultJunctionPoint: 'border'
-        // Here you can refer to the options in "Graph" for setting: https://seeksdream.github.io/#/docs/graph
+        // Here you can refer to the options in "Graph" for setting: 
+        // https://www.relation-graph.com/#/docs/graph
+        // You can also use this GUI tool to generate configuration content.
+        // https://www.relation-graph.com/#/options-tools
       }
     }
   },
@@ -66,6 +72,8 @@ export default {
       const jsonData = {
         rootId: 'a',
         nodes: [
+          // You can also use slots directly without defining these cumbersome attributes and use CSS styles to define the appearance of your nodes.
+          // Example of using slots: https://www.relation-graph.com/#/demo/node-style
           { id: 'a', text: 'A', borderColor: 'yellow' },
           { id: 'b', text: 'B', color: '#43a2f1', fontColor: 'yellow' },
           { id: 'c', text: 'C', nodeShape: 1, width: 80, height: 60 },
@@ -78,9 +86,10 @@ export default {
           { from: 'b', to: 'e', color: '#67C23A' }
         ]
       }
-      // The node and link in the above data can refer to the options in "Node" and "Link & Line" for configuration.
-      // Node: https://seeksdream.github.io/#/docs/node
-      // Link & Line: https://seeksdream.github.io/#/docs/link
+      // The node and line in the above data can refer to the options in "Node" and "Link & Line" for configuration.
+      // Node: https://www.relation-graph.com/#/docs/node
+      // Link & Line: https://www.relation-graph.com/#/docs/link
+      
       this.$refs.graphRef.setJsonData(jsonData, (graphInstance) => {
         // Called when the relation-graph is completed
       });
