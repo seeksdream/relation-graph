@@ -38,10 +38,10 @@ npm install --save relation-graph
   <div>
     <div style="height:calc(100vh - 60px);"><!-- The size of the parent element determines the size of the graph. -->
       <RelationGraph
-        ref="graphRef"
-        :options="graphOptions"
-        :on-node-click="onNodeClick"
-        :on-line-click="onLineClick"
+              ref="graphRef"
+              :options="graphOptions"
+              :on-node-click="onNodeClick"
+              :on-line-click="onLineClick"
       />
     </div>
   </div>
@@ -89,7 +89,7 @@ export default {
       // The node and line in the above data can refer to the options in "Node" and "Link & Line" for configuration.
       // Node: https://www.relation-graph.com/#/docs/node
       // Link & Line: https://www.relation-graph.com/#/docs/link
-      
+
       this.$refs.graphRef.setJsonData(jsonData, (graphInstance) => {
         // Called when the relation-graph is completed
       });
@@ -119,13 +119,13 @@ export default {
 
 ### Example Projects  完整的示例代码：
 
-- The complete Vue2 sample project: / Vue3完整小示例: 
+- The complete Vue2 sample project: / Vue3完整小示例:
 - https://github.com/seeksdream/relation-graph-vue3-demo
 
-- The complete Vue3 sample project: / React完整小示例: 
+- The complete Vue3 sample project: / React完整小示例:
 - https://github.com/seeksdream/relation-graph-react-demo
 
-- The complete React sample project: / vue2完整小示例: 
+- The complete React sample project: / vue2完整小示例:
 - https://github.com/seeksdream/relation-graph-vue2-demo
 
 
@@ -137,7 +137,7 @@ export default {
 
 ![relation-graph](doc/relation-graph-images-m.png)
 
-![center-层级距离设置](doc/demo-images/distance_coefficient.gif) 
+![center-层级距离设置](doc/demo-images/distance_coefficient.gif)
 ![力学布局(force)](doc/demo-images/layout-force.gif)
 ![节点展开/收缩的用法](doc/demo-images/adv-expand.gif)
 ![节点筛选 & 关系筛选](doc/demo-images/adv-data-filter.gif)
@@ -164,7 +164,7 @@ export default {
 
 - [https://relation-graph.github.io](https://relation-graph.github.io)（For regions outside of China）
 
-### Contact me  与我联系： 
+### Contact me  与我联系：
 
 - 我的QQ：3235808353
 - My WhatsApp:

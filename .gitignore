@@ -8,7 +8,7 @@ yarn-error.log*
 tests/**/coverage/
 tests/e2e/reports
 selenium-debug.log
-
+**/node_modules/
 # Editor directories and files
 .idea
 .vscode
@@ -24,3 +24,16 @@ syncSrc.sh
 dist/
 lib/
 doc-site/
+
+platforms/vue2/types
+platforms/vue3/types
+platforms/react/types
+platforms/vue2/README.md
+platforms/vue3/README.md
+platforms/react/README.md
+platforms/vue2/LICENSE
+platforms/vue3/LICENSE
+platforms/react/LICENSE
+platforms/vue2/relation-graph.*
+platforms/vue3/relation-graph.*
+platforms/react/relation-graph.*
