@@ -1,0 +1,1208 @@
+{
+  "code": 0,
+  "msg": "成功",
+  "data": {
+    "中游": [
+      {
+        "id": "无人机_47",
+        "text": "无人机生产制造",
+        "rootId": "无人机_0",
+        "rootName": "无人机",
+        "canClick": true,
+        "children": [
+          {
+            "id": "无人机_75",
+            "text": "无人机整机制造",
+            "rootId": "无人机_0",
+            "rootName": "无人机",
+            "canClick": true,
+            "children": [
+              {
+                "id": "无人机_90",
+                "text": "结构布局",
+                "rootId": "无人机_0",
+                "rootName": "无人机",
+                "canClick": false,
+                "children": [
+                  {
+                    "id": "无人机_92",
+                    "text": "vtol",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  },
+                  {
+                    "id": "无人机_91",
+                    "text": "固定翼无人机",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "无人机_76",
+                "text": "军用无人机",
+                "rootId": "无人机_0",
+                "rootName": "无人机",
+                "canClick": true,
+                "children": [
+                  {
+                    "id": "无人机_79",
+                    "text": "通讯与电战无人机",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  },
+                  {
+                    "id": "无人机_78",
+                    "text": "攻击无人机",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  },
+                  {
+                    "id": "无人机_80",
+                    "text": "察打一体无人机",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  },
+                  {
+                    "id": "无人机_77",
+                    "text": "侦察无人机",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  },
+                  {
+                    "id": "无人机_81",
+                    "text": "其他辅助无人机",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "无人机_82",
+                "text": "民用无人机",
+                "rootId": "无人机_0",
+                "rootName": "无人机",
+                "canClick": true,
+                "children": [
+                  {
+                    "id": "无人机_88",
+                    "text": "物流无人机",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  },
+                  {
+                    "id": "无人机_89",
+                    "text": "科研遥感无人机",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  },
+                  {
+                    "id": "无人机_85",
+                    "text": "测绘无人机",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  },
+                  {
+                    "id": "无人机_87",
+                    "text": "消防无人机",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  },
+                  {
+                    "id": "无人机_83",
+                    "text": "农保无人机",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  },
+                  {
+                    "id": "无人机_84",
+                    "text": "巡检无人机",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  },
+                  {
+                    "id": "无人机_86",
+                    "text": "娱乐观光无人机",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "1无人机_48",
+            "text": "无人分系统制造",
+            "rootId": "无人机_0",
+            "rootName": "无人机",
+            "canClick": true,
+            "children": [
+              {
+                "id": "1无人机_49",
+                "text": "动力系统",
+                "rootId": "无人机_0",
+                "rootName": "无人机",
+                "canClick": true,
+                "children": [
+                  {
+                    "id": "1无人机_50",
+                    "text": "喷气发动机",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  },
+                  {
+                    "id": "1无人机_51",
+                    "text": "活塞发动机",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "无人机_48",
+            "text": "无人分系统制造",
+            "rootId": "无人机_0",
+            "rootName": "无人机",
+            "canClick": true,
+            "children": [
+              {
+                "id": "无人机_49",
+                "text": "动力系统",
+                "rootId": "无人机_0",
+                "rootName": "无人机",
+                "canClick": true,
+                "children": [
+                  {
+                    "id": "无人机_50",
+                    "text": "喷气发动机",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  },
+                  {
+                    "id": "无人机_51",
+                    "text": "活塞发动机",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "无人机_52",
+                "text": "飞行保障系统",
+                "rootId": "无人机_0",
+                "rootName": "无人机",
+                "canClick": true,
+                "children": [
+                  {
+                    "id": "无人机_53",
+                    "text": "电源系统",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  },
+                  {
+                    "id": "无人机_54",
+                    "text": "液压系统",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  },
+                  {
+                    "id": "无人机_55",
+                    "text": "燃油系统",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  },
+                  {
+                    "id": "无人机_56",
+                    "text": "环境控制系统",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  },
+                  {
+                    "id": "无人机_57",
+                    "text": "机轮刹车系统",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "无人机_58",
+                "text": "航空电子系统",
+                "rootId": "无人机_0",
+                "rootName": "无人机",
+                "canClick": true,
+                "children": [
+                  {
+                    "id": "无人机_67",
+                    "text": "数据处理",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  },
+                  {
+                    "id": "无人机_70",
+                    "text": "电子对抗",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  },
+                  {
+                    "id": "无人机_64",
+                    "text": "数据链路",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  },
+                  {
+                    "id": "无人机_61",
+                    "text": "机载导航系统",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  },
+                  {
+                    "id": "无人机_68",
+                    "text": "任务计算",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  },
+                  {
+                    "id": "无人机_60",
+                    "text": "飞行控制系统",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  },
+                  {
+                    "id": "无人机_62",
+                    "text": "雷达系统",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  },
+                  {
+                    "id": "无人机_59",
+                    "text": "机载通信系统",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  },
+                  {
+                    "id": "无人机_65",
+                    "text": "目标识别",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  },
+                  {
+                    "id": "无人机_69",
+                    "text": "武器制导",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  },
+                  {
+                    "id": "无人机_63",
+                    "text": "光电系统",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  },
+                  {
+                    "id": "无人机_66",
+                    "text": "告警系统",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "无人机_71",
+                "text": "地面控制系统（地面站）",
+                "rootId": "无人机_0",
+                "rootName": "无人机",
+                "canClick": true,
+                "children": [
+                  {
+                    "id": "无人机_73",
+                    "text": "遥控台",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  },
+                  {
+                    "id": "无人机_74",
+                    "text": "显示控制系统",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  },
+                  {
+                    "id": "无人机_72",
+                    "text": "信号中继系统",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "21无人机_48",
+            "text": "无人分系统制造",
+            "rootId": "无人机_0",
+            "rootName": "无人机",
+            "canClick": true,
+            "children": [
+              {
+                "id": "21无人机_49",
+                "text": "动力系统",
+                "rootId": "无人机_0",
+                "rootName": "无人机",
+                "canClick": true,
+                "children": [
+                  {
+                    "id": "21无人机_50",
+                    "text": "喷气发动机",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  },
+                  {
+                    "id": "21无人机_51",
+                    "text": "活塞发动机",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "下游": [
+      {
+        "id": "无人机_93",
+        "text": "无人机应用服务",
+        "rootId": "无人机_0",
+        "rootName": "无人机",
+        "canClick": true,
+        "children": [
+          {
+            "id": "无人机_107",
+            "text": "反无人机系统",
+            "rootId": "无人机_0",
+            "rootName": "无人机",
+            "canClick": true,
+            "children": [
+              {
+                "id": "无人机_112",
+                "text": "攻击无人机",
+                "rootId": "无人机_0",
+                "rootName": "无人机",
+                "canClick": true,
+                "children": [
+                  {
+                    "id": "无人机_114",
+                    "text": "飞弹杀伤",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  },
+                  {
+                    "id": "无人机_113",
+                    "text": "激光杀伤",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "无人机_108",
+                "text": "软杀伤系统",
+                "rootId": "无人机_0",
+                "rootName": "无人机",
+                "canClick": true,
+                "children": [
+                  {
+                    "id": "无人机_109",
+                    "text": "电磁干扰",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  },
+                  {
+                    "id": "无人机_111",
+                    "text": "飞网捕捉",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  },
+                  {
+                    "id": "无人机_110",
+                    "text": "系统劫持",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "1无人机_107",
+            "text": "反无人机系统",
+            "rootId": "无人机_0",
+            "rootName": "无人机",
+            "canClick": true,
+            "children": [
+              {
+                "id": "1无人机_112",
+                "text": "攻击无人机",
+                "rootId": "无人机_0",
+                "rootName": "无人机",
+                "canClick": true,
+                "children": [
+                  {
+                    "id": "1无人机_114",
+                    "text": "飞弹杀伤",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  },
+                  {
+                    "id": "1无人机_113",
+                    "text": "激光杀伤",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "1无人机_108",
+                "text": "软杀伤系统",
+                "rootId": "无人机_0",
+                "rootName": "无人机",
+                "canClick": true,
+                "children": [
+                  {
+                    "id": "1无人机_109",
+                    "text": "电磁干扰",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  },
+                  {
+                    "id": "1无人机_111",
+                    "text": "飞网捕捉",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  },
+                  {
+                    "id": "1无人机_110",
+                    "text": "系统劫持",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "无人机_99",
+            "text": "市场服务",
+            "rootId": "无人机_0",
+            "rootName": "无人机",
+            "canClick": true,
+            "children": [
+              {
+                "id": "无人机_101",
+                "text": "巡查应急",
+                "rootId": "无人机_0",
+                "rootName": "无人机",
+                "canClick": true,
+                "children": []
+              },
+              {
+                "id": "无人机_103",
+                "text": "地理测绘",
+                "rootId": "无人机_0",
+                "rootName": "无人机",
+                "canClick": true,
+                "children": []
+              },
+              {
+                "id": "无人机_106",
+                "text": "娱乐表演",
+                "rootId": "无人机_0",
+                "rootName": "无人机",
+                "canClick": true,
+                "children": []
+              },
+              {
+                "id": "无人机_104",
+                "text": "物流运输",
+                "rootId": "无人机_0",
+                "rootName": "无人机",
+                "canClick": true,
+                "children": []
+              },
+              {
+                "id": "无人机_105",
+                "text": "防卫安保",
+                "rootId": "无人机_0",
+                "rootName": "无人机",
+                "canClick": true,
+                "children": []
+              },
+              {
+                "id": "无人机_100",
+                "text": "农业植保",
+                "rootId": "无人机_0",
+                "rootName": "无人机",
+                "canClick": true,
+                "children": []
+              },
+              {
+                "id": "无人机_102",
+                "text": "环境监测",
+                "rootId": "无人机_0",
+                "rootName": "无人机",
+                "canClick": true,
+                "children": []
+              }
+            ]
+          },
+          {
+            "id": "无人机_94",
+            "text": "售后服务",
+            "rootId": "无人机_0",
+            "rootName": "无人机",
+            "canClick": true,
+            "children": [
+              {
+                "id": "无人机_95",
+                "text": "技术支持",
+                "rootId": "无人机_0",
+                "rootName": "无人机",
+                "canClick": true,
+                "children": []
+              },
+              {
+                "id": "无人机_98",
+                "text": "设备租赁",
+                "rootId": "无人机_0",
+                "rootName": "无人机",
+                "canClick": true,
+                "children": []
+              },
+              {
+                "id": "无人机_97",
+                "text": "维修服务",
+                "rootId": "无人机_0",
+                "rootName": "无人机",
+                "canClick": true,
+                "children": []
+              },
+              {
+                "id": "无人机_96",
+                "text": "飞行培训",
+                "rootId": "无人机_0",
+                "rootName": "无人机",
+                "canClick": true,
+                "children": []
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "上游": [
+      {
+        "id": "无人机_1",
+        "text": "无人机研发设计",
+        "rootId": "无人机_0",
+        "rootName": "无人机",
+        "canClick": true,
+        "children": [
+          {
+            "id": "无人机_9",
+            "text": "无人机零部件配套",
+            "rootId": "无人机_0",
+            "rootName": "无人机",
+            "canClick": true,
+            "children": [
+              {
+                "id": "无人机_10",
+                "text": "机体材料",
+                "rootId": "无人机_0",
+                "rootName": "无人机",
+                "canClick": true,
+                "children": [
+                  {
+                    "id": "无人机_14",
+                    "text": "复合材料",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": [
+                      {
+                        "id": "无人机_16",
+                        "text": "芳纶纤维",
+                        "rootId": "无人机_0",
+                        "rootName": "无人机",
+                        "canClick": true,
+                        "children": []
+                      },
+                      {
+                        "id": "无人机_15",
+                        "text": "碳纤维增强塑料（CFRP）",
+                        "rootId": "无人机_0",
+                        "rootName": "无人机",
+                        "canClick": true,
+                        "children": []
+                      },
+                      {
+                        "id": "无人机_17",
+                        "text": "EPP泡沫塑料",
+                        "rootId": "无人机_0",
+                        "rootName": "无人机",
+                        "canClick": true,
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "无人机_11",
+                    "text": "金属材料",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": [
+                      {
+                        "id": "无人机_12",
+                        "text": "铝合金",
+                        "rootId": "无人机_0",
+                        "rootName": "无人机",
+                        "canClick": true,
+                        "children": []
+                      },
+                      {
+                        "id": "无人机_13",
+                        "text": "钛合金",
+                        "rootId": "无人机_0",
+                        "rootName": "无人机",
+                        "canClick": true,
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "无人机_18",
+                "text": "动力零部件",
+                "rootId": "无人机_0",
+                "rootName": "无人机",
+                "canClick": true,
+                "children": [
+                  {
+                    "id": "无人机_22",
+                    "text": "电动发动机",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": [
+                      {
+                        "id": "无人机_25",
+                        "text": "电动机",
+                        "rootId": "无人机_0",
+                        "rootName": "无人机",
+                        "canClick": true,
+                        "children": []
+                      },
+                      {
+                        "id": "无人机_23",
+                        "text": "锂电池",
+                        "rootId": "无人机_0",
+                        "rootName": "无人机",
+                        "canClick": true,
+                        "children": []
+                      },
+                      {
+                        "id": "无人机_24",
+                        "text": "氢燃料电池",
+                        "rootId": "无人机_0",
+                        "rootName": "无人机",
+                        "canClick": true,
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "无人机_19",
+                    "text": "燃油发动机",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": [
+                      {
+                        "id": "无人机_21",
+                        "text": "变速器",
+                        "rootId": "无人机_0",
+                        "rootName": "无人机",
+                        "canClick": true,
+                        "children": []
+                      },
+                      {
+                        "id": "无人机_20",
+                        "text": "驱动轴",
+                        "rootId": "无人机_0",
+                        "rootName": "无人机",
+                        "canClick": true,
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "无人机_26",
+                "text": "电子元器件",
+                "rootId": "无人机_0",
+                "rootName": "无人机",
+                "canClick": true,
+                "children": [
+                  {
+                    "id": "无人机_27",
+                    "text": "主控芯片",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": [
+                      {
+                        "id": "无人机_28",
+                        "text": "MCU",
+                        "rootId": "无人机_0",
+                        "rootName": "无人机",
+                        "canClick": true,
+                        "children": []
+                      },
+                      {
+                        "id": "无人机_29",
+                        "text": "MPU",
+                        "rootId": "无人机_0",
+                        "rootName": "无人机",
+                        "canClick": true,
+                        "children": []
+                      },
+                      {
+                        "id": "无人机_31",
+                        "text": "DSP",
+                        "rootId": "无人机_0",
+                        "rootName": "无人机",
+                        "canClick": true,
+                        "children": []
+                      },
+                      {
+                        "id": "无人机_30",
+                        "text": "FPGA",
+                        "rootId": "无人机_0",
+                        "rootName": "无人机",
+                        "canClick": true,
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "无人机_44",
+                    "text": "功能软件",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": [
+                      {
+                        "id": "无人机_45",
+                        "text": "飞控软件",
+                        "rootId": "无人机_0",
+                        "rootName": "无人机",
+                        "canClick": true,
+                        "children": []
+                      },
+                      {
+                        "id": "无人机_46",
+                        "text": "传感器驱动软件",
+                        "rootId": "无人机_0",
+                        "rootName": "无人机",
+                        "canClick": true,
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "无人机_32",
+                    "text": "传感器",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": true,
+                    "children": [
+                      {
+                        "id": "无人机_38",
+                        "text": "磁罗盘",
+                        "rootId": "无人机_0",
+                        "rootName": "无人机",
+                        "canClick": true,
+                        "children": []
+                      },
+                      {
+                        "id": "无人机_43",
+                        "text": "空速计",
+                        "rootId": "无人机_0",
+                        "rootName": "无人机",
+                        "canClick": true,
+                        "children": []
+                      },
+                      {
+                        "id": "无人机_41",
+                        "text": "磁力计",
+                        "rootId": "无人机_0",
+                        "rootName": "无人机",
+                        "canClick": true,
+                        "children": []
+                      },
+                      {
+                        "id": "无人机_37",
+                        "text": "加速计",
+                        "rootId": "无人机_0",
+                        "rootName": "无人机",
+                        "canClick": true,
+                        "children": []
+                      },
+                      {
+                        "id": "无人机_35",
+                        "text": "红外芯片",
+                        "rootId": "无人机_0",
+                        "rootName": "无人机",
+                        "canClick": true,
+                        "children": []
+                      },
+                      {
+                        "id": "无人机_34",
+                        "text": "基带芯片",
+                        "rootId": "无人机_0",
+                        "rootName": "无人机",
+                        "canClick": true,
+                        "children": []
+                      },
+                      {
+                        "id": "无人机_39",
+                        "text": "气压计",
+                        "rootId": "无人机_0",
+                        "rootName": "无人机",
+                        "canClick": true,
+                        "children": []
+                      },
+                      {
+                        "id": "无人机_33",
+                        "text": "射频芯片",
+                        "rootId": "无人机_0",
+                        "rootName": "无人机",
+                        "canClick": true,
+                        "children": []
+                      },
+                      {
+                        "id": "无人机_42",
+                        "text": "GNSS",
+                        "rootId": "无人机_0",
+                        "rootName": "无人机",
+                        "canClick": true,
+                        "children": []
+                      },
+                      {
+                        "id": "无人机_36",
+                        "text": "光电芯片",
+                        "rootId": "无人机_0",
+                        "rootName": "无人机",
+                        "canClick": true,
+                        "children": []
+                      },
+                      {
+                        "id": "无人机_40",
+                        "text": "陀螺计",
+                        "rootId": "无人机_0",
+                        "rootName": "无人机",
+                        "canClick": true,
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "无人机_2",
+            "text": "无人机技术研发",
+            "rootId": "无人机_0",
+            "rootName": "无人机",
+            "canClick": true,
+            "children": [
+              {
+                "id": "无人机_3",
+                "text": "基础研究",
+                "rootId": "无人机_0",
+                "rootName": "无人机",
+                "canClick": false,
+                "children": [
+                  {
+                    "id": "无人机_4",
+                    "text": "理论研究",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": false,
+                    "children": []
+                  },
+                  {
+                    "id": "无人机_5",
+                    "text": "气动研究",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": false,
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "无人机_6",
+                "text": "应用研究",
+                "rootId": "无人机_0",
+                "rootName": "无人机",
+                "canClick": false,
+                "children": [
+                  {
+                    "id": "无人机_7",
+                    "text": "概念设计",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": false,
+                    "children": []
+                  },
+                  {
+                    "id": "无人机_8",
+                    "text": "型号研制",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": false,
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "3无人机_2",
+            "text": "无人机技术研发",
+            "rootId": "无人机_0",
+            "rootName": "无人机",
+            "canClick": true,
+            "children": [
+              {
+                "id": "3无人机_3",
+                "text": "基础研究",
+                "rootId": "无人机_0",
+                "rootName": "无人机",
+                "canClick": false,
+                "children": [
+                  {
+                    "id": "3无人机_4",
+                    "text": "理论研究",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": false,
+                    "children": []
+                  },
+                  {
+                    "id": "3无人机_5",
+                    "text": "气动研究",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": false,
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "3无人机_6",
+                "text": "应用研究",
+                "rootId": "无人机_0",
+                "rootName": "无人机",
+                "canClick": false,
+                "children": [
+                  {
+                    "id": "3无人机_7",
+                    "text": "概念设计",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": false,
+                    "children": []
+                  },
+                  {
+                    "id": "3无人机_8",
+                    "text": "型号研制",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": false,
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "43无人机_2",
+            "text": "无人机技术研发",
+            "rootId": "无人机_0",
+            "rootName": "无人机",
+            "canClick": true,
+            "children": [
+              {
+                "id": "43无人机_3",
+                "text": "基础研究",
+                "rootId": "无人机_0",
+                "rootName": "无人机",
+                "canClick": false,
+                "children": [
+                  {
+                    "id": "43无人机_4",
+                    "text": "理论研究",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": false,
+                    "children": []
+                  },
+                  {
+                    "id": "43无人机_5",
+                    "text": "气动研究",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": false,
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "43无人机_6",
+                "text": "应用研究",
+                "rootId": "无人机_0",
+                "rootName": "无人机",
+                "canClick": false,
+                "children": [
+                  {
+                    "id": "43无人机_7",
+                    "text": "概念设计",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": false,
+                    "children": []
+                  },
+                  {
+                    "id": "43无人机_8",
+                    "text": "型号研制",
+                    "rootId": "无人机_0",
+                    "rootName": "无人机",
+                    "canClick": false,
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

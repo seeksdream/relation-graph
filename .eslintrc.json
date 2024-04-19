@@ -1,0 +1,64 @@
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:vue/vue3-recommended",
+    "plugin:react/recommended",
+    "prettier"
+  ],
+  "parser": "@typescript-eslint/parser",
+//  "parser": "vue-eslint-parser",
+  "plugins": [
+    "@typescript-eslint",
+    "vue",
+    "react",
+    "import"
+  ],
+  "rules": {
+    "@typescript-eslint/no-unused-vars": "off", // instead use "strict": true, "noUnusedLocals": true, and "noUnusedParameters": true, in tsconfig.json
+    "space-before-function-paren": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "import/prefer-default-export": "off",
+    "import/no-unresolved": "off",
+    "import/no-cycle": "off",
+    "no-multi-assign": "off",
+    "camelcase": "off",
+    "no-new-func": "off",
+    "semi": "off",
+    "no-useless-constructor": "off",
+    "lines-between-class-members": "off",
+    "@typescript-eslint/semi": ["error"],
+    "quotes": [1, "single"],
+    "indent": ["error", 2],
+    "import/imports-first": ["error"],
+    "max-len": "off"
+  },
+  "settings": {
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"],
+      "@vue-eslint-parser/parser": [".vue"]
+    },
+    "vue": {
+      "version": "detect"
+    }
+  },
+  "parserOptions": {
+    "parser": "@typescript-eslint/parser",
+    "extraFileExtensions": [".vue"],
+    // Allows for the parsing of modern ECMAScript features xxx
+    "ecmaVersion": 2018,
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    // Allows for the use of imports
+    "sourceType": "module",
+    "project": "./tsconfig.json"
+  }
+}

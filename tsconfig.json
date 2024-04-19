@@ -15,17 +15,24 @@
     "removeComments": false,
     "rootDir": ".",
     "composite": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "lib": ["ES2018", "DOM", "DOM.Iterable"],
-    "types": ["unplugin-vue-macros/macros-global"],
     "skipLibCheck": true,
-    "paths": {
-      "@relation-graph-vue3/*": ["src/*"]
-    }
+    "types": ["node", "jest", "vue-typescript-support", "unplugin-vue-macros/macros-global"],
+    "typeRoots": ["./node_modules/@types", "./typings"]
   },
-  "include": ["relation-graph-vue2/src", "relation-graph-vue3/src",
-    "typings/components.d.ts",
-    "relation-graph-vue3/shims-vue.d.ts",
+  "include": [
+    "packages/platforms/vue2",
+    "packages/platforms/vue3",
+    "packages/platforms/react",
+    "packages/relation-graph-models/",
+    "play/react-demo/src/",
+    "play/vue3-demo/src/",
+    "play/vue2-demo/src/",
+    "play/vue2.6.11/src/",
+    "types/",
+    "types/components.d.ts",
+    "packages/platforms/vue3/shims-vue.d.ts",
     "typings/env.d.ts"
   ],
   "exclude": [

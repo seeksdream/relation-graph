@@ -1,0 +1,403 @@
+{
+  "code": 0,
+  "msg": "成功",
+  "data": {
+    "中游": [
+      {
+        "id": "半导体_4",
+        "text": "半导体制造",
+        "rootId": "半导体_0",
+        "rootName": "半导体",
+        "canClick": true,
+        "children": [
+          {
+            "id": "半导体_25",
+            "text": "芯片",
+            "rootId": "半导体_0",
+            "rootName": "半导体",
+            "canClick": true,
+            "children": [
+              {
+                "id": "半导体_28",
+                "text": "模拟芯片",
+                "rootId": "半导体_0",
+                "rootName": "半导体",
+                "canClick": true,
+                "children": []
+              },
+              {
+                "id": "半导体_26",
+                "text": "逻辑芯片",
+                "rootId": "半导体_0",
+                "rootName": "半导体",
+                "canClick": true,
+                "children": []
+              },
+              {
+                "id": "半导体_27",
+                "text": "存储芯片",
+                "rootId": "半导体_0",
+                "rootName": "半导体",
+                "canClick": true,
+                "children": []
+              }
+            ]
+          },
+          {
+            "id": "半导体_15",
+            "text": "半导体设备",
+            "rootId": "半导体_0",
+            "rootName": "半导体",
+            "canClick": true,
+            "children": [
+              {
+                "id": "半导体_20",
+                "text": "薄膜沉积设备",
+                "rootId": "半导体_0",
+                "rootName": "半导体",
+                "canClick": true,
+                "children": []
+              },
+              {
+                "id": "半导体_23",
+                "text": "晶圆检测设备",
+                "rootId": "半导体_0",
+                "rootName": "半导体",
+                "canClick": true,
+                "children": []
+              },
+              {
+                "id": "半导体_17",
+                "text": "光刻机",
+                "rootId": "半导体_0",
+                "rootName": "半导体",
+                "canClick": true,
+                "children": []
+              },
+              {
+                "id": "半导体_16",
+                "text": "退火炉",
+                "rootId": "半导体_0",
+                "rootName": "半导体",
+                "canClick": true,
+                "children": []
+              },
+              {
+                "id": "半导体_22",
+                "text": "清洗设备",
+                "rootId": "半导体_0",
+                "rootName": "半导体",
+                "canClick": true,
+                "children": []
+              },
+              {
+                "id": "半导体_21",
+                "text": "CMP设备",
+                "rootId": "半导体_0",
+                "rootName": "半导体",
+                "canClick": true,
+                "children": []
+              },
+              {
+                "id": "半导体_19",
+                "text": "离子注入设备",
+                "rootId": "半导体_0",
+                "rootName": "半导体",
+                "canClick": true,
+                "children": []
+              },
+              {
+                "id": "半导体_24",
+                "text": "封装设备",
+                "rootId": "半导体_0",
+                "rootName": "半导体",
+                "canClick": true,
+                "children": []
+              },
+              {
+                "id": "半导体_18",
+                "text": "刻蚀机",
+                "rootId": "半导体_0",
+                "rootName": "半导体",
+                "canClick": true,
+                "children": []
+              }
+            ]
+          },
+          {
+            "id": "半导体_29",
+            "text": "芯片封测",
+            "rootId": "半导体_0",
+            "rootName": "半导体",
+            "canClick": true,
+            "children": [
+              {
+                "id": "半导体_30",
+                "text": "测试",
+                "rootId": "半导体_0",
+                "rootName": "半导体",
+                "canClick": true,
+                "children": []
+              },
+              {
+                "id": "半导体_31",
+                "text": "封装测试",
+                "rootId": "半导体_0",
+                "rootName": "半导体",
+                "canClick": true,
+                "children": []
+              }
+            ]
+          },
+          {
+            "id": "半导体_5",
+            "text": "半导体材料",
+            "rootId": "半导体_0",
+            "rootName": "半导体",
+            "canClick": true,
+            "children": [
+              {
+                "id": "半导体_7",
+                "text": "化合物半导体",
+                "rootId": "半导体_0",
+                "rootName": "半导体",
+                "canClick": true,
+                "children": []
+              },
+              {
+                "id": "半导体_6",
+                "text": "硅片",
+                "rootId": "半导体_0",
+                "rootName": "半导体",
+                "canClick": true,
+                "children": []
+              },
+              {
+                "id": "半导体_11",
+                "text": "CMP材料",
+                "rootId": "半导体_0",
+                "rootName": "半导体",
+                "canClick": true,
+                "children": []
+              },
+              {
+                "id": "半导体_9",
+                "text": "光刻胶",
+                "rootId": "半导体_0",
+                "rootName": "半导体",
+                "canClick": true,
+                "children": []
+              },
+              {
+                "id": "半导体_8",
+                "text": "光掩模",
+                "rootId": "半导体_0",
+                "rootName": "半导体",
+                "canClick": true,
+                "children": []
+              },
+              {
+                "id": "半导体_14",
+                "text": "封装材料",
+                "rootId": "半导体_0",
+                "rootName": "半导体",
+                "canClick": true,
+                "children": []
+              },
+              {
+                "id": "半导体_12",
+                "text": "溅射靶材",
+                "rootId": "半导体_0",
+                "rootName": "半导体",
+                "canClick": true,
+                "children": []
+              },
+              {
+                "id": "半导体_13",
+                "text": "湿电子化学品",
+                "rootId": "半导体_0",
+                "rootName": "半导体",
+                "canClick": true,
+                "children": []
+              },
+              {
+                "id": "半导体_10",
+                "text": "电子气体",
+                "rootId": "半导体_0",
+                "rootName": "半导体",
+                "canClick": true,
+                "children": []
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "下游": [
+      {
+        "id": "半导体_32",
+        "text": "半导体应用",
+        "rootId": "半导体_0",
+        "rootName": "半导体",
+        "canClick": true,
+        "children": [
+          {
+            "id": "半导体_46",
+            "text": "航天航空",
+            "rootId": "半导体_0",
+            "rootName": "半导体",
+            "canClick": true,
+            "children": []
+          },
+          {
+            "id": "半导体_33",
+            "text": "消费电子",
+            "rootId": "半导体_0",
+            "rootName": "半导体",
+            "canClick": true,
+            "children": []
+          },
+          {
+            "id": "半导体_43",
+            "text": "智慧城市",
+            "rootId": "半导体_0",
+            "rootName": "半导体",
+            "canClick": true,
+            "children": []
+          },
+          {
+            "id": "半导体_37",
+            "text": "健康医疗",
+            "rootId": "半导体_0",
+            "rootName": "半导体",
+            "canClick": true,
+            "children": []
+          },
+          {
+            "id": "半导体_48",
+            "text": "LED",
+            "rootId": "半导体_0",
+            "rootName": "半导体",
+            "canClick": true,
+            "children": []
+          },
+          {
+            "id": "半导体_47",
+            "text": "光伏",
+            "rootId": "半导体_0",
+            "rootName": "半导体",
+            "canClick": true,
+            "children": []
+          },
+          {
+            "id": "半导体_39",
+            "text": "大数据",
+            "rootId": "半导体_0",
+            "rootName": "半导体",
+            "canClick": true,
+            "children": []
+          },
+          {
+            "id": "半导体_41",
+            "text": "人工智能",
+            "rootId": "半导体_0",
+            "rootName": "半导体",
+            "canClick": true,
+            "children": []
+          },
+          {
+            "id": "半导体_35",
+            "text": "工业电子",
+            "rootId": "半导体_0",
+            "rootName": "半导体",
+            "canClick": true,
+            "children": []
+          },
+          {
+            "id": "半导体_36",
+            "text": "移动通信",
+            "rootId": "半导体_0",
+            "rootName": "半导体",
+            "canClick": true,
+            "children": []
+          },
+          {
+            "id": "半导体_44",
+            "text": "虚拟现实",
+            "rootId": "半导体_0",
+            "rootName": "半导体",
+            "canClick": true,
+            "children": []
+          },
+          {
+            "id": "半导体_45",
+            "text": "军事国防",
+            "rootId": "半导体_0",
+            "rootName": "半导体",
+            "canClick": true,
+            "children": []
+          },
+          {
+            "id": "半导体_38",
+            "text": "新能源",
+            "rootId": "半导体_0",
+            "rootName": "半导体",
+            "canClick": true,
+            "children": []
+          },
+          {
+            "id": "半导体_34",
+            "text": "汽车电子",
+            "rootId": "半导体_0",
+            "rootName": "半导体",
+            "canClick": true,
+            "children": []
+          },
+          {
+            "id": "半导体_42",
+            "text": "物联网",
+            "rootId": "半导体_0",
+            "rootName": "半导体",
+            "canClick": true,
+            "children": []
+          },
+          {
+            "id": "半导体_40",
+            "text": "云计算",
+            "rootId": "半导体_0",
+            "rootName": "半导体",
+            "canClick": true,
+            "children": []
+          }
+        ]
+      }
+    ],
+    "上游": [
+      {
+        "id": "半导体_1",
+        "text": "半导体设计",
+        "rootId": "半导体_0",
+        "rootName": "半导体",
+        "canClick": true,
+        "children": [
+          {
+            "id": "半导体_2",
+            "text": "EDA",
+            "rootId": "半导体_0",
+            "rootName": "半导体",
+            "canClick": true,
+            "children": []
+          },
+          {
+            "id": "半导体_3",
+            "text": "IP核",
+            "rootId": "半导体_0",
+            "rootName": "半导体",
+            "canClick": true,
+            "children": []
+          }
+        ]
+      }
+    ]
+  }
+}
