@@ -252,6 +252,33 @@ export class RelationGraphWith4Line extends RelationGraphWith3Image {
       fx, fy, from_ct_x, from_ct_y, f_W, f_H,
       tx, ty, to_ct_x, to_ct_y, t_W, t_H
     );
+
+    // HQ 改变html元素自己连自己的连线的方式
+    if (from.x === to.x && from.y === to.y) {  
+      // console.log('起始点相同，使用椭圆弧绘制');
+      const from_ct_x = from_x + f_W / 2;
+      const from_ct_y = from_y + f_H / 2;
+      const angle = Math.atan2(fy - from_ct_y, fx - from_ct_x);
+      const dx = Math.sin(angle + Math.PI) * 5;
+      const dy = Math.cos(angle + Math.PI) * 5;
+      const p1 = {x: fx - dx, y: fy - dy};
+      
+      // 横纵半径
+      const radiusX = 15;
+      const radiusY = 30;
+      // 圆弧的绘制，这里假定是大弧且为逆时针方向，根据具体情况调整
+      const largeArcFlag = 1; // 大于180度的弧
+      const sweepFlag = 0;    // 逆时针方向
+      // 构建圆弧路径
+      const path = `M ${p1.x},${p1.y} A ${radiusX},${radiusY} 0 ${largeArcFlag},${sweepFlag} ${fx},${fy}`;
+ 
+       
+      textPosition.y = textPosition.y -60  ;   
+      return this.createReturnValue(path, textPosition);
+    }
+
+
+
     return this.createReturnValue(path, textPosition);
   }
 
