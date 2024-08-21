@@ -110,7 +110,8 @@
     }
 
     .rel-toolbar-h-center {
-        left: calc((100% - 260px) / 2);
+        left: 50%;
+        transform: translateX(-50%);
     }
 
     .rel-toolbar-v-top {
@@ -122,6 +123,7 @@
     }
 
     .rel-toolbar-v-center {
-        top: calc((100% - 260px) / 2);
+        top: 50%;
+        transform: translateY(-50%);
     }
 }
