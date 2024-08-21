@@ -64,7 +64,7 @@ const GraphMiniToolBar: React.FC = ({children}) => {
 
       {options.allowAutoLayoutIfSupport && options.isNeedShowAutoLayoutButton &&
           <div
-            title="options.autoLayouting?'点击停止自动布局':'点击开始自动调整布局'"
+            title={options.autoLayouting?'点击停止自动布局':'点击开始自动调整布局'}
             className={[
               'c-mb-button',
               options.autoLayouting && 'c-mb-button-on'
