@@ -483,7 +483,7 @@ export class RelationGraphWith7Event extends RelationGraphWith6Effect {
         await screenfull.toggle(this.$dom);
       }
     }
-    this.emitEvent('fullscreen', { fullscreen: this.options.fullscreen });
+    this.emitEvent('onFullscreen', { fullscreen: this.options.fullscreen });
   }
   async focusNodeById(nodeId:string) {
     let node;
