@@ -345,7 +345,7 @@ export interface RGListeners {
   onNodeDragging?: (node:RGNode, newX:number, newY:number, e:RGUserEvent) => RGPosition | undefined
   onCanvasDragEnd?: (e:RGUserEvent) => void
   onContextmenu?: (e:RGUserEvent, objectType:RGEventTargetType, object:RGNode|RGLink|undefined) => void
-  onFullscreen?: (newValue:boolean) => void
+  onFullscreen?: (newValue:boolean, defaultFullscreen: () => Promise<void>) => void
   onCanvasClick?: (e:RGUserEvent) => void
   onCanvasSelectionEnd?: (selectionView:RGSelectionView, e:RGUserEvent) => void
   // 不要在这个时间中调用任何触发setZoom的动作
