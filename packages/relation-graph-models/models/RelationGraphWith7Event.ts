@@ -466,8 +466,11 @@ export class RelationGraphWith7Event extends RelationGraphWith6Effect {
       this.listeners.onContextmenu(e, objectType, object);
     }
   }
-  async fullscreen(newValue?:boolean) {
+  async fullscreen(newValue?: boolean) {
     if (screenfull.element && screenfull.element !== this.$dom) {
+      return;
+    }
+    if (newValue === this.options.fullscreen) {
       return;
     }
     let isToogle = false;
@@ -475,15 +478,17 @@ export class RelationGraphWith7Event extends RelationGraphWith6Effect {
       newValue = !this.options.fullscreen;
       isToogle = true;
     }
+    devLog("screenfull", newValue);
     this.options.fullscreen = newValue;
+    const defaultEffect = async () => {
+      if (isToogle) await screenfull.toggle(this.$dom);
+    };
     if (this.listeners.onFullscreen) {
-      this.listeners.onFullscreen(this.options.fullscreen);
+      this.listeners.onFullscreen(this.options.fullscreen, defaultEffect);
     } else {
-      if (isToogle) {
-        await screenfull.toggle(this.$dom);
-      }
+      await defaultEffect();
     }
-    this.emitEvent('fullscreen', { fullscreen: this.options.fullscreen });
+    // this.emitEvent('onFullscreen', { fullscreen: this.options.fullscreen });
   }
   async focusNodeById(nodeId:string) {
     let node;
