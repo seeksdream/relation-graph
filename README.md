@@ -1,167 +1,173 @@
+
+
 <img src="doc/relation-graph-yellow-small.png" width="60" />
 
----
-
-relation-graph 当前版本：v2.0.19 (支持Vue2、Vue3、React)
-
-----
+# relation-graph
 
 
-**2023-02-19 版本v2.0.12起开始支持vue3**
 
-**2023-02-24 版本v2.0.19起开始支持react**
-```shell script
-Vue2使用方法： import RelationGraph from 'relation-graph'
-Vue3使用方法： import RelationGraph from 'relation-graph/vue3'
-React使用方法： import RelationGraph from 'relation-graph/react'
-vue2完整小示例：https://github.com/seeksdream/relation-graph-vue2-demo
-vue3完整小示例：https://github.com/seeksdream/relation-graph-vue3-demo
-React完整小示例：https://github.com/seeksdream/relation-graph-react-demo
-```
+- **relation-graph** 是支持Vue2、Vue3、React的关系数据展示组件，支持通过【插槽】让使用者使用"普通HTML元素、Vue组件、React组件"来完全自定义图形元素，并提供实用的API接口让使用者轻松构建可交互的图形应用。<br />
+-  除了典型的关系数据展示功能，relation-graph还支持作为一个画板来使用，你可以在画板上放置任何内容，只需要为想要连接的元素设置id，同时定义"元素连线（Element Lines）"即可。轻松实现一个可任意创建连线、可缩放与拖动、支持通过API轻松实现动态交互的画板。
+- **relation-graph** is a relationship data display component that supports Vue 2, Vue 3, and React. It enables users to fully customize graphical elements using "common HTML elements, Vue components, React components" through slots, and provides practical API interfaces to facilitate the development of interactive graphical applications."<br />
+-  In addition to the typical relationship data display functionality, the relation-graph also supports being used as a drawing board. You can place any content on the drawing board, simply by setting an id for the elements you want to connect, and defining "element lines." This allows for the easy creation of a drawing board that supports the creation of arbitrary connections, zooming and dragging, and dynamic interactions through the API.
+### Docs & Examples  文档 & 示例：
 
-**2023-02-24 最新版本v2.0.24**
+- [https://relation-graph.com](https://relation-graph.com)  (国内用户，无需科学上网)
 
-新增circle布局，环形布局
+- [https://relation-graph.github.io](https://relation-graph.github.io)(For regions outside of China)
 
-**2023-02-24 最新版本v2.0.25**
+上面的网站中包含使用文档、在线示例，以及可视化的配置工具。<br>
+The website above includes documentation, online demos, and a visual configuration tool for software developers.
 
-将默认选项options.moveToCenterWhenRefresh的默认值修改为true
-
----
-
-这是一个Vue关系图谱组件，可以展示如组织机构图谱、股权架构图谱、集团关系图谱等知识图谱，可提供多种图谱布局，包括树状布局、中心布局、力学布局自动布局等。
-
-这个项目使用典型的vue编程方式，代码简单易懂。如果需要实现一些自定义的高级功能，你可以直接使用源码作为一个component放到你的项目中去用，轻松、任意的修改。
-
-*详细使用方法、配置选项、在线demo，以及可视化的配置工具，可以访问这个网址：*
-
-[http://relation-graph.com](http://relation-graph.com)  （国内用户，无需科学上网）
-
-[https://seeksdream.github.io](https://seeksdream.github.io)（For regions outside of China）
-
----
-*快速使用：*
+### Getting Started  快速使用：
 
 ```shell script
 npm install --save relation-graph
 ```
 ```shell script
-注意：
-relation-graph支持Vue2、Vue3、React, 引入的包名称都是【relation-graph】
-但在使用时，根据你的环境，需要引入不同的名称
-Vue2使用方法： import RelationGraph from 'relation-graph'
-Vue3使用方法： import RelationGraph from 'relation-graph/vue3'
-React使用方法： import RelationGraph from 'relation-graph/react'
-```
-
-**示例代码：**
-```vue
-//（以下为Vue2示例代码，如果你使用的是Vue3或者React）
-// Vue3完整小示例：https://github.com/seeksdream/relation-graph-vue3-demo
-// React完整小示例：https://github.com/seeksdream/relation-graph-react-demo
+# 注意：relation-graph支持Vue2、Vue3、React, 引入的包名称都是"relation-graph" 但在使用时，根据你的环境，需要引入不同的名称
+# Note: relation-graph supports Vue2, Vue3, React, but the package name for import is always "relation-graph".
+#
+# Vue2： import RelationGraph from 'relation-graph'
+# Vue3： import RelationGraph from 'relation-graph/vue3'
+# React： import RelationGraph from 'relation-graph/react'
 ```
 
 ```vue
 <template>
-   <div>
-     <div style="height:calc(100vh - 50px);">
-        <RelationGraph ref="seeksRelationGraph" :options="graphOptions" :on-node-click="onNodeClick" :on-line-click="onLineClick" />
-     </div>
-   </div>
- </template>
- 
- <script>
- import RelationGraph from 'relation-graph'
- export default {
-   name: 'Demo',
-   components: { RelationGraph },
-   data() {
-     return {
-       graphOptions: {
-         allowSwitchLineShape: true,
-         allowSwitchJunctionPoint: true,
-         defaultJunctionPoint: 'border'
-         // 这里可以参考"Graph 图谱"中的参数进行设置:http://relation-graph.com/#/docs/graph
-       }
-     }
-   },
-   mounted() {
-     this.showSeeksGraph()
-   },
-   methods: {
-     showSeeksGraph() {
-       var __graph_json_data = {
-         rootId: 'a',
-         nodes: [
-            // node配置选项：http://relation-graph.com/#/docs/node
-            // node支持通过插槽slot完全自定义，示例：http://relation-graph.com/#/demo/adv-slot
-           { id: 'a', text: 'A', borderColor: 'yellow' },
-           { id: 'b', text: 'B', color: '#43a2f1', fontColor: 'yellow' },
-           { id: 'c', text: 'C', nodeShape: 1, width: 80, height: 60 },
-           { id: 'e', text: 'E', nodeShape: 0, width: 150, height: 150 }
-         ],
-         lines: [
-            // link配置选项：http://relation-graph.com/#/docs/link
-           { from: 'a', to: 'b', text: '关系1', color: '#43a2f1' },
-           { from: 'a', to: 'c', text: '关系2' },
-           { from: 'a', to: 'e', text: '关系3' },
-           { from: 'b', to: 'e', color: '#67C23A' }
-         ]
-       }
-       this.$refs.seeksRelationGraph.setJsonData(__graph_json_data, (seeksRGGraph) => {
-         // Called when the relation-graph is completed 
-       })
-     },
-     onNodeClick(nodeObject, $event) {
-       console.log('onNodeClick:', nodeObject)
-     },
-     onLineClick(linkObject, $event) {
-       console.log('onLineClick:', linkObject)
-     }
-   }
- }
- </script>
+  <div>
+    <div style="height:calc(100vh - 60px);"><!-- The size of the parent element determines the size of the graph. -->
+      <RelationGraph
+        ref="graphRef"
+        :options="graphOptions"
+        :on-node-click="onNodeClick"
+        :on-line-click="onLineClick"
+      />
+    </div>
+  </div>
+</template>
+
+<script>
+// relation-graph also supports usage in the main.js file with Vue.use(RelationGraph); this way, you don't need the following line of code for import.
+import RelationGraph from 'relation-graph'
+export default {
+  name: 'Demo',
+  components: { RelationGraph },
+  data() {
+    return {
+      graphOptions: {
+        defaultJunctionPoint: 'border'
+        // Here you can refer to the options in "Graph" for setting: 
+        // https://www.relation-graph.com/#/docs/graph
+        // You can also use this GUI tool to generate configuration content.
+        // https://www.relation-graph.com/#/options-tools
+      }
+    }
+  },
+  mounted() {
+    this.showGraph()
+  },
+  methods: {
+    showGraph() {
+      const jsonData = {
+        rootId: 'a',
+        nodes: [
+          // You can also use slots directly without defining these cumbersome attributes and use CSS styles to define the appearance of your nodes.
+          // Example of using slots: https://www.relation-graph.com/#/demo/node-style
+          { id: 'a', text: 'A', borderColor: 'yellow' },
+          { id: 'b', text: 'B', color: '#43a2f1', fontColor: 'yellow' },
+          { id: 'c', text: 'C', nodeShape: 1, width: 80, height: 60 },
+          { id: 'e', text: 'E', nodeShape: 0, width: 150, height: 150 }
+        ],
+        lines: [
+          { from: 'a', to: 'b', text: 'line1', color: '#43a2f1' },
+          { from: 'a', to: 'c', text: 'line2' },
+          { from: 'a', to: 'e', text: 'line3' },
+          { from: 'b', to: 'e', color: '#67C23A' }
+        ]
+      }
+      // The node and line in the above data can refer to the options in "Node" and "Link & Line" for configuration.
+      // Node: https://www.relation-graph.com/#/docs/node
+      // Link & Line: https://www.relation-graph.com/#/docs/link
+
+      this.$refs.graphRef.setJsonData(jsonData, (graphInstance) => {
+        // Called when the relation-graph is completed
+      });
+      // The this.refs.graphRef.setJsonData(jsonData, callback) method is a convenient method that is equivalent to the following code:
+      //  const graphInstance = this.refs.graphRef.getInstance();
+      //  graphInstance.addNodes(jsonData.nodes);
+      //  graphInstance.addLines(jsonData.lines);
+      //  graphInstance.rootNode = graphInstance.getNodeById(jsonData.rootId);
+      //  await graphInstance.doLayout(); // Layout using the layouter set in graphOptions
+      //  await graphInstance.moveToCenter(); // Find the center based on node distribution and center the view
+      //  await graphInstance.zoomToFit(); // Zoom to fit, so that all nodes can be displayed in the visible area
+    },
+    onNodeClick(nodeObject, $event) {
+      console.log('onNodeClick:', nodeObject)
+    },
+    onLineClick(lineObject, $event) {
+      console.log('onLineClick:', lineObject)
+    }
+  }
+}
+</script>
 ```
 
-完整的、可运行的示例项目：
 
-vue2完整小示例：https://github.com/seeksdream/relation-graph-vue2-demo
-vue3完整小示例：https://github.com/seeksdream/relation-graph-vue3-demo
-React完整小示例：https://github.com/seeksdream/relation-graph-react-demo
-
-
-*上面代码的效果：*
+### Sample code effects  上面代码的效果：
 ![简单示例效果图](doc/images/relation-graph-simple.png)
-![简单示例效果图](doc/images/d1.png)
-![简单示例效果图](doc/images/d2.png)
-![简单示例效果图](doc/images/d3.png)
-![简单示例效果图](doc/images/d4.png)
-![简单示例效果图](doc/images/d5.png)
-![简单示例效果图](doc/images/d6.png)
-![简单示例效果图](doc/images/d7.png)
-![简单示例效果图](doc/images/d8.png)
-![简单示例效果图](doc/images/d9.png)
-![简单示例效果图](doc/images/d10.png)
-![简单示例效果图](doc/images/d11.png)
-![简单示例效果图](doc/images/d12.png)
-![简单示例效果图](doc/images/d13.png)
 
-*更多效果及使用方法：*
+### Example Projects  完整的示例代码：
 
-[http://relation-graph.com](http://relation-graph.com)  （国内用户，无需科学上网）
+- The complete Vue2 sample project: / Vue3完整小示例:
+- https://github.com/seeksdream/relation-graph-vue3-demo
 
-[https://seeksdream.github.io](https://seeksdream.github.io)（For regions outside of China）
+- The complete Vue3 sample project: / React完整小示例:
+- https://github.com/seeksdream/relation-graph-react-demo
 
----
+- The complete React sample project: / vue2完整小示例:
+- https://github.com/seeksdream/relation-graph-vue2-demo
 
-**v2.x版本重要新特性：**
 
-* 修改了线条文字的展示方式，现在线条文字会跟随线条轨迹走
-* 新增线条插槽
-* 新增画布插槽
+### More Examples   更多示例：
+- [https://relation-graph.com/#/demo](https://relation-graph.com/#/demo)  （国内用户，无需科学上网）
 
-这个项目使用典型的vue编程方式，代码简单易懂，如果需要实现一些高级功能，你还可以直接使用源码作为一个component放到你的项目中去用，如果有一些优化或者新特性，欢迎提交pull request。
+- [https://relation-graph.github.io/#/demo](https://relation-graph.github.io/#/demo)（For regions outside of China）
 
-**有问题可以加QQ：3235808353，提bug、提建议、一起交流分享前端开发心得，第一获取新版本发布消息。**
 
+![relation-graph](doc/relation-graph-images-m.png)
+
+![center-层级距离设置](doc/demo-images/distance_coefficient.gif)
+![力学布局(force)](doc/demo-images/layout-force.gif)
+![节点展开/收缩的用法](doc/demo-images/adv-expand.gif)
+![节点筛选 & 关系筛选](doc/demo-images/adv-data-filter.gif)
+![节点/连线点击效果2](doc/demo-images/adv-effect2.gif)
+![展开/收缩 时动画效果](doc/demo-images/expand-animation.gif)
+![展开/关闭所有](doc/demo-images/open-all-close-all.gif)
+![布局切换事件](doc/demo-images/before-change-layout.gif)
+
+### The complete sample project 完整的、可运行的示例项目：
+
+- The complete Vue2 sample project & vue2完整小示例：
+- https://github.com/seeksdream/relation-graph-vue2-demo
+
+- The complete Vue3 sample project & vue3完整小示例：
+- https://github.com/seeksdream/relation-graph-vue3-demo
+
+- The complete React sample project & React完整小示例：
+- https://github.com/seeksdream/relation-graph-react-demo
+
+
+### More info  更多效果及使用方法：
+
+- [https://relation-graph.com](https://relation-graph.com)  （国内用户，无需科学上网）
+
+- [https://relation-graph.github.io](https://relation-graph.github.io)（For regions outside of China）
+
+### Contact me  与我联系：
+
+- 我的QQ：3235808353
+- My WhatsApp:
+
+  <img src="doc/images/Whatsapp.png" width="200" />
 

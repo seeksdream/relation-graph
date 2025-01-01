@@ -4,7 +4,7 @@
   "description": "demo",
   "main": "index.js",
   "scripts": {
-    "start": "vite",
+    "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
   },
@@ -20,7 +20,8 @@
   "homepage": "https://github.com/seeksdream/relation-graph-vue3-demo#readme",
   "dependencies": {
     "@vitejs/plugin-vue": "^3.2.0",
-    "relation-graph": "^2.0.22",
+    "relation-graph": "^2.1.42",
+    "sass": "^1.59.2",
     "vite": "^4.1.2",
     "vue": "^3.2.47"
   }

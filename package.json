@@ -1,40 +1,40 @@
 {
   "name": "relation-graph",
-  "version": "2.0.24",
+  "version": "2.1.42",
   "description": "relation-graph，Vue 关联关系图谱组件，可以展示如组织机构图谱、股权架构图谱、集团关系图谱等知识图谱，可提供多种图谱布局，包括树状布局、中心布局、力学布局自动布局等。Vue component for relationship graph , which can display knowledge graphs, such as organization graph, equity structure graph, group relationship graph, etc.",
-  "main": "./vue2/relation-graph.umd.js",
-  "module": "./vue2/relation-graph.mjs",
-  "unpkg": "./vue2/relation-graph.umd.js",
-  "types": "./vue2/index.d.ts",
+  "main": "./lib/vue2/relation-graph.umd.js",
+  "module": "./lib/vue2/relation-graph.mjs",
+  "unpkg": "./lib/vue2/relation-graph.umd.js",
+  "types": "./types/vue2.d.ts",
   "exports": {
     ".": {
-      "types": "./vue2/index.d.ts",
-      "import": "./vue2/relation-graph.mjs",
-      "require": "./vue2/relation-graph.umd.js"
+      "import": "./lib/vue2/relation-graph.mjs",
+      "require": "./lib/vue2/relation-graph.umd.js",
+      "types": "./types/vue2.d.ts"
     },
     "./react": {
-      "import": "./react/relation-graph.mjs",
-      "require": "./react/relation-graph.umd.js",
-      "types": "./react/index.d.ts"
+      "import": "./lib/react/relation-graph.mjs",
+      "require": "./lib/react/relation-graph.umd.js",
+      "types": "./types/react.d.ts"
     },
     "./vue2": {
-      "import": "./vue2/relation-graph.mjs",
-      "require": "./vue2/relation-graph.umd.js",
-      "types": "./vue2/index.d.ts"
+      "import": "./lib/vue2/relation-graph.mjs",
+      "require": "./lib/vue2/relation-graph.umd.js",
+      "types": "./types/vue2.d.ts"
     },
     "./vue3": {
-      "import": "./vue3/relation-graph.mjs",
-      "require": "./vue3/relation-graph.umd.js",
-      "types": "./vue3/index.d.ts"
+      "import": "./lib/vue3/relation-graph.mjs",
+      "require": "./lib/vue3/relation-graph.umd.js",
+      "types": "./types/vue3.d.ts"
     }
   },
   "scripts": {
-    "build-vue2": "cd ./relation-graph-vue2 && yarn build && cp ../typings/RelationGraph.d.ts ../vue2/RelationGraph.d.ts && cp ../typings/vue2.d.ts ../vue2/index.d.ts",
-    "build-vue3": "cd ./relation-graph-vue3 && yarn build && cp ../typings/RelationGraph.d.ts ../vue3/RelationGraph.d.ts && cp ../typings/vue3.d.ts ../vue3/index.d.ts",
-    "build-react": "cd ./relation-graph-react && yarn build && cp ../typings/RelationGraph.d.ts ../react/RelationGraph.d.ts && cp ../typings/react.d.ts ../react/index.d.ts",
+    "build-vue2": "cd ./relation-graph-vue2 && yarn build",
+    "build-vue3": "cd ./relation-graph-vue3 && yarn build",
+    "build-react": "cd ./relation-graph-react && yarn build",
     "build-all": "yarn build-vue2 && yarn build-vue3 && yarn build-react"
   },
-  "author": "seeks <seeksdream@qq.com>",
+  "author": "WanLian <seeksdream@qq.com>",
   "license": "MIT",
   "private": false,
   "repository": {
@@ -62,21 +62,22 @@
   },
   "devDependencies": {
     "@types/node": "*",
-    "eslint": "^8.18.0",
     "@typescript-eslint/eslint-plugin": "^5.30.0",
     "@typescript-eslint/parser": "^5.30.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-define-config": "^1.5.1",
-    "eslint-plugin-eslint-comments": "^3.2.0",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-jsonc": "^2.3.0",
-    "eslint-plugin-markdown": "^3.0.0",
-    "eslint-plugin-prettier": "^4.1.0",
-    "eslint-plugin-unicorn": "^42.0.0",
-    "eslint-plugin-vue": "^9.1.1",
-    "jsonc-eslint-parser": "^2.1.0",
+    "eslint": "^8.50.0",
+    "eslint-config-prettier": "^6.12.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-eslint-plugin": "^2.3.0",
+    "eslint-plugin-import": "^2.28.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-promise": "^5.1.0",
+    "eslint-plugin-react": "^7.21.5",
+    "eslint-plugin-standard": "^5.0.0",
+    "eslint-plugin-vue": "^8.7.1",
     "prettier": "^2.7.1",
     "typescript": "^4.7.4",
+    "vue-eslint-parser": "^9.3.1",
     "yaml-eslint-parser": "^1.0.1"
   },
   "directories": {

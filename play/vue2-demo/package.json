@@ -9,10 +9,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "relation-graph": "^2.1.42",
     "vue": "2.6.13",
     "vue-template-compiler": "2.6.13"
   },
   "devDependencies": {
+    "sass": "^1.59.2",
     "vite": "^4.1.0",
     "vite-plugin-vue2": "^2.0.3"
   }

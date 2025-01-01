@@ -3,6 +3,8 @@
 node_modules/
 /examples
 examples/
+/platforms
+platforms/
 /src
 src/
 /dist
@@ -13,9 +15,7 @@ doc/
 web/
 npm/
 public/
-relation-graph-react/
-relation-graph-vue2/
-relation-graph-vue3/
+packages/
 play/
 /public
 package-lock.json
@@ -25,3 +25,6 @@ vue.config.js
 .eslintignore
 .eslintrc
 syncSrc.sh
+tsconfig.json
+build-all.sh
+publish-all.sh

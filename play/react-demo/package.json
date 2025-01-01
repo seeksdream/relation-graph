@@ -8,25 +8,34 @@
     "build": "vite build"
   },
   "dependencies": {
-    "relation-graph": "2.0.22"
+    "@klarr-agency/circum-icons-react": "^2.0.1",
+    "chroma-js": "^2.4.2",
+    "dagre": "^0.8.5",
+    "graphology": "^0.25.4",
+    "graphology-layout": "^0.6.1",
+    "graphology-layout-forceatlas2": "^0.10.1",
+    "react-tooltip": "^5.26.3",
+    "relation-graph-react": "2.1.42"
   },
   "devDependencies": {
-    "@types/node": "^16.18.12",
     "@types/estree": "0.0.45",
+    "@types/node": "^16.18.12",
     "@types/react": "^17.0.53",
     "@types/react-dom": "^17.0.19",
     "@types/react-router": "^5.1.16",
     "@types/react-router-dom": "^5.1.8",
-    "@types/video.js": "^7.3.11",
-    "sass": "^1.30.0",
+    "@vitejs/plugin-react": "3.0.1",
+    "autoprefixer": "^10.4.16",
+    "postcss": "^8.4.31",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "react-svg": "^14.0.5",
+    "sass": "^1.30.0",
+    "tailwindcss": "^3.3.5",
     "vite": "^3.2.0",
-    "@vitejs/plugin-react": "3.0.1",
     "vite-plugin-style-inject": "^0.0.1"
   }
 }

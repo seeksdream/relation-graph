@@ -1,0 +1,219 @@
+{
+  "code": 0,
+  "msg": "成功",
+  "data": {
+    "中游": [
+      {
+        "id": "航空发动机_4",
+        "text": "整机制造",
+        "rootId": "航空发动机_0",
+        "rootName": "航空发动机",
+        "canClick": true,
+        "children": [
+          {
+            "id": "航空发动机_6",
+            "text": "零部件",
+            "rootId": "航空发动机_0",
+            "rootName": "航空发动机",
+            "canClick": true,
+            "children": [
+              {
+                "id": "航空发动机_12",
+                "text": "关键部件",
+                "rootId": "航空发动机_0",
+                "rootName": "航空发动机",
+                "canClick": true,
+                "children": [
+                  {
+                    "id": "航空发动机_15",
+                    "text": "轴件",
+                    "rootId": "航空发动机_0",
+                    "rootName": "航空发动机",
+                    "canClick": true,
+                    "children": []
+                  },
+                  {
+                    "id": "航空发动机_14",
+                    "text": "盘件",
+                    "rootId": "航空发动机_0",
+                    "rootName": "航空发动机",
+                    "canClick": true,
+                    "children": []
+                  },
+                  {
+                    "id": "航空发动机_13",
+                    "text": "叶片",
+                    "rootId": "航空发动机_0",
+                    "rootName": "航空发动机",
+                    "canClick": true,
+                    "children": []
+                  },
+                  {
+                    "id": "航空发动机_16",
+                    "text": "环件",
+                    "rootId": "航空发动机_0",
+                    "rootName": "航空发动机",
+                    "canClick": true,
+                    "children": []
+                  },
+                  {
+                    "id": "航空发动机_17",
+                    "text": "机匣",
+                    "rootId": "航空发动机_0",
+                    "rootName": "航空发动机",
+                    "canClick": true,
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "航空发动机_9",
+                "text": "钣金件",
+                "rootId": "航空发动机_0",
+                "rootName": "航空发动机",
+                "canClick": true,
+                "children": []
+              },
+              {
+                "id": "航空发动机_7",
+                "text": "锻造件",
+                "rootId": "航空发动机_0",
+                "rootName": "航空发动机",
+                "canClick": true,
+                "children": []
+              },
+              {
+                "id": "航空发动机_8",
+                "text": "铸造件",
+                "rootId": "航空发动机_0",
+                "rootName": "航空发动机",
+                "canClick": true,
+                "children": []
+              },
+              {
+                "id": "航空发动机_10",
+                "text": "机加工",
+                "rootId": "航空发动机_0",
+                "rootName": "航空发动机",
+                "canClick": true,
+                "children": []
+              },
+              {
+                "id": "航空发动机_11",
+                "text": "增材制造",
+                "rootId": "航空发动机_0",
+                "rootName": "航空发动机",
+                "canClick": true,
+                "children": []
+              }
+            ]
+          },
+          {
+            "id": "航空发动机_19",
+            "text": "总装",
+            "rootId": "航空发动机_0",
+            "rootName": "航空发动机",
+            "canClick": true,
+            "children": [
+              {
+                "id": "航空发动机_20",
+                "text": "活塞式发动机",
+                "rootId": "航空发动机_0",
+                "rootName": "航空发动机",
+                "canClick": true,
+                "children": []
+              },
+              {
+                "id": "航空发动机_21",
+                "text": "喷气式发动机",
+                "rootId": "航空发动机_0",
+                "rootName": "航空发动机",
+                "canClick": true,
+                "children": []
+              }
+            ]
+          },
+          {
+            "id": "航空发动机_18",
+            "text": "控制系统",
+            "rootId": "航空发动机_0",
+            "rootName": "航空发动机",
+            "canClick": true,
+            "children": []
+          },
+          {
+            "id": "航空发动机_5",
+            "text": "原材料",
+            "rootId": "航空发动机_0",
+            "rootName": "航空发动机",
+            "canClick": true,
+            "children": []
+          }
+        ]
+      }
+    ],
+    "下游": [
+      {
+        "id": "航空发动机_22",
+        "text": "维修养护",
+        "rootId": "航空发动机_0",
+        "rootName": "航空发动机",
+        "canClick": true,
+        "children": [
+          {
+            "id": "航空发动机_24",
+            "text": "养护",
+            "rootId": "航空发动机_0",
+            "rootName": "航空发动机",
+            "canClick": true,
+            "children": [
+              {
+                "id": "航空发动机_25",
+                "text": "发动机管理",
+                "rootId": "航空发动机_0",
+                "rootName": "航空发动机",
+                "canClick": true,
+                "children": []
+              }
+            ]
+          },
+          {
+            "id": "航空发动机_23",
+            "text": "维修",
+            "rootId": "航空发动机_0",
+            "rootName": "航空发动机",
+            "canClick": true,
+            "children": []
+          }
+        ]
+      }
+    ],
+    "上游": [
+      {
+        "id": "航空发动机_1",
+        "text": "研发设计",
+        "rootId": "航空发动机_0",
+        "rootName": "航空发动机",
+        "canClick": true,
+        "children": [
+          {
+            "id": "航空发动机_2",
+            "text": "基础研究",
+            "rootId": "航空发动机_0",
+            "rootName": "航空发动机",
+            "canClick": true,
+            "children": []
+          },
+          {
+            "id": "航空发动机_3",
+            "text": "预研型研",
+            "rootId": "航空发动机_0",
+            "rootName": "航空发动机",
+            "canClick": true,
+            "children": []
+          }
+        ]
+      }
+    ]
+  }
+}
