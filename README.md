@@ -12,9 +12,9 @@
 -  In addition to the typical relationship data display functionality, the relation-graph also supports being used as a drawing board. You can place any content on the drawing board, simply by setting an id for the elements you want to connect, and defining "element lines." This allows for the easy creation of a drawing board that supports the creation of arbitrary connections, zooming and dragging, and dynamic interactions through the API.
 ### Docs & Examples  文档 & 示例：
 
-- [https://relation-graph.com](https://relation-graph.com)  （国内用户，无需科学上网）
+- [https://relation-graph.com](https://relation-graph.com)  (国内用户，无需科学上网)
 
-- [https://relation-graph.github.io](https://relation-graph.github.io)（For regions outside of China）
+- [https://relation-graph.github.io](https://relation-graph.github.io)(For regions outside of China)
 
 上面的网站中包含使用文档、在线示例，以及可视化的配置工具。<br>
 The website above includes documentation, online demos, and a visual configuration tool for software developers.
@@ -27,7 +27,7 @@ npm install --save relation-graph
 ```shell script
 # 注意：relation-graph支持Vue2、Vue3、React, 引入的包名称都是"relation-graph" 但在使用时，根据你的环境，需要引入不同的名称
 # Note: relation-graph supports Vue2, Vue3, React, but the package name for import is always "relation-graph".
-# 
+#
 # Vue2： import RelationGraph from 'relation-graph'
 # Vue3： import RelationGraph from 'relation-graph/vue3'
 # React： import RelationGraph from 'relation-graph/react'
@@ -38,10 +38,10 @@ npm install --save relation-graph
   <div>
     <div style="height:calc(100vh - 60px);"><!-- The size of the parent element determines the size of the graph. -->
       <RelationGraph
-              ref="graphRef"
-              :options="graphOptions"
-              :on-node-click="onNodeClick"
-              :on-line-click="onLineClick"
+        ref="graphRef"
+        :options="graphOptions"
+        :on-node-click="onNodeClick"
+        :on-line-click="onLineClick"
       />
     </div>
   </div>
