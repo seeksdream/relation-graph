@@ -130,7 +130,6 @@ export class RelationGraphWith7Event extends RelationGraphWith6Effect {
       }
       this.emitEvent('node-dragging', {node, x, y});
       this.updateElementLines();
-      this._dataUpdated();
     });
   }
   onNodeDraged(node:RGNode, x_buff:number, y_buff:number, e:RGUserEvent) {
