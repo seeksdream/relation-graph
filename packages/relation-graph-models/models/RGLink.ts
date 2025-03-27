@@ -20,6 +20,7 @@ export const json2Line = (originData:JsonLine) => {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const jsonData:RGLine = {
+    id: originData.id,
     from: originData.from,
     to: originData.to,
     text: originData.text !== undefined ? originData.text : '',
@@ -46,11 +47,22 @@ export const json2Line = (originData:JsonLine) => {
     showEndArrow: originData.showEndArrow !== undefined ? originData.showEndArrow : true,
     useTextPath: originData.useTextPath !== undefined ? originData.useTextPath : undefined,
     placeText: originData.placeText !== undefined ? originData.placeText : undefined,
+    startMarkerId: originData.startMarkerId || '',
+    endMarkerId: originData.endMarkerId || '',
+    textAnchor: originData.textAnchor !== undefined ? originData.textAnchor : undefined,
     forDisplayOnly: originData.forDisplayOnly || (originData.from === originData.to),
     fromJunctionPoint: originData.fromJunctionPoint,
     toJunctionPoint: originData.toJunctionPoint,
+    fromJuctionPointOffsetX: originData.fromJuctionPointOffsetX || 0,
+    fromJuctionPointOffsetY: originData.fromJuctionPointOffsetY || 0,
+    toJuctionPointOffsetX: originData.toJuctionPointOffsetX || 0,
+    toJuctionPointOffsetY: originData.toJuctionPointOffsetY || 0,
+    polyLineRadius: originData.polyLineRadius || 0,
     force_elastic: originData.force_elastic,
     polyLineStartDistance: originData.polyLineStartDistance,
+    ctrlPointsFor49: originData.ctrlPointsFor49,
+    ctrlPointsFor44: originData.ctrlPointsFor44,
+    ctrlPoints: originData.ctrlPoints,
     isHideArrow:
       originData.isHideArrow !== undefined ? originData.isHideArrow : undefined,
     hidden: false,
@@ -69,25 +81,32 @@ export const json2Line = (originData:JsonLine) => {
   return jsonData;
 };
 
-const _ignore_link_keys = ['arrow', 'id', 'reverseText', 'isReverse'];
+const _ignore_link_keys = ['arrow', 'reverseText', 'isReverse'];
+export const transLineToJson = (line: RGLine) => {
+  if (!line) return;
+  const _line_json = {};
+  Object.keys(line).forEach((thisKey) => {
+    if (!_ignore_link_keys.includes(thisKey)) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      if (line[thisKey] !== undefined) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        _line_json[thisKey] = line[thisKey];
+      }
+    }
+  });
+  return _line_json as JsonLine;
+};
 export const transLinkToJson = (link: RGLink, relations:JsonLine[]) => {
   if (!link) return;
   link.relations.forEach((thisRelation) => {
-    const _line_json = {};
-    Object.keys(thisRelation).forEach((thisKey) => {
-      if (!_ignore_link_keys.includes(thisKey)) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        if (thisRelation[thisKey] !== undefined) {
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          _line_json[thisKey] = thisRelation[thisKey];
-        }
-      }
-    });
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    relations.push(_line_json);
+    const _line_json = transLineToJson(thisRelation);
+    if (_line_json) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      relations.push(_line_json);
+    }
   });
 };
 export const JUNCTION_POINT_STYLE = {

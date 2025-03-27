@@ -8,7 +8,7 @@
       <svg class="rg-icon" aria-hidden="true"><use xlink:href="#icon-fangda"></use></svg>
       <span class="c-mb-text">放大</span>
     </div>
-    <div v-if="options.allowShowZoomMenu" style="float:left;margin-top:0px;height:20px;width:40px;border-top:0px;border-bottom:0px;background-color: #ffffff;color: #262626;font-size: 10px;background-color: #efefef;text-align: center;line-height: 20px;" @dblclick="zoomToFit">{{ options.canvasZoom }}%</div>
+    <div v-if="options.allowShowZoomMenu" style="float:left;margin-top:0px;height:20px;width:40px;border-top:0px;border-bottom:0px;background-color: #ffffff;color: #262626;font-size: 10px;background-color: #efefef;text-align: center;line-height: 20px;" @click="zoomToFit">{{ options.canvasZoom }}%</div>
     <!--<div style="float:left;margin-top:0px;height:20px;width:40px;border-top:0px;border-bottom:0px;background-color: #ffffff;color: #262626;font-size: 10px;background-color: #efefef;text-align: center;line-height: 20px;">{{ hits }}</div>-->
     <div v-if="options.allowShowZoomMenu" class="c-mb-button" style="margin-top:0px;" @click="relationGraph.zoom(-20)">
       <svg class="rg-icon" aria-hidden="true"><use xlink:href="#icon-suoxiao"></use></svg>

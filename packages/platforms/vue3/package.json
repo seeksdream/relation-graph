@@ -28,7 +28,7 @@
   "jsdelivr": "dist/relation-graph.umd.js",
   "scripts": {
     "build": "vite build --base=.",
-    "tsc": "vue-tsc --declaration --emitDeclarationOnly --declarationDir types ./src/index.ts"
+    "tsc": "vue-tsc --declaration --emitDeclarationOnly --declarationDir ./types src/index.ts"
   },
   "repository": {
     "type": "git",

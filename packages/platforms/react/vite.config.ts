@@ -19,17 +19,26 @@ export default defineConfig({
       entry: resolve(__dirname, 'src/index.tsx'),
       name: 'RelationGraph',
       // the proper extensions will be added
-      fileName: 'relation-graph'
+      fileName: 'relation-graph',
+      formats: ['es', 'cjs'], // 输出 ESM 和 CommonJS 格式
     },
-    outDir: resolve(__dirname, '../lib/react'),
+    outDir: resolve(__dirname, '../../../lib/react'),
     emptyOutDir: false,
     rollupOptions: {
       // 确保外部化处理那些你不想打包进库的依赖
-      external: ['react', 'screenfull', 'html2canvas'],
+      external: [
+        'react',
+        'react-dom',
+        'react/jsx-runtime', // React 19 中 JSX 运行时依赖
+        'screenfull',
+        'html2canvas'
+      ],
       output: {
         // 在 UMD 构建模式下为这些外部化的依赖提供一个全局变量
         globals: {
-          react: 'react',
+          react: 'React',
+          'react-dom': 'ReactDOM',
+          'react/jsx-runtime': 'ReactJSXRuntime',
           screenfull: 'screenfull',
           html2canvas: 'html2canvas'
         }

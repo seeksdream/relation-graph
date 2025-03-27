@@ -17,7 +17,7 @@ import {devLog} from "../../../../relation-graph-models/utils/RGCommon";
 import {RGLine, RGLink} from "../../../../relation-graph-models/types";
 
 export default {
-  name: 'RGCheckedLine',
+  name: 'RGLineChecked',
   inject: ['graph', 'graphInstance'],
   computed: {
     options() {

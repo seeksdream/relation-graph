@@ -26,13 +26,26 @@ const pathData = computed(() => {
 const relationGraph = computed(() => {
   return graph.instance!;
 })
+
+const style = computed(() => {
+  const lineWidth = props.relation.lineWidth !== undefined ? props.relation.lineWidth : (options.value.defaultLineWidth || 1);
+  const lineColor = props.relation.color ? props.relation.color : options.value.defaultLineColor;
+  return options.value.snapshotting ? {
+    stroke: lineColor,
+    opacity: props.relation.opacity,
+    strokeWidth: lineWidth + 'px',
+    pointerEvents: (props.relation.disableDefaultClickEffect ? 'none' : undefined),
+    fill: props.relation.lineShape === 8 ? lineColor : 'none'
+  } : {};
+})
 </script>
 <template>
   <path
-      :id="options.instanceId + '-' + link.seeks_id + '-' + relationIndex"
+      :id="options.instanceId + '-' + relation.id"
       :d="pathData"
       :marker-start="relationGraph.getArrow(relation, link, true)"
       :marker-end="relationGraph.getArrow(relation, link, false)"
       :class="['c-rg-line-path', relation.styleClass, checked?'c-rg-line-checked':'']"
+      :style="style"
   />
 </template>

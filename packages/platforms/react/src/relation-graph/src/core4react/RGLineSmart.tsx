@@ -38,7 +38,7 @@ const RGLineSmart: React.FC<RGLineProps> = ({link,relation,relationIndex}) => {
   const pathData = calcPathData();
   const lineWidth = relation.lineWidth !== undefined ? relation.lineWidth : (options.defaultLineWidth || 1);
   return (
-    <g className={[relation.className].join(' ')}>
+    <g className={[relation.className].join(' ')} data-id={relation.id}>
       <path
         d={pathData.path}
         className="c-rg-line-bg"

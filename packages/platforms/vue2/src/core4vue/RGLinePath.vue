@@ -1,15 +1,16 @@
 <template>
   <path
-      :id="options.instanceId + '-' + link.seeks_id + '-' + relationIndex"
+      :id="options.instanceId + '-' + relation.id"
       :d="pathData"
       :marker-start="relationGraph.getArrow(relation, link, true)"
       :marker-end="relationGraph.getArrow(relation, link, false)"
       :class="['c-rg-line-path', relation.styleClass, checked?'c-rg-line-checked':'']"
+      :style="style"
   />
 </template>
 <script lang="ts">
 export default {
-  name: 'SeeksRGLink',
+  name: 'RGLinePath',
   props: {
     link: {
       mustUseProp: true,
@@ -45,6 +46,17 @@ export default {
     },
     relationGraph() {
       return this.graphInstance();
+    },
+    style() {
+      const lineWidth = this.relation.lineWidth !== undefined ? this.relation.lineWidth : (this.options.defaultLineWidth || 1);
+      const lineColor = this.relation.color ? this.relation.color : this.options.defaultLineColor;
+      return this.options.snapshotting ? {
+        stroke: lineColor,
+        opacity: this.relation.opacity,
+        strokeWidth: lineWidth + 'px',
+        pointerEvents: (this.relation.disableDefaultClickEffect ? 'none' : undefined),
+        fill: this.relation.lineShape === 8 ? lineColor : 'none'
+      } : {};
     }
   },
   data() {

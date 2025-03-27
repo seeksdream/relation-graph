@@ -1,44 +1,30 @@
-import screenfull from 'screenfull';
-import { devLog, findParentByClassName, getClientCoordinate, isSupportTouch } from '../utils/RGCommon';
-import { json2Node } from './RGNode';
-import { newNodeTemplate } from './RGOptions';
+import * as screenfull from 'screenfull';
+import {devLog, findParentByClassName, getClientCoordinate, isSupportTouch} from '../utils/RGCommon';
+import {json2Node} from './RGNode';
+import {newNodeTemplate} from './RGOptions';
 import {
-  JsonLine, JsonNode, RGElementLine,
+  CreatingLinePlotOptions,
+  CreatingNodePlotOptions,
+  JsonNodeTemplate,
+  RGEventNames,
   RGEventTargetType,
   RGJunctionPoint,
   RGLine,
-  RGLineShape,
+  RGLineShape, RGLineTarget,
   RGLink,
   RGListeners,
   RGNode,
-  RGOptions, RGPosition, RGSelectionView,
+  RGOnCreateLineCallback,
+  RGOptions,
+  RGPosition,
+  RGSelectionView,
   RGUserEvent
 } from '../types';
-import { RelationGraphWith6Effect } from './RelationGraphWith6Effect';
+import {RelationGraphWith6Effect} from './RelationGraphWith6Effect';
 import RGEffectUtils from '../utils/RGEffectUtils';
+import {json2Line} from './RGLink';
+import RGNodesAnalytic from "../utils/RGNodesAnalytic";
 
-export type RGOnCreateLineCallback = (from:RGNode, to:RGNode|RGPosition, lineTemplate?:JsonLine) => void;
-export interface JsonLineTemplate extends JsonLine{
-  from?: string;
-  to?: string;
-}
-export interface JsonNodeTemplate extends JsonNode{
-  id?: string;
-}
-export type CreatingLinePlotOptions = {
-  onCreateLine: RGOnCreateLineCallback|undefined
-  template?: JsonLineTemplate
-  fromNode?: JsonNodeTemplate
-};
-export type RGOnCreateNodeCallback = (from:RGNode, to:RGNode|RGPosition, lineTemplate:JsonLine) => void;
-export type CreatingNodePlotOptions = {
-  disableClickCreate?:boolean
-  templateText?:string
-  templateStyleClass?:string
-  templateNode?: JsonNode
-  templateMove?: (x:number, y:number) => void
-  onCreateNode: (x:number, y:number) => void
-};
 export class RelationGraphWith7Event extends RelationGraphWith6Effect {
   constructor(options: RGOptions, listeners: RGListeners) {
     super(options, listeners);
@@ -89,9 +75,7 @@ export class RelationGraphWith7Event extends RelationGraphWith6Effect {
       this.options.checkedLineId = '';
       this.setCheckedNode(node.id);
     }
-    if (this.listeners.onNodeClick) {
-      await this.listeners.onNodeClick(node, e);
-    }
+    this.emitEvent(RGEventNames.onNodeClick, node, e);
     this.prevClickTime = Date.now();
   }
   onNodeDragStart(node:RGNode, e:RGUserEvent) {
@@ -101,42 +85,43 @@ export class RelationGraphWith7Event extends RelationGraphWith6Effect {
     if (isNaN(node.x)) node.x = 0;
     if (isNaN(node.y)) node.y = 0;
     node.dragging = true;
-    if (this.listeners.onNodeDragStart) {
-      this.listeners.onNodeDragStart(node, e);
-    }
-    this.emitEvent('node-drag-start', {node: node})
+    this.setEditingLine(null, null);
+    this.options.checkedLinkId = '';
+    this.options.checkedLineId = '';
+    devLog('[node]onNodeDragStart...', isSupportTouch(e), e);
+    this.emitEvent(RGEventNames.nodeDragStart, node, e);
     const dragEnd = (x_buff:number, y_buff:number, e:RGUserEvent) => {
       node.dragging = false;
+      this.options.editingReferenceLine.show = false;
       this.onNodeDraged(node, x_buff, y_buff, e);
       this._dataUpdated();
     };
     RGEffectUtils.startDrag(e, node, dragEnd, (offsetX, offsetY, basePosition) => {
-      let x = offsetX / (this.options.canvasZoom / 100) + basePosition.x;
-      let y = offsetY / (this.options.canvasZoom / 100) + basePosition.y;
-      if (this.listeners.onNodeDragging) {
-        const updatePosition = this.listeners.onNodeDragging(node, x, y, e);
-        if (updatePosition) {
-          (typeof updatePosition.x === 'number') && (x = updatePosition.x);
-          (typeof updatePosition.y === 'number') && (y = updatePosition.y);
-        }
+      let x = offsetX / (this.options.canvasZoom! / 100) + basePosition.x;
+      let y = offsetY / (this.options.canvasZoom! / 100) + basePosition.y;
+      const buff_x = x - node.x;
+      const buff_y = y - node.y;
+
+      const customPosition = this.emitEvent(RGEventNames.nodeDragging, node, x, y, buff_x, buff_y, e);
+      if (customPosition) {
+        (typeof customPosition.x === 'number') && (x = customPosition.x);
+        (typeof customPosition.y === 'number') && (y = customPosition.y);
+      }
+      if (this.options.useHorizontalView) { // 光芒卡牌设置横向
+        x = offsetY / (this.options.canvasZoom! / 100) + basePosition.x;
+        y = -offsetX / (this.options.canvasZoom! / 100) + basePosition.y;
       }
       this.setNodePosition(node, x, y);
-      if (this.options.useHorizontalView) { // 光芒卡牌设置横向
-        x = offsetY / (this.options.canvasZoom / 100) + basePosition.x;
-        y = -offsetX / (this.options.canvasZoom / 100) + basePosition.y;
-        this.setNodePosition(node, x, y);
-      } else {
-        this.setNodePosition(node, x, y);
-      }
-      this.emitEvent('node-dragging', {node, x, y});
+      this.draggingSelectedNodes(node, buff_x, buff_y);
       this.updateElementLines();
+      this._dataUpdated();
     });
   }
   onNodeDraged(node:RGNode, x_buff:number, y_buff:number, e:RGUserEvent) {
     if (x_buff === 0 && y_buff === 0) {
       devLog('[node]node click by drag');
       this.onNodeClick(node, e);
-      this.emitEvent('node-drag-end', {node});
+      this.onNodeDragEnd(node, e, x_buff, y_buff);
       return;
     }
     if (this.options.isMoveByParentNode) {
@@ -149,19 +134,16 @@ export class RelationGraphWith7Event extends RelationGraphWith6Effect {
       this.prevClickTime = Date.now();
       setTimeout(() => {
         devLog('[node]onDragEnd2');
-        this.onNodeDragEnd(node, e);
+        this.onNodeDragEnd(node, e, x_buff, y_buff);
       }, 100);
     } else {
       devLog('[node]onDragEnd1');
-      this.onNodeDragEnd(node, e);
+      this.onNodeDragEnd(node, e, x_buff, y_buff);
     }
   }
-  onNodeDragEnd(node:RGNode, e:RGUserEvent) {
+  onNodeDragEnd(node:RGNode, e:RGUserEvent, x_buff:number, y_buff:number) {
     this.updateElementLines();
-    if (this.listeners.onNodeDragEnd) {
-      this.listeners.onNodeDragEnd(node, e);
-    }
-    this.emitEvent('node-drag-end', {node});
+    this.emitEvent(RGEventNames.nodeDragEnd, node, e, x_buff, y_buff);
   }
   async onLineClick(line:RGLine, link:RGLink, e:RGUserEvent) {
     devLog('onLineClick:', 'line:', line, 'link:', link);
@@ -176,9 +158,7 @@ export class RelationGraphWith7Event extends RelationGraphWith6Effect {
       //   this.flashNode(link.toNode, false);
       // }, 2000);
     }
-    if (this.listeners.onLineClick) {
-      await this.listeners.onLineClick(line, link, e);
-    }
+    this.emitEvent(RGEventNames.onLineClick, line, link, e);
   }
   async expandOrCollapseNode(node:RGNode, e:RGUserEvent) {
     if (node.expanded === false) {
@@ -210,9 +190,10 @@ export class RelationGraphWith7Event extends RelationGraphWith6Effect {
     }
     this.updateElementLines();
     this._dataUpdated();
-    if (this.listeners.onNodeExpand) {
-      await this.listeners.onNodeExpand(node, e);
-    }
+    this.emitEvent(RGEventNames.onNodeExpand, node, e);
+  }
+  getDescendantNodes(node:RGNode) {
+    return RGNodesAnalytic.getDescendantNodes(node);
   }
   setChildsToPosition(node:RGNode, pnode:RGNode) {
     node.lot.childs.forEach(thisNode => {
@@ -239,32 +220,26 @@ export class RelationGraphWith7Event extends RelationGraphWith6Effect {
     }
     this.updateElementLines();
     this._dataUpdated();
-    if (this.listeners.onNodeCollapse) {
-      await this.listeners.onNodeCollapse(node, e);
-    }
+    this.emitEvent(RGEventNames.onNodeCollapse, node, e);
   }
   onCanvasDragEnd(e:RGUserEvent) {
-    this.setCanvasOffset(this.options.canvasOffset.x + 1, this.options.canvasOffset.y + 1);
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // this.setCanvasOffset(this.options.canvasOffset.x + 1, this.options.canvasOffset.y + 1);
     // this._dataUpdated();
-    if (this.listeners.onCanvasDragEnd) {
-      this.listeners.onCanvasDragEnd(e);
-    }
+    this.updateEditingControllerView();
+    this.emitEvent(RGEventNames.onCanvasDragEnd, e);
   }
   onCanvasClick(e:RGUserEvent) {
     if (this.options.creatingLinePlot) {
       this.onCanvasClickWhenCreatingLinePlot(e);
     }
-    if (this.listeners.onCanvasClick) {
-      this.listeners.onCanvasClick(e);
-    }
+    this.emitEvent(RGEventNames.onCanvasClick, e);
   }
   clickGraphMask(e:RGUserEvent) {
     this.clearLoading();
   }
   onCanvasSelectionEnd(selectionView:RGSelectionView, e:RGUserEvent) {
-    if (this.listeners.onCanvasSelectionEnd) {
-      this.listeners.onCanvasSelectionEnd(selectionView, e);
-    }
+    this.emitEvent(RGEventNames.onCanvasSelectionEnd, selectionView, e);
   }
   startCreatingNodePlot(e:RGUserEvent, setting:CreatingNodePlotOptions) {
     this.options.newNodeTemplate = json2Node(JSON.parse(JSON.stringify(newNodeTemplate)), this.options);
@@ -273,11 +248,13 @@ export class RelationGraphWith7Event extends RelationGraphWith6Effect {
     this.options.showTemplateNode = !isTouchEvent;
     // console.log('is touch event:', isTouchEvent);
     let templaceMove = (x:number, y:number) => {
-      this.options.newNodeTemplate.x = x;
-      this.options.newNodeTemplate.y = y;
+      const tempNode = this.options.newNodeTemplate;
+      const nodeSize = {width:((tempNode.el && tempNode.el.offsetWidth) ? tempNode.el.offsetWidth : (tempNode.width || 96)), height: ((tempNode.el && tempNode.el.offsetHeight) ? tempNode.el.offsetHeight : (tempNode.height || 96))};
+      this.options.newNodeTemplate.x = x - nodeSize.width / 2;
+      this.options.newNodeTemplate.y = y - nodeSize.height / 2;
       this._dataUpdated();
     };
-    let onCreateNode = (x:number, y:number) => {
+    let onCreateNode = (x:number, y:number, nodeTemplate: JsonNodeTemplate) => {
       const templateNodeId = 's-' + Date.now();
       this.addNodes([{
         id: templateNodeId,
@@ -306,8 +283,8 @@ export class RelationGraphWith7Event extends RelationGraphWith6Effect {
     const objectTemplateMove = ($event:MouseEvent) => {
       const _base_position = this.$dom.getBoundingClientRect();
       devLog('[CreatingNodePlot]objectTemplateMove');
-      const movingX = $event.clientX - _base_position.x + 10;
-      const movingY = $event.clientY - _base_position.y + 10;
+      const movingX = $event.clientX - _base_position.x;
+      const movingY = $event.clientY - _base_position.y;
       templaceMove(movingX, movingY);
     };
     const userAbort = ($event:RGUserEvent) => {
@@ -341,26 +318,37 @@ export class RelationGraphWith7Event extends RelationGraphWith6Effect {
       }
       const canvasCoordinate = this.getCanvasCoordinateByClientCoordinate({ x: clientCoordinate.clientX, y: clientCoordinate.clientY });
       devLog('[CreatingNodePlot]objectBePlaced:', canvasCoordinate);
-      onCreateNode(canvasCoordinate.x, canvasCoordinate.y);
+      onCreateNode(canvasCoordinate.x, canvasCoordinate.y, this.options.newNodeTemplate);
       this._dataUpdated();
     };
     setTimeout(() => {
       // this.$dom.addEventListener('mousemove', objectTemplateMove);
       this.$dom.addEventListener('click', objectBePlaced);
+      // this.$dom.addEventListener('mouseup', objectBePlaced);
       this.$dom.addEventListener('contextmenu', userAbort);
     }, 300);
-    if (!isTouchEvent) this.$dom.addEventListener('mousemove', objectTemplateMove);
+    if (!isTouchEvent) {
+      this.$dom.addEventListener('mousemove', objectTemplateMove);
+    }
     // this.$dom.addEventListener('click', objectBePlaced);
     // this.$dom.addEventListener('contextmenu', userAbort);
   }
   startCreatingLinePlot(e:RGUserEvent, setting:CreatingLinePlotOptions) {
     const isTouchEvent = isSupportTouch(e);
     if (setting && setting.onCreateLine) this.onCreateLineCallback = setting.onCreateLine;
-    if (setting && setting.template) Object.assign(this.options.newLineTemplate, setting.template);
+    const lineTemplate = json2Line({
+      from: 'newRelationTemplate-from',
+      to: 'newRelationTemplate-to',
+      color: '',
+      text: 'new line'
+    });
+    if (setting && setting.template) Object.assign(lineTemplate, setting.template);
+    this.options.newLineTemplate = lineTemplate;
+    // console.log('xxxxxxxxxxxxx:lineTemplate:', lineTemplate.isReverse);
     this.options.newLinkTemplate.fromNode = null;
     if (setting && setting.fromNode) {
-      this.options.newLinkTemplate.toNode.x = setting.fromNode.x + 50;
-      this.options.newLinkTemplate.toNode.y = setting.fromNode.y + 50;
+      this.options.newLinkTemplate.toNode.x = setting.fromNode.x! + 50;
+      this.options.newLinkTemplate.toNode.y = setting.fromNode.y! + 50;
       this.options.newLinkTemplate.fromNode = setting.fromNode;
       this.step1EventTime = Date.now();
     }
@@ -370,11 +358,16 @@ export class RelationGraphWith7Event extends RelationGraphWith6Effect {
     this.options.newLinkTemplate.toNode.el.offsetWidth = 2;
     this.options.newLinkTemplate.toNode.el.offsetHeight = 2;
     devLog('[CreatingLinePlot]startCreatingLinePlot:', isTouchEvent);
+    this._currentMovingLinePoint = this.options.newLinkTemplate.toNode;
     if (!isTouchEvent) {
       devLog('[CreatingLinePlot]Listener move');
+      if (this.movingListener) {
+        this.$dom.removeEventListener('mousemove', this.movingListener);
+      }
       this.movingListener = this.onMovingWhenCreatingLinePlot.bind(this);
       this.$dom.addEventListener('mousemove', this.movingListener);
     }
+    this.dataUpdated();
   }
   movingListener:any;
   stopCreatingLinePlot() {
@@ -384,18 +377,92 @@ export class RelationGraphWith7Event extends RelationGraphWith6Effect {
     this.options.newLinkTemplate.toNodeObject = null;
     this.onCreateLineCallback = undefined;
     this.$dom.removeEventListener('mousemove', this.movingListener);
+    this.movingListener = undefined;
+    this._currentMovingLinePoint = null;
+    this._currentCreatingLineIsReverse = false;
+    this.options.nodeConnectController.show = false;
     this._dataUpdated();
   }
+  _currentMovingLinePoint: RGLineTarget|null = null;
   onMovingWhenCreatingLinePlot($event:MouseEvent) {
     devLog('[CreatingLinePlot]mousemove');
+    const canvasCoordinate = this.getCanvasCoordinateByClientCoordinate({
+      x: $event.clientX,
+      y: $event.clientY
+    });
+    if (this._currentMovingLinePoint) {
+      this._currentMovingLinePoint.x = canvasCoordinate.x;
+      this._currentMovingLinePoint.y = canvasCoordinate.y;
+      const editingLineController = this.options.editingLineController;
+      if (editingLineController.line) this.updateEditingLineView();
+    }
+    const targetElement = $event.target as HTMLElement;
     if (this.options.newLinkTemplate.fromNode) {
-      const canvasCoordinate = this.getCanvasCoordinateByClientCoordinate({
-        x: $event.clientX,
-        y: $event.clientY
-      });
       this.options.newLinkTemplate.toNode.x = canvasCoordinate.x;
       this.options.newLinkTemplate.toNode.y = canvasCoordinate.y;
       this._dataUpdated();
+    }
+
+    const node = this.isNode(targetElement);
+    if (node) {
+      if (node === this.options.newLinkTemplate.fromNode) {
+        this.options.nodeConnectController.show = false;
+      } else {
+        this.options.nodeConnectController.node = node;
+        this.updateEditingConnectControllerView();
+        this.options.nodeConnectController.show = true;
+      }
+    }
+    const creatingLineObject = this.options.newLinkTemplate;
+    if (targetElement.classList.contains('rel-connect-ctl-handler')) {
+      devLog('[CreatingLinePlot]content point:', targetElement.dataset.point );
+      const junctionPoint = targetElement.dataset.point as RGJunctionPoint || 'border';
+      const junctionPointIsNotNode = targetElement.dataset.innode === 'true';
+      const nodeConnectController = this.options.nodeConnectController;
+      const connectToNode = nodeConnectController.node;
+      if (creatingLineObject.fromNode === this._currentMovingLinePoint) {
+        if (this.options.newLineTemplate.isReverse) {
+          this.options.newLineTemplate.fromJunctionPoint = junctionPoint;
+        } else {
+          this.options.newLineTemplate.toJunctionPoint = junctionPoint;
+        }
+        // creatingLineObject.fromNode = node; // TODO 应用组件位置到节点位置
+      } else {
+        if (this.options.newLineTemplate.isReverse) {
+          this.options.newLineTemplate.fromJunctionPoint = junctionPoint;
+        } else {
+          this.options.newLineTemplate.toJunctionPoint = junctionPoint;
+        }
+      }
+      if (this._currentMovingLinePoint) {
+        this._currentMovingLinePoint.type = 'point';
+        if (junctionPointIsNotNode) {
+          this._currentMovingLinePoint.el.offsetWidth = 5;
+          this._currentMovingLinePoint.el.offsetHeight = 5;
+        } else {
+          devLog('[CreatingLinePlot]content point:', connectToNode.el.offsetWidth, connectToNode.el.offsetHeight);
+          this._currentMovingLinePoint.el.offsetWidth = connectToNode.el.offsetWidth;
+          this._currentMovingLinePoint.el.offsetHeight = connectToNode.el.offsetHeight;
+          this._currentMovingLinePoint.x = connectToNode.x;
+          this._currentMovingLinePoint.y = connectToNode.y;
+        }
+        this._currentMovingLinePoint.nodeShape = connectToNode.nodeShape || 1;
+        this._currentMovingLinePoint.rotate = 0;
+      }
+
+    } else {
+      devLog('[CreatingLinePlot]point:', targetElement.dataset.point );
+      if (creatingLineObject.fromNode === this._currentMovingLinePoint) {
+        creatingLineObject.fromJunctionPoint = 'border';
+        // creatingLineObject.fromNode = node; // TODO 应用组件位置到节点位置
+      } else {
+        creatingLineObject.toJunctionPoint = 'border';
+      }
+      if (this._currentMovingLinePoint) {
+        this._currentMovingLinePoint.el.offsetWidth = 3;
+        this._currentMovingLinePoint.el.offsetHeight = 3;
+        this._currentMovingLinePoint.rotate = 0;
+      }
     }
   }
   onCanvasClickWhenCreatingLinePlot($event:RGUserEvent) {
@@ -433,9 +500,19 @@ export class RelationGraphWith7Event extends RelationGraphWith6Effect {
   onCreateLineCallback:RGOnCreateLineCallback|undefined;
   onCreateLine(from:RGNode, to:RGNode|RGPosition) {
     devLog('[CreatingLinePlot][fire-event]onCreateLine:', from, to);
+    const lineJson = json2Line(this.options.newLineTemplate);
+    lineJson.from = from ? from.id : '';
+    lineJson.to = to ? to.id : '';
+    const abortCreate = this.emitEvent(RGEventNames.beforeCreateLine, {lineJson, fromNode: from, toNode: to});
+    devLog('[CreatingLinePlot]onCreateLine:abort:', abortCreate);
+    if (abortCreate === true) {
+      return;
+    }
     if (this.onCreateLineCallback) {
+      this.options.newLineTemplate.disableDefaultClickEffect = false;
       this.onCreateLineCallback(from, to, this.options.newLineTemplate);
     }
+    this.emitEvent(RGEventNames.onLineBeCreated, {lineJson, fromNode: from, toNode: to});
   }
   isNode(el:HTMLElement):RGNode|undefined {
     const nodeEl = findParentByClassName(el, 'rel-node-peel', 'rel-map');
@@ -450,6 +527,7 @@ export class RelationGraphWith7Event extends RelationGraphWith6Effect {
     return link;
   }
   onContextmenu(e:RGUserEvent) {
+    this.stopCreatingLinePlot();
     let objectType:RGEventTargetType = 'canvas';
     let object:RGNode|RGLink|undefined = this.isNode(e.target as HTMLElement);
     if (object) {
@@ -461,33 +539,32 @@ export class RelationGraphWith7Event extends RelationGraphWith6Effect {
       }
     }
     devLog('contextmenu:objectType', objectType, object);
-    if (this.listeners.onContextmenu) {
-      this.listeners.onContextmenu(e, objectType, object);
-    }
+    this.emitEvent(RGEventNames.onContextmenu, e, objectType, object);
   }
-  async fullscreen(newValue?: boolean) {
+  async fullscreen(newValue?:boolean) {
     if (screenfull.element && screenfull.element !== this.$dom) {
       return;
     }
     if (newValue === this.options.fullscreen) {
       return;
     }
-    let isToogle = false;
+    devLog("screenfull", newValue);
     if (newValue === undefined) {
       newValue = !this.options.fullscreen;
-      isToogle = true;
     }
-    devLog("screenfull", newValue);
-    this.options.fullscreen = newValue;
     const defaultEffect = async () => {
-      if (isToogle) await screenfull.toggle(this.$dom);
+      this.options.fullscreen = newValue as boolean;
+      await screenfull.toggle(this.$dom);
     };
-    if (this.listeners.onFullscreen) {
-      this.listeners.onFullscreen(this.options.fullscreen, defaultEffect);
-    } else {
+    if (!this.listeners.onFullscreen) { // 默认情况
       await defaultEffect();
+    } else { // 如果用户自定义的全屏事件动作
+      // 则将defaultEffect方法的调用权交给用户；
+      // 用户可以通过newValue获取新的状态
+      // 还可以通过graphInstance.options.fullscreen获取当前的状态
+      // 在根据自己的业务需要来决定是否执行defaultEffect来让全屏状态到达新状态newValue
+      this.emitEvent(RGEventNames.onFullscreen, newValue, defaultEffect);
     }
-    // this.emitEvent('onFullscreen', { fullscreen: this.options.fullscreen });
   }
   async focusNodeById(nodeId:string) {
     let node;
@@ -506,9 +583,9 @@ export class RelationGraphWith7Event extends RelationGraphWith6Effect {
   }
   async handleSelect(thisNode:RGNode) {
     devLog('checked:', thisNode);
-    scrollTo({
-      top: this.$dom.offsetTop
-    });
+    // scrollTo({
+    //   top: this.$dom.offsetTop
+    // });
     await this.animateToZoom(100, 300);
     const _n_width = thisNode.width || 50;
     const _n_height = thisNode.height || 50;
@@ -518,6 +595,8 @@ export class RelationGraphWith7Event extends RelationGraphWith6Effect {
     this.options.checkedNodeId = thisNode.id;
     this.refreshNVAnalysisInfo();
   }
+  private _wheelAction = 0;
+  private _wheelBuff = 0;
   onMouseWheel(e:WheelEvent) {
     if (this.options.disableZoom) {
       e.cancelBubble = false;
@@ -530,10 +609,6 @@ export class RelationGraphWith7Event extends RelationGraphWith6Effect {
     } catch (e) {
       // xxx
     }
-    const userZoomCenter = {
-      x: e.clientX,
-      y: e.clientY
-    };
     let _deltaY = e.deltaY;
     if (_deltaY === undefined) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -543,29 +618,41 @@ export class RelationGraphWith7Event extends RelationGraphWith6Effect {
     // #25 https://github.com/seeksdream/relation-graph/issues/25
     // const _isMac = /macintosh|mac os x/i.test(navigator.userAgent);
     // const _zoomDirection = _isMac ? 1 : -1;
-    const _zoomDirection = -1;
-    // const _zoomDirection = 1;
-    if (_deltaY > 0) {
-      this.zoom(5 * _zoomDirection, userZoomCenter);
-    } else {
-      this.zoom(-5 * _zoomDirection, userZoomCenter);
-    }
+    const _zoomDirection = _deltaY > 0 ? -1 : 1;
+    const buff = this.options.mouseWheelSpeed * _zoomDirection;
+    this._onMouseWheel(e, buff);
+    // this._wheelBuff += buff;
+    // if (this._wheelAction) {
+    //   clearTimeout(this._wheelAction);
+    // }
+    // this._wheelAction = setTimeout(() => {
+    //   this._onMouseWheel(e, this._wheelBuff);
+    //   this._wheelBuff = 0;
+    // }, 100);
+  }
+  private _onMouseWheel(e:WheelEvent, buff:number) {
+    const userZoomCenter = {
+      x: e.clientX,
+      y: e.clientY
+    };
+    this.zoom(buff, userZoomCenter, e);
   }
   onLineDragStart(link: RGLink, e:RGUserEvent) {
-    devLog('onLineDragStart...')
+    devLog('onLineDragStart...');
     const node1BasePosition:RGPosition = { x: link.fromNode.x, y: link.fromNode.y};
     const node2BasePosition:RGPosition = { x: link.toNode.x, y: link.toNode.y};
     const draggingCallback = (moved_x:number, moved_y:number, basePosition:RGPosition, baseEventPosition:RGPosition, e_move:RGUserEvent) => {
-      link.fromNode.x = node1BasePosition.x + moved_x / (this.options.canvasZoom / 100);
-      link.fromNode.y = node1BasePosition.y + moved_y / (this.options.canvasZoom / 100);
-      link.toNode.x = node2BasePosition.x + moved_x / (this.options.canvasZoom / 100);
-      link.toNode.y = node2BasePosition.y + moved_y / (this.options.canvasZoom / 100);
+      link.fromNode.x = node1BasePosition.x + moved_x / (this.options.canvasZoom! / 100);
+      link.fromNode.y = node1BasePosition.y + moved_y / (this.options.canvasZoom! / 100);
+      link.toNode.x = node2BasePosition.x + moved_x / (this.options.canvasZoom! / 100);
+      link.toNode.y = node2BasePosition.y + moved_y / (this.options.canvasZoom! / 100);
+      this.updateEditingControllerView();
       this._dataUpdated();
     };
     RGEffectUtils.startDrag(e, {x:0,y:0}, (...args) => {this.onLineDragEnd(...args);}, draggingCallback);
   }
   onLineDragEnd(x_buff:number, y_buff:number, e:RGUserEvent) {
-    devLog('onLineDragEnd')
+    devLog('onLineDragEnd');
     this.updateElementLines();
   }
   onCanvasDragStart(e:RGUserEvent) {
@@ -573,8 +660,8 @@ export class RelationGraphWith7Event extends RelationGraphWith6Effect {
     if (this.options.disableDragCanvas) {
       return;
     }
-    e.preventDefault();
-    e.stopPropagation();
+    // e.preventDefault();
+    // e.stopPropagation();
     if (this.options.selectionMode || e.shiftKey) {
       this.startCreateSelection(e);
       // RGEffectUtils.startDrag(e, {x:0, y: 0}, this.onDragEnd, null);
@@ -614,28 +701,41 @@ export class RelationGraphWith7Event extends RelationGraphWith6Effect {
         } else {
           const ex = touchPointer1.clientX;
           const ey = touchPointer1.clientY;
-          let x = basePosition.x + (ex - baseEventPosition.x);
-          let y = basePosition.y + (ey - baseEventPosition.y);
+          const buffX = ex - baseEventPosition.x;
+          const buffY = ey - baseEventPosition.y;
           if (this.options.useHorizontalView) { // 光芒卡牌设置横向
-            x = basePosition.x + (ey - baseEventPosition.y);
-            y = basePosition.y - (ex - baseEventPosition.x);
-            this.setCanvasOffset(x, y);
+            const newX = basePosition.x + buffY;
+            const newY = basePosition.y - buffX;
+            this.onCanvasDragging(newX, newY, buffX, buffY);
           } else {
-            this.setCanvasOffset(x, y);
+            const newX = basePosition.x + buffX;
+            const newY = basePosition.y + buffY;
+            this.onCanvasDragging(newX, newY, buffY, buffX);
           }
+          this.updateEditingControllerView();
           this._dataUpdated();
         }
       };
     } else {
-      draggingCallback = (x:number, y:number, basePosition:RGPosition, baseEventPosition:RGPosition, e_move:RGUserEvent) => {
-        // this.options.canvasOffset.x = basePosition.x + x;
-        // this.options.canvasOffset.y = basePosition.y + y;
-        const new_x = basePosition.x + x;
-        const new_y = basePosition.y + y;
-        this.setCanvasOffset(new_x, new_y);
+      draggingCallback = (buffX:number, buffY:number, basePosition:RGPosition, baseEventPosition:RGPosition, e_move:RGUserEvent) => {
+        const newX = basePosition.x + buffX;
+        const newY = basePosition.y + buffY;
+        this.onCanvasDragging(newX, newY, buffX, buffY);
+        this.updateEditingControllerView();
       };
     }
     RGEffectUtils.startDrag(e, this.options.canvasOffset, (...args) => {this.onCanvasDragStop(...args);}, draggingCallback);
+  }
+  protected onCanvasDragging(newX:number, newY:number, buffX:number, buffY:number) {
+    const customPosition = this.emitEvent(RGEventNames.onCanvasDragging, newX, newY, buffX, buffY);
+    if (customPosition === false) {
+      return;
+    }
+    if (customPosition) {
+      (typeof customPosition.x === 'number') && (newX = customPosition.x);
+      (typeof customPosition.y === 'number') && (newY = customPosition.y);
+    }
+    this.setCanvasOffset(newX, newY);
   }
   onCanvasDragStop(x_buff:number, y_buff:number, e:RGUserEvent) {
     devLog('[canvas]onCanvasDragStop...');

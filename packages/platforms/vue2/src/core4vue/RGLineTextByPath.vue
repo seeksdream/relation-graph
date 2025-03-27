@@ -1,5 +1,5 @@
 <template>
-  <g :class="[relation.className]">
+  <g :class="[relation.className]" :data-id="relation.id">
     <use
       :xlink:href="pathRef"
       class="c-rg-line-bg"
@@ -62,7 +62,7 @@
 <script lang="ts">
 
 export default {
-  name: 'SeeksRGLine',
+  name: 'RGLineTextByPath',
   props: {
     link: {
       mustUseProp: true,
@@ -103,7 +103,7 @@ export default {
           return this.relationGraph.getLineTextStyle(this.link, this.relation, this.relationIndex);
       },
       pathRef() {
-          return '#' + this.options.instanceId + '-' +  this.link.seeks_id + '-' + this.relationIndex;
+          return '#' + this.options.instanceId + '-' +  this.relation.id;
       },
     //   textOffset() {
     //       const x = this.relation.textOffset_x || this.options.defaultLineTextOffset_x || 0;

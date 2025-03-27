@@ -1,5 +1,5 @@
 import {devLog, getScreenHeight, getScreenWidth} from '../utils/RGCommon';
-import { RGListeners, RGOptions } from '../types';
+import {RGEventNames, RGListeners, RGOptions} from '../types';
 import { RelationGraphWith4Line } from './RelationGraphWith4Line';
 export type RGZoomCenter = {
   x:number
@@ -14,11 +14,17 @@ export class RelationGraphWith5Zoom extends RelationGraphWith4Line {
     super(options, listeners);
   }
 
-  zoom(buff:number, userZoomCenter?:RGZoomCenter) {
+  zoom(buff:number, userZoomCenter?:RGZoomCenter, e: WheelEvent) {
     // devLog('[zoom]', buff, 'from:', userZoomCenter);
-    if ((this.options.canvasZoom + buff) < 5) {
-      devLog('zoom:reset zoom=10');
-      buff = 5 - this.options.canvasZoom;
+    const abortZoom = this.emitEvent(RGEventNames.beforeZoomStart, this.options.canvasZoom, buff, e);
+    devLog('[zoom]', 'abortZoom:', abortZoom);
+    if (abortZoom === true) {
+      return;
+    } else {
+      if ((this.options.canvasZoom + buff) < this.options.minCanvasZoom) {
+        devLog('zoom:reset zoom=10');
+        buff = this.options.minCanvasZoom - this.options.canvasZoom;
+      }
     }
     const oldZoom = this.options.canvasZoom;
     const __new_zoom_value = this.options.canvasZoom + buff;
@@ -26,35 +32,42 @@ export class RelationGraphWith5Zoom extends RelationGraphWith4Line {
     this.options.canvasOffset.x += zoomBuff.buff_x;
     this.options.canvasOffset.y += zoomBuff.buff_y;
     this.options.canvasZoom = __new_zoom_value;
+    this._zoomEnd(oldZoom, __new_zoom_value);
+  }
+  protected _zoomEnd(oldZoomValue:number, newZoomValue: number) {
     this.refreshNVAnalysisInfo();
-    if (this.listeners.onZoomEnd) {
-      this.listeners.onZoomEnd();
-    }
-    if (oldZoom <= 40 && __new_zoom_value > 40) {
+    if (oldZoomValue <= 40 && newZoomValue > 40) {
       if (this.options.performanceMode) {
         this.updateVisbleViewNodes(true);
       }
       this.options.showEasyView = false;
-      devLog('zoom:hide:showEasyView', oldZoom, __new_zoom_value);
-      setTimeout(() => {
-        this.updateElementLines();
-      }, 150)
+      devLog('zoom:hide:showEasyView', oldZoomValue, newZoomValue);
+      this.updateElementLines();
+      // setTimeout(() => {
+      //   this.updateElementLines();
+      // }, 500);
     }
-    if (oldZoom > 40 && __new_zoom_value <= 40) {
-      devLog('zoom:show:showEasyView', oldZoom, __new_zoom_value);
+    if (oldZoomValue > 40 && newZoomValue <= 40) {
+      devLog('zoom:show:showEasyView', oldZoomValue, newZoomValue);
       if (this.options.performanceMode) {
         this.options.showEasyView = true;
       }
     }
     // this.options.showEasyView = this.options.canvasZoom <= 40;
+    this.updateEditingControllerView();
+    this.emitEvent(RGEventNames.onZoomEnd, this.options.canvasZoom);
     this._dataUpdated();
-    this.emitEvent('zoom', { canvasZoom: this.options.canvasZoom });
   }
   setZoom(finalZoom:number, userZoomCenter?:RGZoomCenter) {
     const buff = Math.floor(finalZoom - this.options.canvasZoom);
     this.zoom(buff, userZoomCenter);
   }
   zoomCenter_of_newSize = { x: 0, y: 0 };
+
+  /**
+   * Get the coordinates mapped on the viewport from the canvas coordinates
+   * @param clientCoordinate
+   */
   getCanvasCoordinateByClientCoordinate(clientCoordinate:RGCoordinate) {
     const _current_zoom = this.options.canvasZoom / 100;
     const { NMCanvasStart, NMZoomCenter } = this.analysisByZoom(_current_zoom, clientCoordinate);
@@ -67,19 +80,60 @@ export class RelationGraphWith5Zoom extends RelationGraphWith4Line {
       y: zoomCenter.y / _current_zoom
     };
   }
+
+  /**
+   * Get the coordinates mapped on the canvas from the viewport coordinates
+   * @param canvasCoordinate
+   */
   getClientCoordinateByCanvasCoordinate(canvasCoordinate:RGCoordinate) {
     const _current_zoom = this.options.canvasZoom / 100;
     const { NMCanvasStart } = this.analysisByZoom(_current_zoom);
-
     const zoomCenter = {
       x: canvasCoordinate.x * _current_zoom + NMCanvasStart.x,
       y: canvasCoordinate.y * _current_zoom + NMCanvasStart.y
     };
+    // const zoomCenter = {
+    //   x: canvasCoordinate.x * _current_zoom,
+    //   y: canvasCoordinate.y * _current_zoom
+    // };
 
     return {
       x: zoomCenter.x + this.options.canvasOffset.x,
       y: zoomCenter.y + this.options.canvasOffset.y
     };
+  }
+
+  /**
+   * Get the coordinates mapped on the canvas from the viewport coordinates
+   * @param canvasCoordinate
+   */
+  getViewPointByCanvasPoint(canvasCoordinate:RGCoordinate) {
+    const _current_zoom = this.options.canvasZoom / 100;
+    const { NMCanvasStart } = this.analysisByZoom(_current_zoom);
+    const zoomCenter = {
+      x: canvasCoordinate.x * _current_zoom + NMCanvasStart.x,
+      y: canvasCoordinate.y * _current_zoom + NMCanvasStart.y
+    };
+    // const zoomCenter = {
+    //   x: canvasCoordinate.x * _current_zoom,
+    //   y: canvasCoordinate.y * _current_zoom
+    // };
+    return {
+      x: zoomCenter.x,
+      y: zoomCenter.y
+    };
+  }
+
+  /**
+   * Get the coordinates mapped on the viewport from the canvas coordinates
+   * @param canvasCoordinate
+   */
+  getCanvasPointByViewPoint(canvasCoordinate:RGCoordinate) {
+    const _view_info = this.$dom.getBoundingClientRect();
+    return this.getCanvasCoordinateByClientCoordinate({
+      x: _view_info.left + canvasCoordinate.x,
+      y: _view_info.top + canvasCoordinate.y,
+    });
   }
   analysisByZoom(zoom:number, userZoomCenter?:RGZoomCenter) {
     const result = {

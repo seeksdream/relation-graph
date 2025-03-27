@@ -12,6 +12,7 @@
 
 <script lang="ts">
 export default {
+  name: 'RGNodeExpandHolder',
   props: {
     nodeProps: {
       type: Object,

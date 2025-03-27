@@ -15,8 +15,10 @@ export const getEventListeners = (props: RelationGraphProps) => {
     onContextmenu: props.onContextmenu,
     onFullscreen: props.onFullscreen,
     onCanvasClick: props.onCanvasClick,
+    onCanvasDragging: props.onCanvasDragging,
     onCanvasSelectionEnd: props.onCanvasSelectionEnd,
     onImageSaveAsFile: props.onImageSaveAsFile,
+    beforeNodeResize: props.beforeNodeResize,
     onZoomEnd: props.onZoomEnd
   };
   return listeners;

@@ -4,7 +4,7 @@ import {RelationGraphStoreContext} from '../store/reducers/StockStore';
 import type { RGNodeSlotProps } from '../../../../../../../relation-graph-models/types';
 
 export interface GraphOperateStuffProps {
-  nodeSlot?: React.FC<RGNodeSlotProps>
+  nodeSlot?: React.FC<RGNodeSlotProps> | React.ReactNode
 }
 const GraphOperateStuff: React.FC<GraphOperateStuffProps> = ({nodeSlot}) => {
   const relationGraph = useContext(RelationGraphStoreContext);

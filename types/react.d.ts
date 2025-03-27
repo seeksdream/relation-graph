@@ -2,37 +2,34 @@
  * relation-graph
  * Website: http://www.relation-graph.com/
  * Github: https://github.com/seeksdream/relation-graph
- * QQ: 3235808353
  *
  */
 import type React from 'react';
-import {RelationGraphInstance,RelationGraphComponent,RelationGraphProps, RGNode, RGNodeSlotProps, RGLineSlotProps} from "./types/types";
-
-import BidirectionalTreeLayouter from './types/layouters/SeeksBidirectionalTreeLayouter';
-import CenterLayouter from './types/layouters/SeeksCenterLayouter';
-import CircleLayouter from './types/layouters/SeeksCircleLayouter';
-import FixedLayouter from './types/layouters/SeeksFixedLayouter';
-import ForceLayouter from './types/layouters/SeeksForceLayouter';
-import BaseLayouter from "./types/layouters/SeeksBaseLayouter";
-import * as SeeksRGLink from './types/models/RGLink';
-import * as SeeksRGNode from './types/models/RGNode';
-import * as SeeksRGOptions from './types/models/RGOptions';
-import * as SeeksRGLayouter from './types/models/RGLayouter';
-import {RelationGraphFinal} from "./types/models/RelationGraphFinal";
-import * as _RGNodesAnalyticUtils from "./types/utils/RGNodesAnalytic";
-import * as _RGEffectUtils from "./types/utils/RGEffectUtils";
 import {
-  RGEventTargetType,
-  RGLayoutOptions,
-  RGLine,
-  RGLink,
-  RGOptions,
-  RGSelectionView,
-  RGUserEvent
-} from "../packages/platforms/vue2/src";
+  RelationGraphInstance,
+  RelationGraphComponent,
+  RelationGraphProps,
+  RGNode,
+  RGNodeSlotProps,
+  RGLineSlotProps,
+  RGToolBarProps, RGMiniViewProps, RGBackgroundProps, RGWatermarkProps, RGWidgetPosition, RGCreateLineHandleProps
+} from "./types/relation-graph-models/types";
 
+import BidirectionalTreeLayouter from './types/relation-graph-models/layouters/SeeksBidirectionalTreeLayouter';
+import CenterLayouter from './types/relation-graph-models/layouters/SeeksCenterLayouter';
+import CircleLayouter from './types/relation-graph-models/layouters/SeeksCircleLayouter';
+import FixedLayouter from './types/relation-graph-models/layouters/SeeksFixedLayouter';
+import ForceLayouter from './types/relation-graph-models/layouters/SeeksForceLayouter';
+import BaseLayouter from "./types/relation-graph-models/layouters/SeeksBaseLayouter";
+import * as SeeksRGLink from './types/relation-graph-models/models/RGLink';
+import * as SeeksRGNode from './types/relation-graph-models/models/RGNode';
+import * as SeeksRGOptions from './types/relation-graph-models/models/RGOptions';
+import * as SeeksRGLayouter from './types/relation-graph-models/models/RGLayouter';
+import {RelationGraphFinal} from "./types/relation-graph-models/models/RelationGraphFinal";
+import * as _RGNodesAnalyticUtils from "./types/relation-graph-models/utils/RGNodesAnalytic";
+import * as _RGEffectUtils from "./types/relation-graph-models/utils/RGEffectUtils";
 
-export * from './types/types';
+export * from './types/relation-graph-models/types';
 
 export type RGNodeProps = {
   nodeProps: RGNode
@@ -47,13 +44,16 @@ export type RGNodeExpandHolderProps = {
   color?: string
 };
 export type RelationGraphJsxProps = RelationGraphProps & {
-  toolBarSlot?: React.FC<{relationGraph: RelationGraphInstance}> | JSX.Element
-  miniViewSlot?: React.FC<{relationGraph: RelationGraphInstance}> | JSX.Element
-  graphPlugSlot?: React.FC<{relationGraph: RelationGraphInstance}> | JSX.Element
-  nodeSlot?: React.FC<RGNodeSlotProps>
-  lineSlot?: React.FC<RGLineSlotProps>
-  canvasPlugSlot?: React.FC<{relationGraph: RelationGraphInstance}> | JSX.Element
-  expandHolderSlot?: React.FC<RGNodeExpandHolderProps> | JSX.Element
+  toolBarSlot?: React.FC<{relationGraph: RelationGraphInstance}> | React.ReactNode
+  miniViewSlot?: React.FC<{relationGraph: RelationGraphInstance}> | React.ReactNode
+  graphPlugSlot?: React.FC<{relationGraph: RelationGraphInstance}> | React.ReactNode
+  nodeSlot?: React.FC<RGNodeSlotProps> | React.ReactNode
+  lineSlot?: React.FC<RGLineSlotProps> | React.ReactNode
+  svgDefs?: React.FC | React.ReactNode
+  canvasPlugSlot?: React.FC<{relationGraph: RelationGraphInstance}> | React.ReactNode
+  canvasPlugAboveSlot?: React.FC<{relationGraph: RelationGraphInstance}> | React.ReactNode
+  expandHolderSlot?: React.FC<RGNodeExpandHolderProps> | React.ReactNode
+  children?: React.ReactNode
 };
 export declare const Layout: {
   BaseLayouter: typeof BaseLayouter;
@@ -63,6 +63,8 @@ export declare const Layout: {
   FixedLayouter: typeof FixedLayouter;
   ForceLayouter: typeof ForceLayouter;
 };
+export const RGSlotOnGraph: React.FC;
+export const RGSlotOnCanvasAbove: React.FC;
 export declare const RelationGraphCore: typeof RelationGraphFinal;
 export declare const RGLayouterUtils: typeof SeeksRGLayouter;
 export declare const RGOptionsUtils: typeof SeeksRGOptions;
@@ -71,7 +73,21 @@ export declare const RGNodeUtils: typeof SeeksRGNode;
 export declare const RGNodesAnalyticUtils: typeof _RGNodesAnalyticUtils;
 export declare const RGEffectUtils: typeof _RGEffectUtils;
 export declare const RelationGraphStoreContext: React.Context<RelationGraphInstance>;
+export declare const RGInstanceContext: React.Context<RelationGraphInstance>;
+export declare const RGUpdateSingalContext: React.Context<RelationGraphInstance>;
 
 export declare const GraphToolBar: React.FC;
-declare const RelationGraph: React.ForwardRefExoticComponent<RelationGraphJsxProps & React.RefAttributes<RelationGraphComponent>>;
+export declare const RGMiniToolBar: React.FC<RGToolBarProps>;
+export declare const RGMiniView: React.FC<RGMiniViewProps>;
+export declare const RGBackground: React.FC<RGBackgroundProps>;
+export declare const RGWatermark: React.FC<RGWatermarkProps>;
+export declare const RGEditingController: React.FC;
+export declare const RGEditingResize: React.FC;
+export declare const RGEditingNearNodeWidget: React.FC<{position: RGWidgetPosition}>;
+export declare const RGEditingLineController: React.FC<{textEditable?: boolean}>;
+export declare const RGEditingConnectController: React.FC;
+export declare const RGEditingCreateLineHandle: React.FC<RGCreateLineHandleProps>;
+export declare const RGEditingConnectPoints: React.FC;
+export declare const RGEditingReferenceLine: React.FC;
+declare const RelationGraph: React.ForwardRefExoticComponent<RelationGraphJsxProps & React.RefAttributes<RelationGraphComponent|undefined>>;
 export default RelationGraph;

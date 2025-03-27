@@ -1,14 +1,21 @@
 <template>
   <div
-    v-show="isAllowShowNode(nodeProps)"
+    v-show="isAllowShowNode"
     ref="seeksRGNode"
     :style="{
       'left':nodeProps.x + 'px',
       'top':nodeProps.y + 'px',
-      'opacity': (nodeProps.opacity>1?nodeProps.opacity/100:nodeProps.opacity)
+      'z-index':nodeProps.zIndex ? nodeProps.zIndex : undefined,
+      'opacity': (nodeProps.opacity>1?nodeProps.opacity/100:nodeProps.opacity),
+       'pointer-events': nodeProps.opacity === 0 ? 'none' : undefined
     }"
     class="rel-node-peel"
-    :class="[(nodeProps.selected && 'rel-node-selected'), (nodeProps.dragging && 'rel-node-dragging'), (nodeProps.id===options.checkedNodeId && 'rel-node-peel-checked'), nodeProps.className]"
+    :class="[
+      (nodeProps.selected && 'rel-node-selected'),
+      (nodeProps.dragging && 'rel-node-dragging'),
+      (nodeProps.id===options.checkedNodeId && 'rel-node-peel-checked'),
+      nodeProps.className
+      ]"
     :data-id="nodeProps.id"
   >
     <template v-if="showExpandHolder">
@@ -65,6 +72,9 @@
         <slot v-else name="node" :node="nodeProps">
           <div v-if="!nodeProps.innerHTML" :style="{'color':(nodeProps.fontColor || options.defaultNodeFontColor)}" class="c-node-text">
             <span v-html="nodeProps.text" />
+<!--            {{options.defaultExpandHolderPosition + ''}} /-->
+<!--            {{nodeProps.expandHolderPosition + ''}}-->
+<!--            {{(nodeProps.lot.childs && nodeProps.lot.childs.length) + ''}}-->
           </div>
           <div v-else v-html="nodeProps.innerHTML" />
         </slot>
@@ -81,7 +91,7 @@ import RGNodeExpandHolder from "./RGNodeExpandHolder.vue";
 
 
 export default {
-  name: 'SeeksRGNode',
+  name: 'RGNode',
   components: {RGNodeExpandHolder},
   props: {
     nodeProps: {
@@ -108,10 +118,16 @@ export default {
       return this.nodeProps.expanded === false ? 'c-expanded' : 'c-collapsed';
     },
     showExpandHolder() {
-      return (
-          this.nodeProps.expandHolderPosition&&this.nodeProps.expandHolderPosition!=='hide')
-          ||
-          (this.options.defaultExpandHolderPosition&&this.options.defaultExpandHolderPosition!=='hide'&&this.nodeProps.lot.childs&&this.nodeProps.lot.childs.length>0)
+      if (this.nodeProps.expandHolderPosition && this.nodeProps.expandHolderPosition !== 'hide') {
+        return true;
+      }
+      if (this.nodeProps.lot.childs && this.nodeProps.lot.childs.length > 0) {
+        if (this.options.defaultExpandHolderPosition && this.options.defaultExpandHolderPosition !== 'hide') {
+          return true;
+        }
+      } else {
+        return false;
+      }
     },
     options() {
       return this.graph.options;
@@ -124,7 +140,7 @@ export default {
     },
     borderWidth() {
       const width = this.nodeProps.borderWidth === undefined ? this.options.defaultNodeBorderWidth : this.nodeProps.borderWidth;
-      return width === 0 ? undefined : width;
+      return !width ? undefined : (width + 'px');
     },
     nodeWidth() {
       if (this.nodeProps.width === 0) return;
@@ -141,6 +157,9 @@ export default {
         return;
       }
       return v+'px'
+    },
+    isAllowShowNode() {
+      return RGNodesAnalytic.isAllowShowNode(this.nodeProps);
     }
   },
   created() {
@@ -186,9 +205,6 @@ export default {
     },
     onclick(e) {
       this.relationGraph.onNodeClick(this.nodeProps, e);
-    },
-    isAllowShowNode(thisNode) {
-      return RGNodesAnalytic.isAllowShowNode(thisNode);
     }
   }
 };

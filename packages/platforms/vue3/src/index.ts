@@ -1,7 +1,25 @@
+/*
+* relation-graph
+* (c) 2019-2024 relation-graph.com
+* Released under the MIT License.
+* More info: https://relation-graph.com
+*/
 import {App} from "vue";
 import { version as _version } from './constants';
 import _RelationGraph from './relation-graph/src/core4vue3/index.vue';
-import _GraphToolBar from './relation-graph/src/core4vue3/widgets/GraphMiniToolBar.vue';
+import GraphToolBarComponent from './relation-graph/src/core4vue3/widgets/GraphMiniToolBar.vue';
+import GraphXsToolBarComponent from './relation-graph/src/core4vue3/widgets/GraphXsToolBar.vue';
+import GraphBackgroundComponent from './relation-graph/src/core4vue3/widgets/GraphBackground.vue';
+import GraphWatermarkComponent from './relation-graph/src/core4vue3/widgets/GraphWatermark.vue';
+import RGEditingControllerComponent from './relation-graph/src/core4vue3/editing/RGEditingController.vue';
+import RGEditingResizeComponent from './relation-graph/src/core4vue3/editing/RGEditingResize.vue';
+import RGMiniViewComponent from './relation-graph/src/core4vue3/editing/RGMiniView.vue';
+import RGEditingNearNodeWidgetComponent from './relation-graph/src/core4vue3/editing/RGEditingNearNodeWidget.vue';
+import RGEditingLineControllerComponent from './relation-graph/src/core4vue3/editing/RGEditingLineController.vue';
+import RGEditingConnectControllerComponent from './relation-graph/src/core4vue3/editing/RGEditingConnectController.vue';
+import RGEditingCreateLineHandleComponent from './relation-graph/src/core4vue3/editing/RGEditingCreateLineHandle.vue';
+import RGEditingConnectPointsComponent from './relation-graph/src/core4vue3/editing/RGEditingConnectPoints.vue';
+import RGEditingReferenceLineComponent from './relation-graph/src/core4vue3/editing/RGEditingReferenceLine.vue';
 
 import { RelationGraphFinal } from '../../../relation-graph-models/models/RelationGraphFinal';
 import BidirectionalTreeLayouter from '../../../relation-graph-models/layouters/SeeksBidirectionalTreeLayouter';
@@ -42,6 +60,19 @@ _RelationGraph.install = (app: App): void => {
   app.component('SeeksRelationGraph', _RelationGraph);
 };
 export const RelationGraph = _RelationGraph;
-export const GraphToolBar = _GraphToolBar;
+
+export const GraphToolBar = GraphToolBarComponent;
+export const RGMiniToolBar = GraphXsToolBarComponent;
+export const RGMiniView = RGMiniViewComponent;
+export const RGBackground = GraphBackgroundComponent;
+export const RGWatermark = GraphWatermarkComponent;
+export const RGEditingController = RGEditingControllerComponent;
+export const RGEditingResize = RGEditingResizeComponent;
+export const RGEditingNearNodeWidget = RGEditingNearNodeWidgetComponent;
+export const RGEditingLineController = RGEditingLineControllerComponent;
+export const RGEditingConnectController = RGEditingConnectControllerComponent;
+export const RGEditingCreateLineHandle = RGEditingCreateLineHandleComponent;
+export const RGEditingConnectPoints = RGEditingConnectPointsComponent;
+export const RGEditingReferenceLine = RGEditingReferenceLineComponent;
 export const version = _version;
 export default _RelationGraph;
