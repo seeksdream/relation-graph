@@ -13,6 +13,9 @@
         <slot name="canvas-plug" />
       </div>
       <RelationGraphSingleGraph>
+        <template #svg-defs>
+          <slot name="svg-defs" />
+        </template>
         <template #node="{node}" >
           <slot :node="node" name="node" />
         </template>

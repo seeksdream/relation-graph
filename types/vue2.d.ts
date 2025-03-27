@@ -2,7 +2,6 @@
  * relation-graph
  * Website: http://www.relation-graph.com/
  * Github: https://github.com/seeksdream/relation-graph
- * QQ: 3235808353
  *
  */
 import vue from 'vue';
@@ -10,23 +9,30 @@ import type { VNode, RendererNode, RendererElement } from 'vue';
 import type {
   RelationGraphProps, RelationGraphInstance, RGJsonData, RGLayouter, RGOptions, RGRefreshCallback,
   RGLineSlotProps, RGNodeSlotProps
-} from './types';
+} from './types/relation-graph-models/types';
 
-import BidirectionalTreeLayouter from './types/layouters/SeeksBidirectionalTreeLayouter';
-import CenterLayouter from './types/layouters/SeeksCenterLayouter';
-import CircleLayouter from './types/layouters/SeeksCircleLayouter';
-import FixedLayouter from './types/layouters/SeeksFixedLayouter';
-import ForceLayouter from './types/layouters/SeeksForceLayouter';
-import SeeksBaseLayouter from "./types/layouters/SeeksBaseLayouter";
-import * as SeeksRGLink from './types/models/RGLink';
-import * as SeeksRGNode from './types/models/RGNode';
-import * as SeeksRGOptions from './types/models/RGOptions';
-import * as SeeksRGLayouter from './types/models/RGLayouter';
-import {RelationGraphFinal} from "./types/models/RelationGraphFinal";
-import * as _RGNodesAnalytic from "../packages/relation-graph-models/utils/RGNodesAnalytic";
-import * as _RGEffectUtils from "../packages/relation-graph-models/utils/RGEffectUtils";
+import BidirectionalTreeLayouter from './types/relation-graph-models/layouters/SeeksBidirectionalTreeLayouter';
+import CenterLayouter from './types/relation-graph-models/layouters/SeeksCenterLayouter';
+import CircleLayouter from './types/relation-graph-models/layouters/SeeksCircleLayouter';
+import FixedLayouter from './types/relation-graph-models/layouters/SeeksFixedLayouter';
+import ForceLayouter from './types/relation-graph-models/layouters/SeeksForceLayouter';
+import SeeksBaseLayouter from './types/relation-graph-models/layouters/SeeksBaseLayouter';
+import * as SeeksRGLink from './types/relation-graph-models/models/RGLink';
+import * as SeeksRGNode from './types/relation-graph-models/models/RGNode';
+import * as SeeksRGOptions from './types/relation-graph-models/models/RGOptions';
+import * as SeeksRGLayouter from './types/relation-graph-models/models/RGLayouter';
+import {RelationGraphFinal} from './types/relation-graph-models/models/RelationGraphFinal';
+import * as _RGNodesAnalytic from './types/relation-graph-models/utils/RGNodesAnalytic';
+import * as _RGEffectUtils from './types/relation-graph-models/utils/RGEffectUtils';
+import {
+  RGBackgroundProps,
+  RGCreateLineHandleProps, RGMiniViewProps,
+  RGToolBarProps,
+  RGWatermarkProps,
+  RGWidgetPosition
+} from "./types/relation-graph-models/types";
 
-export * from './types/types';
+export * from './types/relation-graph-models/types';
 
 
 export declare const Layout: {
@@ -51,6 +57,77 @@ export declare class GraphToolBar extends vue {
     default: VNode[];
   };
 }
+export declare class RGMiniToolBar extends vue {
+  $props: RGToolBarProps;
+  $slots: {
+    default: VNode[];
+  };
+}
+export declare class RGMiniView extends vue {
+  $props: RGMiniViewProps;
+  $slots: {
+    default: VNode[];
+  };
+}
+export declare class RGBackground extends vue {
+  $props: RGBackgroundProps;
+  $slots: {
+    default: VNode[];
+  };
+}
+export declare class RGWatermark extends vue {
+  $props: RGWatermarkProps;
+  $slots: {
+    default: VNode[];
+  };
+}
+export declare class RGEditingController extends vue {
+  $slots: {
+    default: VNode[];
+  };
+}
+export declare class RGEditingResize extends vue {
+  $slots: {
+    default: VNode[];
+  };
+}
+export declare class RGEditingNearNodeWidget extends vue {
+  $props: {
+    position: RGWidgetPosition
+  };
+  $slots: {
+    default: VNode[];
+  };
+}
+export declare class RGEditingLineController extends vue {
+  $props: {
+    textEditable?: boolean
+  };
+  $slots: {
+    default: VNode[];
+  };
+}
+export declare class RGEditingConnectController extends vue {
+  $slots: {
+    default: VNode[];
+  };
+}
+export declare class RGEditingCreateLineHandle extends vue {
+  $props: RGCreateLineHandleProps;
+  $slots: {
+    default: VNode[];
+  };
+}
+export declare class RGEditingConnectPoints extends vue {
+  $slots: {
+    default: VNode[];
+  };
+}
+export declare class RGEditingReferenceLine extends vue {
+  $slots: {
+    default: VNode[];
+  };
+}
 export declare class RelationGraphComponent extends vue {
   options: RGOptions;
   getInstance(): RelationGraphInstance;
@@ -71,15 +148,6 @@ export declare class RelationGraphComponent extends vue {
   setLayouter(layouterInstance: RGLayouter);
   onGraphResize();
   refresh(callback?: RGRefreshCallback);
-  focusRootNode();
-  focusNodeById(nodeId: string);
-  getNodeById(nodeId: string);
-  removeNodeById(nodeId: string);
-  getNodes();
-  getLinks();
-  getGraphJsonData();
-  getGraphJsonOptions();
-  updateView();
   $props: RelationGraphProps;
   $slots: {
     default: VNode[];
@@ -87,6 +155,8 @@ export declare class RelationGraphComponent extends vue {
     'tool-bar': VNode[];
     'mini-view': VNode[];
     'graph-plug': VNode[];
+    'svg-defs': VNode[];
+    'node-template': VNode[];
     node: VNode<RendererNode, RendererElement, RGNodeSlotProps>[];
     line: VNode<RendererNode, RendererElement, RGLineSlotProps>[];
   };

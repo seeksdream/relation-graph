@@ -10,4 +10,5 @@ export const relationGraphReducer:RelationGraphReducer = (state, action):Relatio
 };
 export const RelationGraphStoreContext = createContext<RelationGraphInstance|null>(null) as React.Context<RelationGraphInstance>;
 export const RGUpdateContext = createContext<((v?: RelationGraphInstance) => void)|null>(null) as React.Context<((v?: RelationGraphInstance) => void)>;
+export const RGUpdateSingalContext = createContext<boolean>(false) as React.Context<boolean>;
 

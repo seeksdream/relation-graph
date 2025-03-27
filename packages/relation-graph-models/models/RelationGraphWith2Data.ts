@@ -1,6 +1,6 @@
 import { devLog, getColorId } from '../utils/RGCommon';
 import { json2Node, transNodeToJson } from './RGNode';
-import { json2Line, transLinkToJson } from './RGLink';
+import {json2Line, transLineToJson, transLinkToJson} from './RGLink';
 import { createLayout } from './RGLayouter';
 import {
   JsonLine,
@@ -15,31 +15,49 @@ import {
 } from '../types';
 import { RelationGraphWith1Dom } from './RelationGraphWith1Dom';
 import { newInstanceOptions } from './RGOptions';
-import RGNodesAnalytic from "../utils/RGNodesAnalytic";
+import RGNodesAnalytic from '../utils/RGNodesAnalytic';
 export class RelationGraphWith2Data extends RelationGraphWith1Dom {
+  /**
+   * All data managed in RelationGraph, including all nodes RGNode, all relationships RGLink, the current root node, and all element lines elementLines
+   */
   graphData:RGGraphData = {
     rootNode: undefined,
     nodes: [],
     links: [],
     elementLines: []
   };
-  seeksNodeIdIndex = 0;
+  protected seeksNodeIdIndex = 0;
+  /**
+   * [Used internally by relation-graph] All colors involved in the current lines
+   */
   allLineColors:RGLineColorItem[] = [];
   userLayouerClass?:RGLayouter;
+  /**
+   * [Used internally by relation-graph] The current layouter
+   */
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   layouter:RGLayouter;
+  /**
+   * [Used internally by relation-graph] The reactive data object of the current RelationGraph component
+   */
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   reactiveData:RGGraphReactiveData;
   constructor(options: RGOptions, listeners: RGListeners) {
     super(options, listeners);
   }
+
+  /**
+   * [Used internally by relation-graph] Set reactive data objects
+   * @param graphData
+   * @param reactiveData
+   */
   setReactiveData(graphData:RGGraphData, reactiveData:RGGraphReactiveData) {
     this.reactiveData = reactiveData;
     this.graphData = graphData;
     this.allLineColors = reactiveData.allLineColors;
-    Object.assign(reactiveData.options, this.options)
+    Object.assign(reactiveData.options, this.options);
     // console.log(this.id, this.options.instanceId, 'xxxxxxxxxxxxxxxxx:', this.options.defaultNodeColor);
     this.options = reactiveData.options;
     // this.options.xxx = Math.random();
@@ -47,21 +65,26 @@ export class RelationGraphWith2Data extends RelationGraphWith1Dom {
     //   console.log(this.id, this.options.xxx, 'xxxxx###', this.options.instanceId, this.options.defaultNodeColor);
     // }, 3000);
   }
+  /**
+   * [Used internally by relation-graph] Set reactive data objects
+   * @param graphData
+   * @param reactiveData
+   */
   setReactiveDataVue3(graphData:RGGraphData, reactiveData:RGGraphReactiveData) {
     this.reactiveData = reactiveData;
     this.graphData = graphData;
     this.allLineColors = reactiveData.allLineColors;
     // reactiveData.options = this.options;
-    Object.assign(reactiveData.options, this.options)
+    Object.assign(reactiveData.options, this.options);
     this.options = reactiveData.options;
   }
   disableNextLayoutAnimation = false;
   protected _setOptions(options:RGOptions) {
     const newOptions = newInstanceOptions(options);
     if (this.reactiveData) { // Vue
-      Object.assign(this.reactiveData.options, newOptions)
+      Object.assign(this.reactiveData.options, newOptions);
     } else { // React
-      Object.assign(this.options, newOptions)
+      Object.assign(this.options, newOptions);
     }
   }
   protected _initLayoutByLayoutOptions(layoutOptions:RGLayoutOptions) {
@@ -71,7 +94,7 @@ export class RelationGraphWith2Data extends RelationGraphWith1Dom {
     this.options.layoutDirection = layoutOptions.layoutDirection;
     this.layouter = createLayout(layoutOptions, this.options, this);
   }
-  initLayouter() {
+  protected initLayouter() {
     if (this.userLayouerClass) {
       devLog('Use user layouter:', this.userLayouerClass);
       this.layouter = this.userLayouerClass;
@@ -92,24 +115,55 @@ export class RelationGraphWith2Data extends RelationGraphWith1Dom {
     // this.initLayouter();
     this.loadGraphJsonData(jsonData);
   }
-  async clearGraph() {
+
+  /**
+   * Clear all data in RelationGraph, including nodes, lines, element lines, and the root node
+   */
+  clearGraph() {
     this.graphData.nodes = [];
     this.graphData.links = [];
     this.graphData.elementLines = [];
     this.graphData.rootNode = undefined;
   }
+
+  /**
+   * Clear all element lines elementLines
+   */
   async clearElementLines() {
     this.graphData.elementLines = [];
   }
-  generateNewNodeId(addIndex = 1):string {
-    const newNodeId = 'N' + (this.graphData.nodes.length + addIndex);
+
+  /**
+   * Generate a unique Node id relative to the current existing nodes
+   * @param idLength The minimum length of the id, default is 5
+   */
+  generateNewNodeId(idLength= 5):string {
+    const newNodeId = this.generateNewUUID(idLength);
     if (this.getNodeById(newNodeId)) {
-      return this.generateNewNodeId(addIndex + 1);
+      return this.generateNewNodeId(idLength + 1);
     }
-    devLog('generateNewNodeId:', addIndex, newNodeId);
     return newNodeId;
   }
-  loadNodes(_nodes:JsonNode[]) {
+  /**
+   * Generate a highly likely unique id, the probability of non-duplication depends on the parameter idLength (the length of the id)
+   * @param idLength The length of the id, default is 5
+   */
+  generateNewUUID(idLength= 5) {
+    const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let uuid = '';
+    const maxLength = idLength > 30 ? 30 : idLength;
+    for (let i = 0; i < maxLength; i++) {
+      uuid += chars[Math.floor(Math.random() * chars.length)];
+    }
+    return uuid;
+  }
+
+  /**
+   * Convert JsonNode to RGNode object and add it to the graph
+   * @param _nodes
+   * @protected
+   */
+  protected loadNodes(_nodes:JsonNode[]) {
     const nodeMap = {};
     this.graphData.nodes.forEach(n => {
       nodeMap[n.id] = n;
@@ -128,7 +182,13 @@ export class RelationGraphWith2Data extends RelationGraphWith1Dom {
     });
     this.graphData.nodes.push(...newNodes);
   }
-  loadLines(_lines:JsonLine[]) {
+
+ /**
+ * Convert JsonLine to RGLine object and add it to the graph
+ * @param _lines
+ * @protected
+ */
+  protected loadLines(_lines:JsonLine[]) {
     const nodeMap = {};
     this.graphData.nodes.forEach(node => {
       nodeMap[node.id] = node;
@@ -164,7 +224,7 @@ export class RelationGraphWith2Data extends RelationGraphWith1Dom {
       const linkId1 = `${__from.seeks_id}-${__to.seeks_id}`;
       const linkId2 = `${__to.seeks_id}-${__from.seeks_id}`;
       const thisLineData = json2Line(thisLineJson);
-      let thisLink = linkMap[linkId1]; // this.graphData.links.find(lk => lk.seeks_id === linkId1);
+      let thisLink: RGLink = linkMap[linkId1]; // this.graphData.links.find(lk => lk.seeks_id === linkId1);
       let thisLinkIsReserve = false;
       if (!thisLink) {
         thisLink = linkMap[linkId2]; // this.graphData.links.find(lk => lk.seeks_id === linkId2);
@@ -178,6 +238,7 @@ export class RelationGraphWith2Data extends RelationGraphWith1Dom {
             toNode: __to,
             appended: false,
             forDisplayOnly: true,
+            invisiable: false,
             relations: []
           };
         }
@@ -208,13 +269,13 @@ export class RelationGraphWith2Data extends RelationGraphWith1Dom {
       }
       let isDuplicate = false;
       for (let i = 0; i < thisLink.relations.length; i++) {
-        if ((thisLink.relations[i].id || thisLineData.id) && thisLink.relations[i].id === thisLineData.id) {
+        if (thisLineData.id && thisLink.relations[i].id === thisLineData.id) {
           isDuplicate = true;
           break;
         }
       }
       if (isDuplicate === false) {
-        if (!thisLineData.id) thisLineData.id = `${thisLink.seeks_id}-${thisLink.relations.length}`;
+        if (!thisLineData.id) thisLineData.id = this.getNextLineId(thisLink);
         thisLineData.isReverse = thisLinkIsReserve;
         thisLineData.arrow = _arrow;
         thisLink.relations.push(thisLineData);
@@ -228,10 +289,30 @@ export class RelationGraphWith2Data extends RelationGraphWith1Dom {
     });
     this.graphData.links.push(...newLines);
   }
+  protected nextLineId = 0;
+  protected getNextLineId(thisLink: RGLink):string {
+    const nextId = this.nextLineId++;
+    const lineId = `${thisLink.seeks_id}-${nextId}`;
+    for (let i = 0; i < thisLink.relations.length; i++) {
+      if (thisLink.relations[i].id === lineId) {
+        return this.getNextLineId(thisLink);
+        break;
+      }
+    }
+    return lineId;
+  }
+
+  /**
+   * Expand tree-structured data into flattened data
+   * @param orign_nodes Tree-structured data, e.g., [{id:'a',children:[{id:'a-1'},{id:'a-1', children: [{id:'a-1-1'}]}]}]
+   * @param parentNode Please pass null
+   * @param nodes_collect All expanded nodes will be stored here
+   * @param lines_collect All expanded lines will be stored here
+   */
   flatNodeData(orign_nodes:JsonNode[], parentNode:JsonNode|null, nodes_collect:JsonNode[], lines_collect:JsonLine[]) {
     RGNodesAnalytic.flatNodeData(orign_nodes, parentNode, nodes_collect, lines_collect);
   }
-  loadGraphJsonData(jsonData:RGJsonData) {
+  protected loadGraphJsonData(jsonData:RGJsonData) {
     // 兼容以前的配置
     if (!jsonData.lines) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -259,9 +340,9 @@ export class RelationGraphWith2Data extends RelationGraphWith1Dom {
     this._dataUpdated();
     setTimeout(() => {
       jsonData.elementLines && this.addElementLines(jsonData.elementLines);
-    }, 500)
+    }, 500);
   }
-  getLineArrow(_color:string|undefined, isStartArrow = false, checked = false) {
+  protected getLineArrow(_color:string|undefined, isStartArrow = false, checked = false) {
     const arrowType = (isStartArrow ? 'start-' : '');
     if (checked) {
       return `${this.options.instanceId}-${arrowType}arrow-checked`;
@@ -278,13 +359,81 @@ export class RelationGraphWith2Data extends RelationGraphWith1Dom {
       return `${this.options.instanceId}-${arrowType}arrow-default`;
     }
   }
+
+ /**
+ * Get all node objects
+ */
   getNodes() {
     return this.graphData.nodes;
   }
+
+  /**
+   * Get all relationship objects, note that here Link is not a line.
+   * Line: The lines refer to the connections between nodes, and the graph will generate lines based on these lines.
+   * Relationship (Link): The graph will also generate a Link to summarize the associations between nodes based on the lines (there is only one Link between two directly related nodes, and all relationship lines (Line[]) between nodes will be placed in link.relations).
+   * You can traverse and get all lines like this:
+   * const allLines: RGLine[] = [];
+   * for (const link of graphInstance.getLinks()) {
+   *    for (const line of link.relations) {
+   *         allLines.push(line);
+   *    }
+   * }
+   * // The Line object has all the properties of JsonLine, you can change these properties. For example, change the color of all lines to red:
+   * for (const line of allLines) {
+   *    line.color = 'red';
+   * }
+   */
   getLinks() {
     return this.graphData.links;
   }
-  getGraphJsonData() {
+
+  getLines(): RGLine[] {
+    const lines: RGLine[] = [];
+    for (const link of this.graphData.links) {
+      lines.push(...link.relations);
+    }
+    return lines;
+  }
+  getLinesByNode(node: RGNode): RGLine[] {
+    const lines: RGLine[] = [];
+    for (const link of this.graphData.links) {
+      if (node === link.fromNode || node === link.toNode ) {
+        lines.push(...link.relations);
+      }
+    }
+    return lines;
+  }
+
+  /**
+   * Convert an RGNode object to a JSON-serializable object
+   * @param nodeJson: JsonNode
+   */
+  transRGNodeToJsonObject(node: RGNode): JsonNode {
+    const jsonNode =  transNodeToJson(node)!;
+    jsonNode.selected = false;
+    return jsonNode;
+  }
+  /**
+   * Convert an RGLink object to a JSON-serializable object
+   * @param lines: JsonLine[]
+   */
+  transRGLinkToJsonObject(link: RGLink): JsonLine[] {
+    const linesJson: JsonLine[] =  [];
+    transLinkToJson(link, linesJson);
+    return linesJson;
+  }
+  /**
+  * Convert an RGLine object to a JSON-serializable object
+  * @param lineJson: JsonLine
+  */
+  transRGLineToJsonObject(line: RGLine): JsonLine {
+    return transLineToJson(line)!;
+  }
+  /**
+   * Get all nodes and lines data in the current graph.
+   * @param graphJsonData: RGJsonData
+   */
+  getGraphJsonData(): RGJsonData {
     const _nodes:JsonNode[] = [];
     const _lines:JsonLine[] = [];
     this.graphData.nodes.forEach(thisNode => {
@@ -302,6 +451,10 @@ export class RelationGraphWith2Data extends RelationGraphWith1Dom {
       lines: _lines
     };
   }
+
+  /**
+   * Get the configuration information of the current graph
+   */
   getGraphJsonOptions() {
     const _options = {};
     const _ignore = [
@@ -318,10 +471,19 @@ export class RelationGraphWith2Data extends RelationGraphWith1Dom {
     });
     return _options;
   }
+
+  /**
+   * Print the current graph configuration and JSON data to the console
+   */
   printGraphJsonData() {
-    devLog('graph options:', JSON.stringify(this.getGraphJsonOptions()));
-    devLog('graph json data:', JSON.stringify(this.getGraphJsonData()));
+    console.log('graph options:', JSON.stringify(this.getGraphJsonOptions()));
+    console.log('graph json data:', JSON.stringify(this.getGraphJsonData()));
   }
+
+  /**
+   * Get the node object by node id
+   * @param nodeId: RGNode
+   */
   getNodeById(nodeId:string) {
     for (let i = 0; i < this.graphData.nodes.length; i++) {
       if (this.graphData.nodes[i].id === nodeId) {
@@ -329,6 +491,11 @@ export class RelationGraphWith2Data extends RelationGraphWith1Dom {
       }
     }
   }
+
+  /**
+   * Get the RGLink object by relationship id
+   * @param linkId: string
+   */
   getLinkById(linkId:string) {
     for (let i = 0; i < this.graphData.links.length; i++) {
       if (this.graphData.links[i].seeks_id === linkId) {
@@ -336,6 +503,10 @@ export class RelationGraphWith2Data extends RelationGraphWith1Dom {
       }
     }
   }
+  /**
+   * Get the RGLink object by line id
+   * @param line: RGLine
+   */
   getLinkByLineId(lineId:string) {
     for (let i = 0; i < this.graphData.links.length; i++) {
       if (this.graphData.links[i].relations.findIndex(l => l.id === lineId) !== -1) {
@@ -343,16 +514,38 @@ export class RelationGraphWith2Data extends RelationGraphWith1Dom {
       }
     }
   }
+  /**
+   * Get the RGLink object by line
+   * @param line: RGLine
+   */
+  getLinkByLine(line: RGLine) {
+    return this,this.getLinkByLineId(line.id!);
+  }
+
+  /**
+   * Add multiple nodes
+   * @param nodes: JsonNode[]
+   */
   addNodes(nodes:JsonNode[]) {
     devLog('addNodes:', nodes);
     this.loadNodes(nodes);
     this._dataUpdated();
   }
+
+  /**
+   * Add multiple lines
+   * @param lines: JsonLine[]
+   */
   addLines(lines:JsonLine[]) {
     devLog('addLines:', lines);
     this.loadLines(lines);
     this._dataUpdated();
   }
+
+  /**
+   * Add multiple element lines
+   * @param lines: JsonLine[]
+   */
   addElementLines(lines:JsonLine[]) {
     devLog('addElementLines:', lines);
     lines.forEach(thisLineJson => {
@@ -374,21 +567,26 @@ export class RelationGraphWith2Data extends RelationGraphWith1Dom {
       } else {
         _arrow = this.getLineArrow(thisLineData.color);
       }
+      thisLineData.arrow = _arrow;
       thisLineData.forDisplayOnly = true;
-      let isDuplicate = false;
-      for (const elementLine: RGElementLine of this.graphData.elementLines) {
+      let elLink: RGLink|undefined = undefined;
+      for (const elementLink of this.graphData.elementLines) {
         if (
-          (elementLine.relations[0].from === thisLineData.from && elementLine.relations[0].to === thisLineData.to)
-          || (elementLine.relations[0].from === thisLineData.to && elementLine.relations[0].to === thisLineData.from)
+          (elementLink.fromNode.id === thisLineData.from && elementLink.toNode.id === thisLineData.to)
+          || (elementLink.fromNode.id === thisLineData.to && elementLink.toNode.id === thisLineData.from)
         ) {
-          isDuplicate = true;
-          break;
+          elLink = elementLink;
+        }
+        if (elementLink.relations.some(line => thisLineData.id === line.id)) {
+          // 忽略id重复的数据
+          return;
         }
       }
-      if (!isDuplicate) {
-        if (!thisLineData.id) thisLineData.id = `rg-ell-${thisLineData.from}-${thisLineData.to}`;
-        thisLineData.arrow = _arrow;
-        const fromEl = {
+      if (!elLink) {
+        // if (!thisLineData.id) thisLineData.id = `rg-ell-${thisLineData.from}-${thisLineData.to}`;
+        if (!thisLineData.id) thisLineData.id = this.generateNewUUID(6);
+        const fromEl: RGNode = {
+          id: thisLineData.from,
           type: 'el',
           nodeShape: 1,
           // junctionPoint: 'ltrb',
@@ -400,7 +598,8 @@ export class RelationGraphWith2Data extends RelationGraphWith1Dom {
             offsetHeight: 10
           }
         };
-        const toEl = {
+        const toEl: RGNode = {
+          id: thisLineData.to,
           type: 'el',
           nodeShape: 1,
           // junctionPoint: 'ltrb',
@@ -412,48 +611,97 @@ export class RelationGraphWith2Data extends RelationGraphWith1Dom {
             offsetHeight: 10
           }
         };
-        const elLine: RGElementLine = {
-          seeks_id: 'ell-' + this.graphData.elementLines.length,
+        elLink = {
+          seeks_id: 'ell-' + this.generateNewUUID(8),
           fromNode: fromEl as RGNode,
           toNode: toEl as RGNode,
           relations: [thisLineData],
           appended: true,
           forDisplayOnly: true
         };
-        this._updateElementLinePosition(__from, elLine.fromNode);
-        this._updateElementLinePosition(__to, elLine.toNode);
-        this.graphData.elementLines.push(elLine);
+        this._updateElementLinePosition(__from!, elLink.fromNode);
+        this._updateElementLinePosition(__to!, elLink.toNode);
+        this.graphData.elementLines.push(elLink);
+      } else {
+        elLink.relations.push(thisLineData);
       }
     });
     this.updateElementLines();
     this._dataUpdated();
   }
+
+  /**
+   * 根据元素连线id获取元素连线
+   * @param elLink: RGLink
+   */
   getElementLineById(elLineId:string) {
-    for (const elLine of this.graphData.elementLines) {
-      if (elLine.seeks_id === elLineId) {
-        return elLine;
+    for (const elLink of this.graphData.elementLines) {
+      for (const elLine of elLink.relations) {
+        if (elLine.id === elLineId) {
+          return elLine;
+        }
       }
     }
   }
+
+  /**
+   * Get all element lines
+   */
   getElementLines(): RGLine[] {
-    return this.graphData.elementLines.map(ell => ell.relations[0]);
+    const elementLines: RGLine[] = [];
+    this.graphData.elementLines.forEach(ell => {
+      elementLines.push(...ell.relations);
+    });
+    return elementLines;
   }
-  removeElementLine(elementLine: RGElementLine) {
+
+  /**
+  * Delete element line
+  * @param elementLine: RGElementLine
+  */
+  removeElementLine(elementLine: RGElementLine | RGLink | RGLine) {
     devLog('removeElementLine:', elementLine);
-    this.removeELementLineById(elementLine.relations[0].id as string);
+    for (const elLink of this.graphData.elementLines) {
+      if (elLink === elementLine) {
+        this.graphData.elementLines.splice(this.graphData.elementLines.indexOf(elLink), 1);
+        return;
+      } else {
+        for (const elLine of elLink.relations) {
+          if (elLine === elementLine) {
+            this.graphData.elementLines.splice(elLink.relations.indexOf(elLine), 1);
+            return;
+          }
+        }
+      }
+    }
   }
+  /**
+  * Delete element line by element line id
+  * @param elementLineId: string Element line id
+  */
   removeELementLineById(elementLineId:string) {
     devLog('removeELementLineById:', elementLineId);
-    for (let i = 0; i < this.graphData.elementLines.length; i++) {
-      const thisLink = this.graphData.elementLines[i];
-      if (thisLink.relations[0].id === elementLineId) {
-        this.graphData.elementLines.splice(i, 1);
-        i--;
+    for (const elLink of this.graphData.elementLines) {
+      if (elLink.seeks_id === elementLineId) {
+        this.removeElementLine(elLink);
+        return;
+      } else {
+        for (const elLine of elLink.relations) {
+          if (elLine.id === elementLineId) {
+            this.removeElementLine(elLine);
+            return;
+          }
+        }
       }
     }
   }
   private elLineUpdating = false;
+
+ /**
+ * Update the position information of all element lines
+ */
   updateElementLines() {
+    // console.error('xx');
     devLog('updateElementLines:', this.graphData.elementLines.length);
     if (this.graphData.elementLines.length === 0) {
       return;
@@ -473,11 +721,15 @@ export class RelationGraphWith2Data extends RelationGraphWith1Dom {
       const __from = document.getElementById(elLine.relations[0].from);
       const __to = document.getElementById(elLine.relations[0].to);
       if (!__from) {
-        elLine.relations[0].isHide = true;
+        elLine.relations.forEach(line => {
+          line.isHide = true;
+        });
         return;
       }
       if (!__to) {
-        elLine.relations[0].isHide = true;
+        elLine.relations.forEach(line => {
+          line.isHide = true;
+        });
         return;
       }
       // if (!this.isElementVisible(__from) || !!this.isElementVisible(__to)) {
@@ -488,17 +740,23 @@ export class RelationGraphWith2Data extends RelationGraphWith1Dom {
       this._updateElementLinePosition(__to, elLine.toNode);
       if (elLine.fromNode.el.offsetWidth === 0 && elLine.fromNode.el.offsetHeight === 0  ) {
         // console.log('from be hidden:', elLine.fromNode);
-        elLine.relations[0].isHide = true;
+        elLine.relations.forEach(line => {
+          line.isHide = true;
+        });
         return;
       }
       if (elLine.toNode.el.offsetWidth === 0 && elLine.toNode.el.offsetHeight === 0  ) {
         // console.log('to be hidden:', elLine.toNode);
-        elLine.relations[0].isHide = true;
+        elLine.relations.forEach(line => {
+          line.isHide = true;
+        });
         return;
       }
-      elLine.relations[0].isHide = false;
+      elLine.relations.forEach(line => {
+        line.isHide = false;
+      });
       // console.log('update:!to:', elLine.relations[0].to);
-    })
+    });
     this._dataUpdated();
   }
   // isElementVisible(element: HTMLElement, deep = 0) {
@@ -528,8 +786,16 @@ export class RelationGraphWith2Data extends RelationGraphWith1Dom {
     target.x = (box.x - canvasBox.x) / (this.options.canvasZoom / 100);
     target.y = (box.y - canvasBox.y) / (this.options.canvasZoom / 100);
     // console.log('updateElementLinePosition:', box.width, box.height);
-    target.el.offsetWidth = box.width / (this.options.canvasZoom / 100);
-    target.el.offsetHeight = box.height / (this.options.canvasZoom / 100);
+    const newWidth = box.width / (this.options.canvasZoom / 100);
+    const newHeight = box.height / (this.options.canvasZoom / 100);
+    if (newWidth > 11 && Math.abs(newWidth - target.el.offsetWidth) > 2) {
+      // console.log('xxxxxxxxxxxx:width', newWidth, Math.abs(newWidth - target.el.offsetWidth) > 2, target.el.offsetWidth, target.el.offsetHeight);
+      target.el.offsetWidth = newWidth;
+    }
+    if (newHeight > 11 && Math.abs(newHeight - target.el.offsetHeight) > 2) {
+      // console.log('xxxxxxxxxxxx:height', newHeight, Math.abs(newHeight - target.el.offsetHeight) > 2, target.el.offsetWidth, target.el.offsetHeight);
+      target.el.offsetHeight = newHeight;
+    }
   }
   getElementPosition(elementId: string) {
     const thisRootEl = document.getElementById(elementId);
@@ -537,8 +803,13 @@ export class RelationGraphWith2Data extends RelationGraphWith1Dom {
     const canvasBox = this.$canvasDom.getBoundingClientRect();
     const x = (box.x - canvasBox.x) / (this.options.canvasZoom / 100);
     const y = (box.y - canvasBox.y) / (this.options.canvasZoom / 100);
-    return {x, y}
+    return {x, y};
   }
+
+  /**
+  * Remove a node from the graph
+  * @param nodeId
+  */
   removeNodeById(nodeId:string) {
     let __removed_links = 0;
     for (let i = 0; i < this.graphData.links.length; i++) {
@@ -572,10 +843,21 @@ export class RelationGraphWith2Data extends RelationGraphWith1Dom {
     devLog('Removed node：', nodeId, __removed_nodes);
     this._dataUpdated();
   }
+
+  /**
+   * Remove a node from the graph
+   * @param node
+   */
   removeNode(node:RGNode) {
     this.removeNodeById(node.id);
     this._dataUpdated();
   }
+
+/**
+* Delete all links between two nodes by their IDs
+* @param node1Id
+* @param node2Id
+*/
   removeLinkByTwoNode(node1Id:string, node2Id:string) {
     for (const link of this.getLinks()) {
       if ((link.fromNode.id === node1Id && link.toNode.id === node2Id) || (link.fromNode.id === node1Id && link.toNode.id === node2Id)) {
@@ -585,11 +867,18 @@ export class RelationGraphWith2Data extends RelationGraphWith1Dom {
     }
     this._dataUpdated();
   }
-  getGroupByNode(node:RGNode, groupNodes:RGNode[] = []) {
+
+/**
+* Get all nodes that have a direct or indirect relationship with a given node
+* @param node
+* @param groupNodes Used to collect the found nodes
+* @return All nodes that have a direct or indirect relationship with the node, including the node itself
+*/
+  getGroupNodesByNode(node:RGNode, groupNodes:RGNode[] = []) {
     if (!groupNodes.includes(node)) groupNodes.push(node);
     for (const thisNode of node.targetNodes) {
       if (!groupNodes.includes(thisNode)) {
-        this.getGroupByNode(thisNode, groupNodes);
+        this.getGroupNodesByNode(thisNode, groupNodes);
       }
     }
     return groupNodes;
@@ -603,6 +892,12 @@ export class RelationGraphWith2Data extends RelationGraphWith1Dom {
       }
     }
   }
+
+  /**
+  * Remove the reference of node to refNode, this method is only used internally by the relation-graph component
+  * @param node
+  * @param refNode
+  */
   removeNodeRef(node:RGNode, refNode:RGNode) {
     if (node) {
       if (node.targetNodes) {
@@ -616,6 +911,11 @@ export class RelationGraphWith2Data extends RelationGraphWith1Dom {
       }
     }
   }
+
+ /**
+ * Delete the Link object by its id, usually used to delete all lines and data relationships between two nodes
+ * @param linkId
+ */
   removeLinkById(linkId:string) {
     devLog('removeLinkById:', linkId);
     for (let i = 0; i < this.graphData.links.length; i++) {
@@ -629,12 +929,27 @@ export class RelationGraphWith2Data extends RelationGraphWith1Dom {
     }
     this._dataUpdated();
   }
+
+  /**
+  * Remove the RGLink object from the graph
+  * @param link
+  */
   removeLink(link:RGLink) {
     devLog('removeLink:', link);
     this.removeLinkById(link.seeks_id);
     this._dataUpdated();
   }
-  removeLine(link:RGLink, line:RGLine) {
+
+  /**
+  * Remove the specified RGLine object
+  * @param line
+  */
+  removeLine(line:RGLine) {
+    const link = this.getLinkByLine(line);
+    if (!link) {
+      devLog('Can not find link by line:', line);
+      return;
+    }
     devLog('removeLine:', link, line);
     for (let i = 0; i < link.relations.length; i++) {
       const thisLine = link.relations[i];
@@ -647,6 +962,34 @@ export class RelationGraphWith2Data extends RelationGraphWith1Dom {
     }
     this._dataUpdated();
   }
+  /**
+   * Remove the specified RGLine object by line id
+   * @param lineId
+   */
+  removeLineById(lineId: string) {
+    devLog('removeLineById:', lineId);
+    for (const link of this.graphData.links) {
+      for (let i = 0; i < link.relations.length; i++) {
+        const thisLine = link.relations[i];
+        if (thisLine.id === lineId) {
+          link.relations.splice(i, 1);
+          i--;
+        }
+      }
+      if (link.relations.length === 0) {
+        this.removeLink(link);
+      }
+    }
+
+    this._dataUpdated();
+  }
+
+  /**
+  * Set the coordinates of a node. Generally, you do not need to call this method; you can directly modify the x and y properties of the node.
+  * @param node
+  * @param x
+  * @param y
+  */
   setNodePosition(node:RGNode, x:number, y:number) {
     // devLog('debug0910: setNodePosition:', node.text, x, y)
     node.x = x;
@@ -660,6 +1003,12 @@ export class RelationGraphWith2Data extends RelationGraphWith1Dom {
       offset_y: _center_offset_y
     };
   }
+
+  /**
+  * Display the specified canvas coordinates in the center of the visible area
+  * @param x
+  * @param y
+  */
   setCanvasCenter(x:number, y:number) {
     const viewX = this.options.viewSize.width / 2;
     const viewY = this.options.viewSize.height / 2;
@@ -668,6 +1017,12 @@ export class RelationGraphWith2Data extends RelationGraphWith1Dom {
     this.setCanvasOffset(viewX - x + centerOffset.offset_x, viewY - y + centerOffset.offset_y);
     this._dataUpdated();
   }
+
+  /**
+   * Set the canvas offset, used when dragging the canvas
+   * @param x
+   * @param y
+   */
   setCanvasOffset(x:number, y:number) {
     // console.log('resetViewSize:8:', x, y);
     this.options.canvasOffset.x = x;
@@ -682,25 +1037,43 @@ export class RelationGraphWith2Data extends RelationGraphWith1Dom {
     // });
     this._dataUpdated();
   }
+
+  /**
+  * Oh my, this seems to be a duplicate method, it seems to have the same effect as the getGroupNodesByNode method
+  * @param node
+  * @param childs
+  */
   findGroupNodes(node:RGNode, childs:RGNode[]) {
     childs.push(node);
     node.targetNodes.forEach((thisNode) => {
       if (!childs.includes(thisNode)) this.findGroupNodes(thisNode, childs);
     });
   }
-  resetViewSize() {
+
+/**
+* When the size of the parent element of the relation-graph component changes, you can call this method to recalculate the view size
+* @param zoomTo100
+* @protected
+*/
+  protected resetViewSize(zoomTo100=false) {
     if (!this.options) {
       return;
     }
     // devLog('resetViewSize');
     this.options.viewSize.width = this.$dom.getBoundingClientRect().width;
     this.options.viewSize.height = this.$dom.getBoundingClientRect().height;
-    this.options.canvasZoom = 100;
-    this.setCanvasCenter(0, 0);
+    if (zoomTo100) {
+      this.options.canvasZoom = 100;
+      this.setCanvasCenter(0, 0);
+    }
     devLog('resetViewSize:1:', this.options.viewSize.width, this.options.viewSize.height, this.options.canvasOffset.x, this.options.canvasOffset.y);
     this.refreshNVAnalysisInfo();
     this._dataUpdated();
   }
+
+  /**
+   * This is an internal method, generally not needed to be called
+   */
   refreshNVAnalysisInfo() {
     // devLog('[refreshNVAnalysisInfo]');
     if (!this.$dom) {
@@ -730,89 +1103,115 @@ export class RelationGraphWith2Data extends RelationGraphWith1Dom {
     this.options.viewELSize.left = _view_info.left;
     this.options.viewELSize.top = _view_info.top;
   }
+
+  /**
+   * Calculate the plane space information occupied by all nodes
+   * @param nodes Optional, if not specified, it will be calculated based on all nodes
+   */
   getStuffSize(nodes?:RGNode[]) {
     const nodesForCalc = nodes || this.graphData.nodes;
+    const visiableNodes = nodesForCalc.filter(node => {
+      return node.opacity! > 0 && RGNodesAnalytic.isAllowShowNode(node);
+    });
+    if (visiableNodes.length === 0) {
+      return {
+        width: 10,
+        height: 10,
+        minX: 0,
+        minY: 0,
+        maxX: 0,
+        maxY: 0
+      };
+    }
     let minX = 9999999;
     let minY = 9999999;
-    let maxX = 0;
-    let maxY = 0;
-    nodesForCalc.forEach(thisNode => {
-      if (RGNodesAnalytic.isAllowShowNode(thisNode)) {
-        if (thisNode.x < minX) {
-          minX = thisNode.x;
-        }
-        if (thisNode.x > maxX) {
-          maxX = thisNode.x + thisNode.el.offsetWidth;
-        }
-        if (thisNode.y < minY) {
-          minY = thisNode.y;
-        }
-        if (thisNode.y > maxY) {
-          maxY = thisNode.y + thisNode.el.offsetHeight;
-        }
+    let maxX = -9999999;
+    let maxY = -9999999;
+    visiableNodes.forEach(thisNode => {
+      if (thisNode.x < minX) {
+        minX = thisNode.x;
+      }
+      if (thisNode.x > maxX) {
+        maxX = thisNode.x + thisNode.el.offsetWidth;
+      }
+      if (thisNode.y < minY) {
+        minY = thisNode.y;
+      }
+      if (thisNode.y > maxY) {
+        maxY = thisNode.y + thisNode.el.offsetHeight;
       }
     });
     const padding = 100;
     const _stuff_width = maxX - minX + padding;
     const _stuff_height = maxY - minY + padding;
     return {
-      width: _stuff_width,
-      height: _stuff_height,
-      minX,
-      maxX,
-      minY,
-      maxY
+      width: _stuff_width < 0 ? 0 : _stuff_width,
+      height: _stuff_height < 0 ? 0 : _stuff_height,
+      minX: minX === 9999999 ? 0 : minX,
+      minY: minY === 9999999 ? 0 : minY,
+      maxX: maxX === -9999999 ? 0 : maxX,
+      maxY: maxY === -9999999 ? 0 : maxY
     };
   }
-  getNodesCenter() {
-    const stuffSize = this.getStuffSize();
+
+  /**
+   * Get the center coordinates of the plane space occupied by the node collection
+   * @param nodes Optional, if not specified, it will be calculated based on all nodes
+   */
+  getNodesCenter(nodes?:RGNode[]) {
+    const stuffSize = this.getStuffSize(nodes);
     devLog('getStuffSize:', stuffSize);
     // const x = (stuffSize.width - this.options.viewSize.width) / 2;
     // const y = (stuffSize.height - this.options.viewSize.height) / 2;
-    const x = stuffSize.minX + (stuffSize.width - 100) / 2;
-    const y = stuffSize.minY + (stuffSize.height - 100) / 2;
+    const x = (stuffSize.minX + (stuffSize.maxX - stuffSize.minX) / 2);
+    const y = (stuffSize.minY + (stuffSize.maxY - stuffSize.minY) / 2);
     return {
       x,
       y
     };
   }
-  querySearchAsync(queryString:string) {
-    devLog('fetch-suggestions', queryString);
-    queryString = queryString.trim();
-    if (queryString === '') {
-      return;
-    }
-    const rst:RGNode[] = [];
-    this.graphData.nodes.forEach(thisNode => {
-      devLog('fetch:', thisNode.text);
-      if (thisNode.text.includes(queryString)) {
-        rst.push(thisNode);
-      }
-    });
-    devLog('fetched:', rst.length);
-    return rst;
-  }
+
+ /**
+   * Print the current graph configuration information to the console
+   */
   printOptions() {
     const objectData = this.getGraphJsonOptions();
     console.log('options:', objectData);
     console.log('options-json-string:');
     console.log(JSON.stringify(objectData));
   }
+  /**
+   * Print all data of the current graph to the console
+   */
   printData() {
     const objectData = this.getGraphJsonData();
     console.log('data:', objectData);
     console.log('data-json-string:');
     console.log(JSON.stringify(objectData));
   }
+
+  /**
+  * Lock the graph component screen and display a piece of text
+  * @param graphLoadingText The text to display
+  */
   loading(graphLoadingText = '') {
     this.options.graphLoading = true;
     this.options.graphLoadingText = graphLoadingText;
   }
+
+  /**
+  * Clear the lock on the graph component screen
+  */
   clearLoading() {
     // console.log('debug:clearLoading');
     this.options.graphLoading = false;
     this.options.graphLoadingText = '';
   }
+
+  /**
+  * Recalculate all visible nodes
+  * @param force
+  */
   updateVisbleViewNodes(force = false) {
     // console.log('updateVisbleViewNodes:');
     if (!force) {
@@ -838,23 +1237,30 @@ export class RelationGraphWith2Data extends RelationGraphWith1Dom {
       x: viewRect.x + this.options.viewELSize.width,
       y: viewRect.y + this.options.viewELSize.height
     });
+    const snapshotting = this.options.snapshotting;
     let visibleNodeSize = 0;
     for (const node of this.graphData.nodes) {
-      if (node.alwaysRender) {
-        node.invisiable = false;
-        continue;
+      let isRenderNode = true;
+      if (snapshotting) {
+        isRenderNode = true;
+      } else if (node.alwaysRender) {
+        isRenderNode = true;
+      } else {
+        if (node.x > endCoordinateOnCanvas.x || node.y > endCoordinateOnCanvas.y) {
+          isRenderNode = false;
+        }
+        if ((node.x + node.el.offsetWidth) < startCoordinateOnCanvas.x || (node.y + node.el.offsetHeight) < startCoordinateOnCanvas.y) {
+          isRenderNode = false;
+        }
       }
-      let invisible = false;
-      if (node.x > endCoordinateOnCanvas.x || node.y > endCoordinateOnCanvas.y) {
-        invisible = true;
-      }
-      if ((node.x + node.el.offsetWidth) < startCoordinateOnCanvas.x || (node.y + node.el.offsetHeight) < startCoordinateOnCanvas.y) {
-        invisible = true;
-      }
-      node.invisiable = invisible;
-      !invisible && visibleNodeSize++;
+      node.invisiable = !isRenderNode;
+      !isRenderNode && visibleNodeSize++;
     }
     for (const link of this.graphData.links) {
+      if (snapshotting) {
+        link.invisiable = false;
+        continue;
+      }
       let invisible = false;
       if (link.fromNode.invisiable && link.toNode.invisiable) {
         invisible = true;

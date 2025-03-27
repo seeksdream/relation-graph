@@ -18,7 +18,7 @@ const checked = computed(() => {
   return props.relation.id === graph.instance!.options.checkedLineId
 })
 const pathRef = computed(() => {
-  return '#' + options.value.instanceId + '-' +  props.link.seeks_id + '-' + props.relationIndex;
+  return '#' + options.value.instanceId + '-' +  props.relation.id;
 })
 // const textOffset = computed(() => {
 //     const x = props.relation.textOffset_x || options.value.defaultLineTextOffset_x || 0;
@@ -62,7 +62,7 @@ const onClick = (line:RGLine, e:MouseEvent|TouchEvent) => {
 }
 </script>
 <template>
-  <g :class="[relation.className]">
+  <g :class="[relation.className]" :data-id="relation.id">
     <use
       :xlink:href="pathRef"
       class="c-rg-line-bg"

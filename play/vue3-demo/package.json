@@ -20,7 +20,7 @@
   "homepage": "https://github.com/seeksdream/relation-graph-vue3-demo#readme",
   "dependencies": {
     "@vitejs/plugin-vue": "^3.2.0",
-    "relation-graph": "^2.1.42",
+    "relation-graph": "^2.1.16",
     "sass": "^1.59.2",
     "vite": "^4.1.2",
     "vue": "^3.2.47"

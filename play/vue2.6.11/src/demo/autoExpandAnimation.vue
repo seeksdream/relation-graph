@@ -41,27 +41,20 @@ export default {
     return {
       isShowCodePanel: false,
       graphOptions: {
-        ovUseNodeSlot: false, // 如果使用了节点插槽且需要让节点插槽生效，请设置为true
-        ovUseLineSlot: false, // 如果使用了连线插槽且需要让节点插槽生效，请设置为true
+        ovUseNodeSlot: true, // 如果使用了节点插槽且需要让节点插槽生效，请设置为true
+        ovUseLineSlot: true, // 如果使用了连线插槽且需要让节点插槽生效，请设置为true
         ovUseToolbarSlot: false, // 如果使用了工具栏插槽且需要让节点插槽生效，请设置为true
         ovUseNodeExpandHolderSlot: false, // 如果使用了展开/收缩按钮插槽且需要让节点插槽生效，请设置为true
-        'backgrounImageNoRepeat': true,
-        'moveToCenterWhenRefresh': true,
-        'zoomToFitWhenRefresh': true,
-        "defaultExpandHolderPosition": "right",
-        "useAnimationWhenExpanded": true,
+        moveToCenterWhenRefresh: true,
+        zoomToFitWhenRefresh: true,
+        defaultExpandHolderPosition: "right",
+        useAnimationWhenExpanded: true,
         useAnimationWhenRefresh: false,
         debug: true,
-        'layouts': [
-          {
-            'label': '中心',
-            'layoutName': 'center',
-            'from': 'top',
-            'layoutClassName': 'seeks-layout-center',
-            'defaultExpandHolderPosition': 'hide',
-            'defaultJunctionPoint': 'border'
-          }
-        ]
+        layout: {
+          layoutName: 'center',
+          from: 'top'
+        }
       },
     };
   },

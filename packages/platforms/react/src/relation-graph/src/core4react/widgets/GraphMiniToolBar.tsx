@@ -1,16 +1,17 @@
 import React, { useContext } from 'react';
-import { RGUpdateContext, RelationGraphStoreContext } from '../store/reducers/StockStore';
+import {RelationGraphStoreContext, RGUpdateSingalContext} from '../store/reducers/StockStore';
+
 
 const GraphMiniToolBar: React.FC = ({children}) => {
   const relationGraph = useContext(RelationGraphStoreContext);
-  const updateView = useContext(RGUpdateContext);
+  const updateSingal = useContext(RGUpdateSingalContext);
   const refresh = async() => {
     await relationGraph.refresh();
-    updateView();
+    relationGraph.dataUpdated();
   };
   const updateViewLoop = () => {
     if (relationGraph.options.autoLayouting) {
-      updateView();
+      relationGraph.dataUpdated();
       requestAnimationFrame(() => { updateViewLoop(); });
     }
   };
@@ -20,7 +21,7 @@ const GraphMiniToolBar: React.FC = ({children}) => {
   };
   const toogleFullScreen = async() => {
     await relationGraph.fullscreen();
-    updateView();
+    relationGraph.dataUpdated();
   };
   const downloadAsImage = () => {
     relationGraph.downloadAsImage('png');
@@ -30,11 +31,10 @@ const GraphMiniToolBar: React.FC = ({children}) => {
     await instance.setZoom(100);
     await instance.moveToCenter();
     await instance.zoomToFit();
-    updateView();
   };
   const addZoom = (buff:number) => {
     relationGraph.zoom(buff);
-    updateView();
+    relationGraph.dataUpdated();
   };
   const options = relationGraph && relationGraph.options;
   return (
@@ -55,7 +55,7 @@ const GraphMiniToolBar: React.FC = ({children}) => {
             <div title="放大" className="c-mb-button" onClick={() => {addZoom(20);}}>
               <svg className="rg-icon" aria-hidden="true"><use xlinkHref="#icon-fangda"></use></svg>
             </div>
-            <div className="c-current-zoom" onDoubleClick={() => {zoomToFit();}}>{options.canvasZoom}%</div>
+            <div className="c-current-zoom" onClick={() => {zoomToFit();}}>{options.canvasZoom}%</div>
             <div title="缩小" className="c-mb-button" onClick={()=>{addZoom(-20);}}>
               <svg className="rg-icon" aria-hidden="true"><use xlinkHref="#icon-suoxiao"></use></svg>
             </div>

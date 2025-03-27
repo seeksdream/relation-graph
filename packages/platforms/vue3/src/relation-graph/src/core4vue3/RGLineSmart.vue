@@ -63,7 +63,7 @@ const onClick = (line:RGLine, e: MouseEvent | TouchEvent) => {
 }
 </script>
 <template>
-  <g :class="[relation.className]">
+  <g :class="[relation.className]" :data-id="relation.id">
     <path
       :d="pathData.path"
       class="c-rg-line-bg"
@@ -75,7 +75,6 @@ const onClick = (line:RGLine, e: MouseEvent | TouchEvent) => {
       @click="onClick(relation, $event)"
     />
     <path
-        :id="'path' + relation.id" 
         :d="pathData.path"
         class="c-rg-line"
         :class="[
@@ -96,14 +95,15 @@ const onClick = (line:RGLine, e: MouseEvent | TouchEvent) => {
         @touchstart="onClick(relation, $event)"
         @click="onClick(relation, $event)"
     />
-    <g v-if="
-      textStyle &&
-      options.defaultShowLineLabel &&
-      options.canvasZoom > 40" 
-      :transform="props.relation.useTextPath ?textStyle.textOffset: pathData.textTransform">
-      <!-- HQ 支持html元素连线时文字沿着路径显示，修改指向自己的节点时线条绘制方式 -->
+    <g
+        v-if="
+        textStyle &&
+        options.defaultShowLineLabel &&
+        options.canvasZoom > 40
+      "
+        :transform="pathData.textTransform"
+    >
       <text
-          v-if="!props.relation.useTextPath"
           :key="'t-' + relation.seeks_id"
           :x="relation.textOffset_x || options.defaultLineTextOffset_x || 0"
           :y="relation.textOffset_y || options.defaultLineTextOffset_y || 10"
@@ -120,22 +120,6 @@ const onClick = (line:RGLine, e: MouseEvent | TouchEvent) => {
       >
         {{ textStyle.text }}
       </text>
-
-      <text v-if="props.relation.useTextPath" :key="'t-' + relation.seeks_id" :x="relation.textOffset_x || options.defaultLineTextOffset_x || 0"
-        :y="relation.textOffset_y || options.defaultLineTextOffset_y || 10" :style="{
-          letterSpacing: '3px',
-          opacity: relation.opacity,
-          fill: (relation.fontColor ? relation.fontColor : (options.defaultLineFontColor ? options.defaultLineFontColor : (relation.color ? relation.color : options.defaultLineColor))),
-          'pointer-events': (relation.disableDefaultClickEffect && 'none')
-        }" 
-        :rotate="textStyle.textRotate"
-        :text-anchor="textStyle.textAnchor" class="c-rg-line-text" :class="{ 'c-rg-line-text-checked': checked }"
-        @touchstart="onClick(relation, $event)" @click="onClick(relation, $event)">
-        <textPath :xlink:href="'#path' + relation.id" :startOffset="textStyle.textHPosition"  
-          :text-anchor="textStyle.textAnchor" method="align" spacing="auto"> {{ textStyle.text }} </textPath>
-      </text>
-
-
     </g>
   </g>
 </template>

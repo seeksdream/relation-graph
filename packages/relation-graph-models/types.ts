@@ -1,16 +1,16 @@
 /**
  * relation-graph
- * Website: https://ssl.relation-graph.com/
- *          http://www.relation-graph.com/
+ * Website: http://www.relation-graph.com/
  * Github: https://github.com/seeksdream/relation-graph
- * QQ: 3235808353
- *
  */
 
-import { RelationGraphFinal } from "./models/RelationGraphFinal";
+import { RelationGraphFinal } from './models/RelationGraphFinal';
 
 export type RGJunctionPoint = 'border' | 'lr' | 'tb' | 'ltrb' | 'left' | 'top' | 'right' | 'bottom';
+export type RGResizeHandlePosition = 't' | 'r' | 'b' | 'l' | 'tl' | 'tr' | 'bl' | 'br';
+export type RGWidgetPosition = 'top' | 'right' | 'bottom' | 'left' | 'tl' | 'tr' | 'bl' | 'br';
 export type RGPositionPoint = 'left' | 'top' | 'right' | 'bottom';
+export type RGLineEditPoint = 'start' | 'end';
 export type RGNodeShape = 0 | 1 | undefined;
 export type RGLineShape = 1 | 2 | 3 | 4 | 5 | 6 | 8 | 41 | undefined;
 export type RGUserEvent = MouseEvent | TouchEvent;
@@ -49,12 +49,13 @@ export interface JsonNode {
   childs?: JsonNode[]
   force_weight?: number
   alwaysRender?: boolean
-};
+}
 export interface JsonLine {
   id?: string
   from: string
   to: string
   text?: string
+  type?: string;
   color?: string
   fontColor?: string
   lineWidth?: number
@@ -66,7 +67,11 @@ export interface JsonLine {
   arrow?: string
   showStartArrow?: boolean
   showEndArrow?: boolean
+  startMarkerId?: string
+  endMarkerId?: string
   useTextPath?: boolean
+  placeText?: string
+  textAnchor?: string
   isHideArrow?: boolean
   reverseText?: boolean
   lineDirection?: string
@@ -77,10 +82,15 @@ export interface JsonLine {
   textOffset_y?: number
   animation?: number
   dashType?: number
+  polyLineRadius?: number
   forDisplayOnly?: boolean
   fromJunctionPoint?: RGJunctionPoint
   toJunctionPoint?: RGJunctionPoint
-};
+  fromJuctionPointOffsetX?: number
+  fromJuctionPointOffsetY?: number
+  toJuctionPointOffsetX?: number
+  toJuctionPointOffsetY?: number
+}
 export interface RGNode extends JsonNode {
   seeks_id: number
   x: number
@@ -89,6 +99,7 @@ export interface RGNode extends JsonNode {
   Fy: number
   isShow: boolean
   invisiable?: boolean
+  zIndex?: number
   flashing?: boolean
   dragging?: boolean
   targetNodes: RGNode[]
@@ -125,7 +136,7 @@ export interface RGNode extends JsonNode {
   origin_x?: number
   origin_y?: number
   el: { offsetWidth: number; offsetHeight: number }
-};
+}
 export interface RGLine extends JsonLine {
   seeks_id: string
   reverseText?: boolean
@@ -133,14 +144,17 @@ export interface RGLine extends JsonLine {
   hidden?: boolean
   polyLineStartDistance?: number
   disableDefaultClickEffect?: boolean
-};
+}
 export type RGLineTarget = {
-  x: number,
-  y: number,
+  x: number
+  y: number
   el: {
-    offsetWidth: number,
+    offsetWidth: number
     offsetHeight: number
   }
+  nodeShape: RGNodeShape
+  type: 'node' | 'point' | ''
+  rotate?: number
 };
 export type RGLink = {
   seeks_id: string
@@ -214,6 +228,8 @@ export type RGTreeLayoutOptions = RGLayoutOptionsCore & {
   max_per_width?: number
   min_per_height?: number
   max_per_height?: number
+  vGap?: number
+  hGap?: number
 };
 export type RGLayoutOptions =
   | RGLayoutOptionsCore
@@ -311,6 +327,8 @@ export interface RGOptions {
   graphOffset_x?:number
   graphOffset_y?:number
   canvasZoom?: number // private
+  mouseWheelSpeed?: number // private
+  minCanvasZoom?: number // private
   showSingleNode?: boolean // private
   showNodeLabel?: boolean // private
   placeOtherGroup?: boolean
@@ -341,17 +359,50 @@ export interface RGListeners {
   onImageSaveAsFile?: (canvas: HTMLCanvasElement, format: string, fileName: string) => boolean | void
   beforeChangeLayout?: (newLayoutOptions:RGLayoutOptions) => boolean | void
   onNodeDragStart?: (node:RGNode, e:RGUserEvent) => void
-  onNodeDragEnd?: (node:RGNode, e:RGUserEvent) => void
-  onNodeDragging?: (node:RGNode, newX:number, newY:number, e:RGUserEvent) => RGPosition | undefined
+  onNodeDragEnd?: (node:RGNode, e:RGUserEvent, x_buff?:number, y_buff?: number) => void
+  onNodeDragging?: (node:RGNode, newX:number, newY:number, e:RGUserEvent) => void | RGPosition | undefined
+  onCanvasDragging?: (newX:number, newY:number, buffX:number, buffY:number) => void | RGPosition | undefined
   onCanvasDragEnd?: (e:RGUserEvent) => void
   onContextmenu?: (e:RGUserEvent, objectType:RGEventTargetType, object:RGNode|RGLink|undefined) => void
-  onFullscreen?: (newValue:boolean, defaultFullscreen: () => Promise<void>) => void
+  onFullscreen?: (newValue:boolean, defaultFullscreen: () => Promise<void>) => void;
   onCanvasClick?: (e:RGUserEvent) => void
   onCanvasSelectionEnd?: (selectionView:RGSelectionView, e:RGUserEvent) => void
+  beforeNodeResize?: (node: RGNode, newX:number, newY:number, newW:number, newH:number) => void|false
   // 不要在这个时间中调用任何触发setZoom的动作
   onZoomEnd?: () => void
 }
-export type RGEventHandler = (eventName:string, object: {[option: string]:any}) => void;
+export enum RGEventNames {
+  onNodeClick = 'onNodeClick',
+  onNodeExpand = 'onNodeExpand',
+  onNodeCollapse = 'onNodeCollapse',
+  onLineClick = 'onLineClick',
+  onImageDownload = 'onImageDownload',
+  onImageSaveAsFile = 'onImageSaveAsFile',
+  onNodeDragStart = 'onNodeDragStart',
+  onNodeDragEnd = 'onNodeDragEnd',
+  onNodeDragging = 'onNodeDragging',
+  onCanvasDragEnd = 'onCanvasDragEnd',
+  onCanvasDragging = 'onCanvasDragging',
+  onContextmenu = 'onContextmenu',
+  onFullscreen = 'onFullscreen',
+  onCanvasClick = 'onCanvasClick',
+  onCanvasSelectionEnd = 'onCanvasSelectionEnd',
+  beforeZoomStart = 'beforeZoomStart',
+  onZoomEnd = 'onZoomEnd',
+  viewResize = 'viewResize',
+  nodeDragStart = 'nodeDragStart',
+  nodeDragging = 'nodeDragging',
+  nodeDragEnd = 'nodeDragEnd',
+  fullscreen = 'fullscreen',
+  onResizeStart = 'onResizeStart',
+  onResizeEnd = 'onResizeEnd',
+  onLineVertexDropped = 'onLineVertexDropped',
+  beforeCreateLine = 'beforeCreateLine',
+  onLineBeCreated = 'onLineBeCreated',
+  beforeChangeLayout = 'beforeChangeLayout',
+}
+export type RGEventHandler = (eventName: RGEventNames, ...args: any[]) => void|any;
+export type RGEventEmitHook = (eventName: RGEventNames, ...args: any[]) => void|any;
 export interface RGV2Options extends RGOptions {
   useHorizontalView?: boolean // UI
   ovUseNodeSlot?: boolean // UI
@@ -367,13 +418,79 @@ export interface RGV2Options extends RGOptions {
   newLineTemplate?: any // UI
   newLinkTemplate?: any // UI
 }
+export enum RGDirection {
+  Left = 'left',
+  Top = 'top',
+  Right = 'right',
+  Bottom = 'bottom',
+}
+export type RGCtrlPointForLine44 = {pIndex:number, optionName:string, direction: 'v'|'h', x: number, y: number, startDirection: RGDirection, endDirection: RGDirection, hide?: boolean}
+
 export interface RGOptionsFull extends RGV2Options {
   debug?: boolean // UI
+  snapshotting?: boolean // UI
   graphLoading?: boolean // UI
   graphLoadingText?: string // UI
   showMaskWhenLayouting: boolean // UI
   instanceDestroyed: boolean // UI
   oldVueVersion: boolean // UI
+  editingLineController: {
+    show: boolean,
+    link: RGLink | null,
+    line: RGLine | null,
+    startPoint: RGPosition,
+    endPoint: RGPosition,
+    text: {
+      show: boolean,
+      x: number,
+      y: number,
+      width: number,
+      height: number
+    },
+    ctrlPoints: RGPosition[],
+    selectedLines: string[],
+    line44Splits: RGCtrlPointForLine44[],
+    line49Points: RGPosition[],
+    ctrlPoint1: RGPosition,
+    ctrlPoint2: RGPosition,
+    toolbar: RGPosition
+  }, // UI
+  editingController: {
+    show: boolean,
+    nodes: RGNode[],
+    x: number,
+    y: number,
+    width: number,
+    height: number
+  }, // UI
+  nodeConnectController: {
+    show: boolean,
+    node: RGNode,
+    x: number,
+    y: number,
+    width: number,
+    height: number
+  }, // UI
+  showReferenceLine: boolean,
+  editingReferenceLine: {
+    show: boolean,
+    directionV: boolean,
+    directionH: boolean,
+    v_x: number,
+    v_y: number,
+    v_height: number,
+    h_x: number,
+    h_y: number,
+    h_width: number
+  }, // UI
+  showMiniView: boolean,
+  miniViewVisibleHandle: {
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    emptyContent: boolean
+  }
   instanceId: string
   viewSize: { width: number; height: number }
   viewELSize: { width: number; height: number; left: number; top: number }
@@ -381,7 +498,6 @@ export interface RGOptionsFull extends RGV2Options {
   canvasNVInfo: { width: number; height: number; x: number; y: number }
   // NMViewCenter: { x: 0, y: 0 },
   // NMCanvasCenter: { x: 0, y: 0 },
-  allowShowMiniView: boolean // private
   allowShowSettingPanel: boolean // private
   allowShowMiniNameFilter: boolean // private
   fullscreen: boolean // private
@@ -479,10 +595,10 @@ export interface RelationGraphInstance2 {
 }
 export interface RelationGraphExpose{
   getInstance(): RelationGraphInstance
-  setOptions(
-    options: RGOptions,
-    callback?: (graphInstance: RelationGraphInstance) => void
-  ):void;
+  // setOptions(
+  //   options: RGOptions,
+  //   callback?: (graphInstance: RelationGraphInstance) => void
+  // ):void;
   setJsonData(
     jsonData: RGJsonData,
     reLayoutOrCallback?: boolean | RGRefreshCallback,
@@ -493,22 +609,20 @@ export interface RelationGraphExpose{
     reLayout?: boolean | RGRefreshCallback,
     callback?: (graphInstance: RelationGraphInstance) => void
   ):void;
-  setLayouter(layouterInstance: RGLayouter):void;
-  onGraphResize():void;
-  refresh(callback?: RGRefreshCallback):void;
-  focusRootNode():void;
-  focusNodeById(nodeId: string):void;
-  getNodeById(nodeId: string):RGNode|undefined;
-  removeNodeById(nodeId: string):void;
-  getNodes():RGNode[];
-  getLinks():RGLink[];
-  getGraphJsonData():RGJsonData;
-  getGraphJsonOptions():RGOptions;
-  updateView():void;
+  // onGraphResize():void;
+  // refresh(callback?: RGRefreshCallback):void;
+  // setLayouter(layouterInstance: RGLayouter):void;
+  // focusRootNode():void;
+  // focusNodeById(nodeId: string):void;
+  // getNodeById(nodeId: string):RGNode|undefined;
+  // removeNodeById(nodeId: string):void;
+  // getNodes():RGNode[];
+  // getLinks():RGLink[];
+  // getGraphJsonData():RGJsonData;
+  // getGraphJsonOptions():RGOptions;
+  // updateView():void;
 }
-export interface RelationGraphComponent extends RelationGraphExpose {
-
-}
+export type RelationGraphComponent = RelationGraphExpose;
 export interface RGNodeSlotProps {
   node: RGNode
   relationGraph: RelationGraphInstance
@@ -523,7 +637,73 @@ export type RelationGraphProps  = RGListeners & {
   options: RGOptions;
   relationGraphCore?: any;
 };
+export interface RGToolBarProps {
+  direction?: 'v'|'h',
+  positionH?: 'left'|'center'|'right',
+  positionV?: 'top'|'center'|'bottom',
+}
+export interface RGMiniViewProps {
+  position?: RGWidgetPosition,
+  width?: string,
+  height?: string
+}
+export interface RGWidgetProps {
+  position?: RGWidgetPosition
+}
+
+
+export type RGOnCreateLineCallback = (from:RGNode, to:RGNode|RGPosition, lineTemplate?:JsonLine) => void;
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+export interface JsonLineTemplate extends JsonLine{
+  from?: string;
+  to?: string;
+}
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+export interface JsonNodeTemplate extends JsonNode{
+  id?: string;
+}
+export type JsonLineLike = JsonLineTemplate;
+
+export type CreatingLinePlotOptions = {
+  onCreateLine: RGOnCreateLineCallback|undefined
+  template?: JsonLineTemplate
+  fromNode?: JsonNodeTemplate
+};
+export type RGOnCreateNodeCallback = (from:RGNode, to:RGNode|RGPosition, lineTemplate:JsonLine) => void;
+export type CreatingNodePlotOptions = {
+  disableClickCreate?:boolean
+  templateText?:string
+  templateStyleClass?:string
+  templateNode?: JsonNodeTemplate
+  templateMove?: (x:number, y:number) => void
+  onCreateNode: (x:number, y:number, nodeTemplate?: JsonNodeTemplate) => void
+};
+export interface RGCreateLineHandleProps {
+  lineTemplate?: JsonLineLike;
+}
+export interface RGWatermarkProps {
+  forImage?: boolean,
+  forDisplay?: boolean,
+  position?: RGWidgetPosition,
+  width?: string,
+  height?: string
+}
+export interface RGBackgroundProps {
+  forImage?: boolean,
+  forDisplay?: boolean,
+}
 // export interface RelationGraphProps extends RGListeners{
 //   options: RGOptions
 //   relationGraphCore?: any
 // }
+export type RGLineTextPosition = {
+  x: number;
+  y: number;
+  rotate: number;
+};
+export type RGCoordinate = {
+  x: number;
+  y: number;
+};

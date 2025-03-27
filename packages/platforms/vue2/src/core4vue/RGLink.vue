@@ -26,7 +26,7 @@ import RGLineTextByPath from './RGLineTextByPath.vue';
 import RGNodesAnalytic from "../../../../relation-graph-models/utils/RGNodesAnalytic";
 
 export default {
-  name: 'SeeksRGLink',
+  name: 'RGLink',
   components: { RGLineSmart, RGLineTextByPath },
   props: {
     linkProps: {

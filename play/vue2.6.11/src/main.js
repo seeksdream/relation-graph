@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import RelationGraph from './relation-graph-agent.ts';
+import RelationGraph from './relation-graph-agent';
 import App from './App.vue';
 
 Vue.config.productionTip = false;

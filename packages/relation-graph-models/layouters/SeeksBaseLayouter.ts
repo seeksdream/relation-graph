@@ -1,4 +1,4 @@
-import {RGLayoutOptions, RGLink, RGNode, RGOptionsFull} from '../types';
+import {RelationGraphInstance, RGLayoutOptions, RGLink, RGNode, RGOptionsFull} from '../types';
 import { devLog } from '../utils/RGCommon';
 import RGNodesAnalytic from '../utils/RGNodesAnalytic';
 import {RelationGraphFinal} from "../models/RelationGraphFinal";
@@ -6,7 +6,7 @@ import {RelationGraphFinal} from "../models/RelationGraphFinal";
 export class SeeksBaseLayouter {
   graphOptions:RGOptionsFull;
   layoutOptions:RGLayoutOptions;
-  graphInstance:RelationGraphFinal;
+  graphInstance:RelationGraphInstance;
   allNodes:RGNode[] = [];
   isMainLayouer = true;
   requireLinks = false;

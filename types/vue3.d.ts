@@ -2,7 +2,6 @@
  * relation-graph
  * Website: http://www.relation-graph.com/
  * Github: https://github.com/seeksdream/relation-graph
- * QQ: 3235808353
  *
  */
 import {InjectionKey, VueElement, Ref} from 'vue';
@@ -17,23 +16,29 @@ import type {
   RGOptions,
   RGRefreshCallback,
   RGUserEvent, RGLayoutOptions, RGEventTargetType, RGSelectionView, RGPosition, RGLineSlotProps, RGNodeSlotProps
-} from './types';
+} from './types/relation-graph-models/types';
 
-import BidirectionalTreeLayouter from './types/layouters/SeeksBidirectionalTreeLayouter';
-import CenterLayouter from './types/layouters/SeeksCenterLayouter';
-import CircleLayouter from './types/layouters/SeeksCircleLayouter';
-import FixedLayouter from './types/layouters/SeeksFixedLayouter';
-import ForceLayouter from './types/layouters/SeeksForceLayouter';
-import SeeksBaseLayouter from "./types/layouters/SeeksBaseLayouter";
-import * as SeeksRGLink from './types/models/RGLink';
-import * as SeeksRGNode from './types/models/RGNode';
-import * as SeeksRGOptions from './types/models/RGOptions';
-import * as SeeksRGLayouter from './types/models/RGLayouter';
-import {RelationGraphFinal} from "./types/models/RelationGraphFinal";
-import * as _RGNodesAnalyticUtils from "./types/utils/RGNodesAnalytic";
-import * as _RGEffectUtils from "./types/utils/RGEffectUtils";
+import BidirectionalTreeLayouter from './types/relation-graph-models/layouters/SeeksBidirectionalTreeLayouter';
+import CenterLayouter from './types/relation-graph-models/layouters/SeeksCenterLayouter';
+import CircleLayouter from './types/relation-graph-models/layouters/SeeksCircleLayouter';
+import FixedLayouter from './types/relation-graph-models/layouters/SeeksFixedLayouter';
+import ForceLayouter from './types/relation-graph-models/layouters/SeeksForceLayouter';
+import SeeksBaseLayouter from "./types/relation-graph-models/layouters/SeeksBaseLayouter";
+import * as SeeksRGLink from './types/relation-graph-models/models/RGLink';
+import * as SeeksRGNode from './types/relation-graph-models/models/RGNode';
+import * as SeeksRGOptions from './types/relation-graph-models/models/RGOptions';
+import * as SeeksRGLayouter from './types/relation-graph-models/models/RGLayouter';
+import {RelationGraphFinal} from "./types/relation-graph-models/models/RelationGraphFinal";
+import * as _RGNodesAnalyticUtils from "./types/relation-graph-models/utils/RGNodesAnalytic";
+import * as _RGEffectUtils from "./types/relation-graph-models/utils/RGEffectUtils";
+import {
+  RGBackgroundProps, RGCreateLineHandleProps,
+  RGMiniViewProps,
+  RGToolBarProps,
+  RGWatermarkProps, RGWidgetPosition
+} from "./types/relation-graph-models/types";
 
-export * from './types/types';
+export * from './types/relation-graph-models/types';
 
 
 export declare const Layout: {
@@ -69,8 +74,9 @@ export type RelationGraphProps = {
   onImageSaveAsFile?: (canvas: HTMLCanvasElement, format: string, fileName: string) => boolean | void;
   beforeChangeLayout?: (newLayoutOptions: RGLayoutOptions) => boolean | void;
   onNodeDragStart?: (node:RGNode, e:RGUserEvent) => void
-  onNodeDragEnd?: (node:RGNode, e:RGUserEvent) => void
-  onNodeDragging?: (node:RGNode, newX:number, newY:number, e:RGUserEvent) => RGPosition | undefined
+  onNodeDragEnd?: (node:RGNode, e:RGUserEvent, x_buff?:number, y_buff?: number) => void
+  onNodeDragging?: (node:RGNode, newX:number, newY:number, e:RGUserEvent) => void | RGPosition | undefined
+  onCanvasDragging?: (newX:number, newY:number, buffX:number, buffY:number) => void | RGPosition | undefined
   onCanvasDragEnd?: (e: RGUserEvent) => void;
   onContextmenu?: (e: RGUserEvent, objectType: RGEventTargetType, object: RGNode | RGLink | undefined) => void;
   onFullscreen?: (newValue:boolean, defaultFullscreen: () => Promise<void>) => void;
@@ -79,6 +85,77 @@ export type RelationGraphProps = {
   onZoomEnd?: () => void
 };
 export declare class GraphToolBar extends VueElement {
+  $slots: {
+    default: VNode[];
+  };
+}
+export declare class RGMiniToolBar extends VueElement {
+  $props: RGToolBarProps;
+  $slots: {
+    default: VNode[];
+  };
+}
+export declare class RGMiniView extends VueElement {
+  $props: RGMiniViewProps;
+  $slots: {
+    default: VNode[];
+  };
+}
+export declare class RGBackground extends VueElement {
+  $props: RGBackgroundProps;
+  $slots: {
+    default: VNode[];
+  };
+}
+export declare class RGWatermark extends VueElement {
+  $props: RGWatermarkProps;
+  $slots: {
+    default: VNode[];
+  };
+}
+export declare class RGEditingController extends VueElement {
+  $slots: {
+    default: VNode[];
+  };
+}
+export declare class RGEditingResize extends VueElement {
+  $slots: {
+    default: VNode[];
+  };
+}
+export declare class RGEditingNearNodeWidget extends VueElement {
+  $props: {
+    position: RGWidgetPosition
+  };
+  $slots: {
+    default: VNode[];
+  };
+}
+export declare class RGEditingLineController extends VueElement {
+  $props: {
+    textEditable?: boolean
+  };
+  $slots: {
+    default: VNode[];
+  };
+}
+export declare class RGEditingConnectController extends VueElement {
+  $slots: {
+    default: VNode[];
+  };
+}
+export declare class RGEditingCreateLineHandle extends VueElement {
+  $props: RGCreateLineHandleProps;
+  $slots: {
+    default: VNode[];
+  };
+}
+export declare class RGEditingConnectPoints extends VueElement {
+  $slots: {
+    default: VNode[];
+  };
+}
+export declare class RGEditingReferenceLine extends VueElement {
   $slots: {
     default: VNode[];
   };
@@ -100,18 +177,8 @@ export declare class RelationGraphComponent extends VueElement {
     reLayout?: boolean | RGRefreshCallback,
     callback?: (graphInstance: RelationGraphInstance) => void
   );
-  setLayouter(layouterInstance: RGLayouter);
   onGraphResize();
   refresh(callback?: RGRefreshCallback);
-  focusRootNode();
-  focusNodeById(nodeId: string);
-  getNodeById(nodeId: string);
-  removeNodeById(nodeId: string);
-  getNodes();
-  getLinks();
-  getGraphJsonData();
-  getGraphJsonOptions();
-  updateView();
   $props: RelationGraphProps;
   $slots: {
     default: VNode[];
@@ -119,6 +186,8 @@ export declare class RelationGraphComponent extends VueElement {
     'tool-bar': VNode[];
     'mini-view': VNode[];
     'graph-plug': VNode[];
+    'svg-defs': VNode[];
+    'node-template': VNode[];
     node: VNode<RendererNode, RendererElement, RGNodeSlotProps>[];
     line: VNode<RendererNode, RendererElement, RGLineSlotProps>[];
   };

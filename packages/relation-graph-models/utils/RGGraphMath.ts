@@ -264,9 +264,9 @@ export const RGGraphMath = {
     let buff_h = to_x - from_x;
     const isSameH = buff_h > -1 && buff_h < 1;
     if (isSameH) {
-      to_x = to_x - 2;
-      from_x = from_x + 2;
-      buff_h = -4;
+      to_x = to_x - 0.5;
+      from_x = from_x + 0.5;
+      buff_h = -1;
     }
     const ri_angle_buff = (indexOfAll - ((allSize - 1) / 2));
     const distance = ri_angle_buff * lineDistance;

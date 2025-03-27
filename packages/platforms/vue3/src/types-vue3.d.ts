@@ -39,6 +39,7 @@ export declare class RelationGraphComponent extends VueElement {
     miniToolBar: VNode[];
     miniViewPanel: VNode[];
     graphPlug: VNode[];
+    svgDefs: VNode[];
     node: VNode[];
     line: VNode[];
   };

@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import CurrentDemo from "./react-demos/line";
+import {OnlineDemosIndex} from "./online-demos";
 // eslint-disable-next-line react/no-deprecated
 ReactDOM.render(
-  <CurrentDemo />,
+  <OnlineDemosIndex />,
   document.querySelector('#root')
 );

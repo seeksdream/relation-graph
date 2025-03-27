@@ -18,7 +18,7 @@ const borderColor = computed(() => {
 });
 const borderWidth = computed(() => {
   const width = props.nodeProps.borderWidth === undefined ? options.value.defaultNodeBorderWidth : props.nodeProps.borderWidth;
-  return width === 0 ? undefined : width;
+  return !width ? undefined : (width + 'px');
 });
 const nodeWidth = computed(() => {
   if (props.nodeProps.width === 0) return;
@@ -41,6 +41,9 @@ const showExpandHolder = computed(() => {
 });
 const expandButtonClass = computed(() => {
   return props.nodeProps.expanded === false ? 'c-expanded' : 'c-collapsed'
+})
+const isAllowShowNode = computed(() => {
+  return RGNodesAnalytic.isAllowShowNode(props.nodeProps)
 })
 const expandOrCollapseNode = (e: MouseEvent) => {
   graph.instance!.expandOrCollapseNode(props.nodeProps, e)
@@ -67,9 +70,6 @@ const onDragStart = (e: MouseEvent | TouchEvent) => {
 const onclick = (e: MouseEvent | TouchEvent) => {
   graph.instance!.onNodeClick(props.nodeProps, e)
 }
-const isAllowShowNode = (thisNode:RGNode):boolean => {
-  return RGNodesAnalytic.isAllowShowNode(thisNode);
-}
 onMounted(() => {
   refreshNodeProperties()
   graph.instance!.addNodeResizeListener(seeksRGNode$.value!, props.nodeProps)
@@ -83,12 +83,14 @@ onBeforeUnmount(() => {
 </script>
 <template>
   <div
-      v-show="isAllowShowNode(nodeProps)"
+      v-show="isAllowShowNode"
       ref="seeksRGNode$"
       :style="{
       'left':nodeProps.x + 'px',
       'top':nodeProps.y + 'px',
-      'opacity': (nodeProps.opacity>1?nodeProps.opacity/100:nodeProps.opacity)
+      'z-index':nodeProps.zIndex ? nodeProps.zIndex : undefined,
+      'opacity': (nodeProps.opacity>1?nodeProps.opacity/100:nodeProps.opacity),
+       'pointer-events': nodeProps.opacity === 0 ? 'none' : undefined
     }"
       class="rel-node-peel"
       :class="[(nodeProps.selected && 'rel-node-selected'), (nodeProps.dragging && 'rel-node-dragging'), (nodeProps.id===options.checkedNodeId && 'rel-node-peel-checked'), nodeProps.className]"

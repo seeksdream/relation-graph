@@ -4,33 +4,30 @@
 
 # relation-graph
 
+[English ](README.md) | [简体中文](README-zh.md)
 
-
-- **relation-graph** 是支持Vue2、Vue3、React的关系数据展示组件，支持通过【插槽】让使用者使用"普通HTML元素、Vue组件、React组件"来完全自定义图形元素，并提供实用的API接口让使用者轻松构建可交互的图形应用。<br />
--  除了典型的关系数据展示功能，relation-graph还支持作为一个画板来使用，你可以在画板上放置任何内容，只需要为想要连接的元素设置id，同时定义"元素连线（Element Lines）"即可。轻松实现一个可任意创建连线、可缩放与拖动、支持通过API轻松实现动态交互的画板。
 - **relation-graph** is a relationship data display component that supports Vue 2, Vue 3, and React. It enables users to fully customize graphical elements using "common HTML elements, Vue components, React components" through slots, and provides practical API interfaces to facilitate the development of interactive graphical applications."<br />
 -  In addition to the typical relationship data display functionality, the relation-graph also supports being used as a drawing board. You can place any content on the drawing board, simply by setting an id for the elements you want to connect, and defining "element lines." This allows for the easy creation of a drawing board that supports the creation of arbitrary connections, zooming and dragging, and dynamic interactions through the API.
-### Docs & Examples  文档 & 示例：
+### Docs & Examples 
 
-- [https://relation-graph.com](https://relation-graph.com)  （国内用户，无需科学上网）
+- [https://relation-graph.com](https://relation-graph.com) 
 
-- [https://relation-graph.github.io](https://relation-graph.github.io)（For regions outside of China）
-
-上面的网站中包含使用文档、在线示例，以及可视化的配置工具。<br>
 The website above includes documentation, online demos, and a visual configuration tool for software developers.
 
-### Getting Started  快速使用：
+### Getting Started
 
 ```shell script
+# Vue2
 npm install --save relation-graph
+# Vue3
+npm install --save relation-graph-vue3
+# React
+npm install --save relation-graph-react
 ```
 ```shell script
-# 注意：relation-graph支持Vue2、Vue3、React, 引入的包名称都是"relation-graph" 但在使用时，根据你的环境，需要引入不同的名称
-# Note: relation-graph supports Vue2, Vue3, React, but the package name for import is always "relation-graph".
-# 
 # Vue2： import RelationGraph from 'relation-graph'
-# Vue3： import RelationGraph from 'relation-graph/vue3'
-# React： import RelationGraph from 'relation-graph/react'
+# Vue3： import RelationGraph from 'relation-graph-vue3'
+# React： import RelationGraph from 'relation-graph-react'
 ```
 
 ```vue
@@ -114,25 +111,24 @@ export default {
 ```
 
 
-### Sample code effects  上面代码的效果：
+### Sample code effects
 ![简单示例效果图](doc/images/relation-graph-simple.png)
 
-### Example Projects  完整的示例代码：
+### Example Projects
 
-- The complete Vue2 sample project: / Vue3完整小示例:
+- The complete Vue2 sample project:
 - https://github.com/seeksdream/relation-graph-vue3-demo
 
-- The complete Vue3 sample project: / React完整小示例:
+- The complete Vue3 sample project:
 - https://github.com/seeksdream/relation-graph-react-demo
 
-- The complete React sample project: / vue2完整小示例:
+- The complete React sample project:
 - https://github.com/seeksdream/relation-graph-vue2-demo
 
 
-### More Examples   更多示例：
-- [https://relation-graph.com/#/demo](https://relation-graph.com/#/demo)  （国内用户，无需科学上网）
+### More Examples
+- [https://relation-graph.com/#/demo](https://relation-graph.com/#/demo)
 
-- [https://relation-graph.github.io/#/demo](https://relation-graph.github.io/#/demo)（For regions outside of China）
 
 
 ![relation-graph](doc/relation-graph-images-m.png)
@@ -146,28 +142,29 @@ export default {
 ![展开/关闭所有](doc/demo-images/open-all-close-all.gif)
 ![布局切换事件](doc/demo-images/before-change-layout.gif)
 
-### The complete sample project 完整的、可运行的示例项目：
+### The complete sample project
 
-- The complete Vue2 sample project & vue2完整小示例：
-- https://github.com/seeksdream/relation-graph-vue2-demo
+- The complete Vue2 sample project：
+- [https://github.com/seeksdream/relation-graph-vue2-demo(Vite)](https://github.com/seeksdream/relation-graph-vue2-demo)
+- [https://github.com/seeksdream/relation-graph-vue2-demo(Webpack)](https://github.com/seeksdream/relation-graph-webpack)
 
-- The complete Vue3 sample project & vue3完整小示例：
+- The complete Vue3 sample project：
 - https://github.com/seeksdream/relation-graph-vue3-demo
 
-- The complete React sample project & React完整小示例：
+- The complete React sample project：
 - https://github.com/seeksdream/relation-graph-react-demo
 
 
-### More info  更多效果及使用方法：
+### More info
 
-- [https://relation-graph.com](https://relation-graph.com)  （国内用户，无需科学上网）
+- [https://relation-graph.com](https://relation-graph.com)
 
-- [https://relation-graph.github.io](https://relation-graph.github.io)（For regions outside of China）
 
-### Contact me  与我联系：
+### Contact me
 
-- 我的QQ：3235808353
 - My WhatsApp:
 
   <img src="doc/images/Whatsapp.png" width="200" />
+
+- QQ：3235808353
 

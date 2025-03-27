@@ -1,4 +1,5 @@
 import {JsonNode, RGNode, RGOptions} from '../types';
+import RGNodesAnalytic from "../utils/RGNodesAnalytic";
 
 export const json2Node = (originData:JsonNode, graphOptions?: RGOptions) => {
   if (originData.id === undefined) {
@@ -60,6 +61,8 @@ export const json2Node = (originData:JsonNode, graphOptions?: RGOptions) => {
     disableDrag:
       originData.disableDrag !== undefined ? originData.disableDrag : false,
     singleNode: false,
+    invisiable: false,
+    zIndex: originData.zIndex || 0,
     data: originData.data !== undefined ? originData.data : {}
   };
   jsonData.lot = {
@@ -74,8 +77,8 @@ export const json2Node = (originData:JsonNode, graphOptions?: RGOptions) => {
       offsetHeight: 50
     };
     if (graphOptions) {
-      if (graphOptions.defaultNodeWidth) jsonData.el.offsetWidth = graphOptions.defaultNodeWidth + 16;
-      if (graphOptions.defaultNodeHeight) jsonData.el.offsetHeight = graphOptions.defaultNodeHeight + 16;
+      if (graphOptions.defaultNodeWidth) jsonData.el.offsetWidth = graphOptions.defaultNodeWidth;
+      if (graphOptions.defaultNodeHeight) jsonData.el.offsetHeight = graphOptions.defaultNodeHeight;
     }
   }
   if (jsonData.width) jsonData.el.offsetWidth = jsonData.width;
@@ -91,7 +94,6 @@ const _ignore_node_keys = [
   'targetFrom',
   'targetNodes',
   'targetTo',
-  'type',
   'lot',
   'seeks_id'
 ];

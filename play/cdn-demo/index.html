@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charSet="utf-8">
+    <title>relation-graph demo</title>
+
+<!--    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>-->
+    <!-- screenfull和html2canvas是relation-graph依赖的两个组件，需要引入 -->
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/screenfull.js/5.1.0/screenfull.min.js"></script>-->
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>-->
+    <!-- 引入relation-graph -->
+<!--    <script src="https://unpkg.com/relation-graph/lib/vue2/relation-graph.umd.js"></script>-->
+    <script type="importmap">
+    {
+        "imports": {
+            "vue": "https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.esm.browser.js",
+            "screenfull": "https://cdnjs.cloudflare.com/ajax/libs/screenfull.js/5.1.0/screenfull.min.js",
+            "html2canvas": "https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js",
+            "relation-graph": "https://unpkg.com/relation-graph@2.2.8/lib/vue2/relation-graph.mjs"
+        }
+    }
+</script>
+</head>
+<body>
+<div id="app">
+    <div style="height:calc(100vh - 30px);width:100%;border:#eeeeee solid 1px;">
+        <relation-graph ref="seeksRelationGraph" :options="graphOptions"/>
+    </div>
+</div>
+</body>
+<script type="module">
+    import Vue from 'vue';
+    import Rg from 'relation-graph';
+    console.log('Rg:', Rg);
+    const app = new Vue({
+        el: '#app',
+        data: {
+            message: 'Hello Vue!',
+            graphOptions: {
+                defaultJunctionPoint: 'border'
+                // 这里可以参考"Graph 图谱"中的参数进行设置
+            }
+        },
+        mounted() {
+            this.showRelationGraph();
+        },
+        methods: {
+            showRelationGraph() {
+                console.log('ref:btn:', this.$refs.btn);
+                console.log('ref:', this.$refs.seeksRelationGraph);
+                const __graph_json_data = {
+                    rootId: 'a',
+                    nodes: [
+                        { id: 'a', text: 'A', borderColor: 'yellow' },
+                        { id: 'b', text: 'B', color: '#43a2f1', fontColor: 'yellow' },
+                        { id: 'c', text: 'C', nodeShape: 1, width: 80, height: 60 },
+                        { id: 'e', text: 'E', nodeShape: 0, width: 150, height: 150 }
+                    ],
+                    lines: [
+                        { from: 'a', to: 'b', text: 'Text 1', color: '#43a2f1' },
+                        { from: 'a', to: 'c', text: 'Textt 2' },
+                        { from: 'a', to: 'e', text: 'Text 3' },
+                        { from: 'b', to: 'e', text: '', color: '#67C23A' }
+                    ]
+                };
+                this.$refs.seeksRelationGraph.setJsonData(__graph_json_data, (seeksRGGraph) => {
+                    // 这些写上当图谱初始化完成后需要执行的代码
+                });
+            }
+        }
+    })
+</script>
+</html>

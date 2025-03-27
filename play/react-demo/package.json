@@ -15,7 +15,7 @@
     "graphology-layout": "^0.6.1",
     "graphology-layout-forceatlas2": "^0.10.1",
     "react-tooltip": "^5.26.3",
-    "relation-graph-react": "2.1.42"
+    "relation-graph-react": "2.1.36"
   },
   "devDependencies": {
     "@types/estree": "0.0.45",

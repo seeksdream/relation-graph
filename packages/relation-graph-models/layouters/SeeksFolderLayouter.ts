@@ -129,7 +129,7 @@ export class SeeksFolderLayouter extends SeeksBaseLayouter {
       max_length: 1,
       max_strength: 1
     };
-    RGNodesAnalytic.analysisNodes(groupNodes, [this.rootNode], 0, analyticResult);
+    RGNodesAnalytic.analysisNodesForFolder(groupNodes, [this.rootNode], 0, analyticResult);
     groupNodes = [];
     analyticResult = {
       max_deep: 1,
@@ -214,6 +214,7 @@ export class SeeksFolderLayouter extends SeeksBaseLayouter {
         // thisNode.lot.y = rootNode.lot.y! - __per_height * (thisNode.lot.strengthWithChilds_from!);
         // thisNode.lot.y = rootNode.lot.y! + __per_height * (thisNode.lot.strengthWithChilds_from!);
         thisNode.lot.y = rootNode.lot.y! + __per_height * (thisNode.lot.strengthWithChilds_from! - 1);
+        // console.log('xxxxxxxx2222:', thisNode.text, 'bloomingNode:', rootNode.lot.y, thisNode.lot.strengthWithChilds_from!, thisNode.lot.y);
       }
     });
     this.gatherNodes(groupNodes, 'h', __per_height);
@@ -242,8 +243,8 @@ export class SeeksFolderLayouter extends SeeksBaseLayouter {
           if (thisNode.lot.childs_size! <= 1) {
             // thisNode.selected = true;
             const bloomingNode = this.getBloomingNearByParent(thisNode, thisNode.lot.parent!, levelNodes, hv);
+            // console.log(thisNode.text, 'bloomingNode:', bloomingNode && bloomingNode.text, bloomingNode && bloomingNode.lot.y, perSize);
             if (bloomingNode) {
-              // console.log(thisNode.text, 'bloomingNode:', bloomingNode.text, bloomingNode.lot.y, perSize);
               if (hv === 'h') {
                 if (thisNode.lot.y - bloomingNode.lot.y > 0) {
                   thisNode.lot.y = bloomingNode.lot.y! + perSize * bloomingNode.lot.movedNodeSizeAfter;
