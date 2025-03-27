@@ -7,7 +7,7 @@
       "dom",
       "es2017"
     ],
-    "baseUrl": "../../../relation-graph-react",
+    "baseUrl": "./",
     "moduleResolution": "node",
     "strict": true,
     "allowJs": true,

@@ -57,6 +57,9 @@ export class SeeksBidirectionalTreeLayouter extends SeeksBaseLayouter {
       if (thisDeep !== 0) {
         childNodes = thisNode.targetNodes;
       }
+      if (this.layoutOptions.simpleTree === true) {
+        childNodes = thisNode.targetNodes;
+      }
       let __thisTargetIndex = 0;
       childNodes.forEach((thisTarget) => {
         if (!thisTarget.lot) thisTarget.lot = {eached: false, childs: []};
@@ -114,10 +117,17 @@ export class SeeksBidirectionalTreeLayouter extends SeeksBaseLayouter {
     } else {
       devLog('layout by root:', rootNode);
     }
-    this.rootNode = rootNode;
-    this.allNodes = allNodes;
     devLog('allNodes:', allNodes.length);
-    allNodes.forEach(thisNode => {
+    this.rootNode = rootNode;
+    let groupNodes:RGNode[] = [];
+    if (this.allNodes && this.allNodes.length > 0) {
+      groupNodes.push(this.rootNode);
+      RGNodesAnalytic.getDescendantNodes(this.rootNode, groupNodes);
+      devLog('groupNodes:1:', groupNodes.length);
+    } else {
+      groupNodes = allNodes;
+    }
+    groupNodes.forEach(thisNode => {
       // thisNode.lot = { eached: false }
       thisNode.lot.eached = false;
       thisNode.lot.notLeafNode = false;
@@ -129,31 +139,49 @@ export class SeeksBidirectionalTreeLayouter extends SeeksBaseLayouter {
       thisNode.lot.strengthWithChilds = 0;
       thisNode.lot.placed = false;
     });
+    this.allNodes = allNodes;
     // this.rootNode.fixed = true
-    let groupNodes:RGNode[] = [];
+
     let analyticResult = {
       max_deep: 1,
       max_length: 1,
       max_strength: 1
     };
+    groupNodes = [];
     RGNodesAnalytic.analysisNodes(groupNodes, [this.rootNode], 0, analyticResult);
+    groupNodes.forEach(thisNode => {
+      // thisNode.lot = { eached: false }
+      thisNode.lot.eached = false;
+      thisNode.lot.notLeafNode = false;
+      thisNode.lot.childs = [];
+      // thisNode.lot.parent = undefined;
+      thisNode.lot.index_of_parent = 0;
+      thisNode.lot.strength = 0;
+      thisNode.lot.strengthWithChilds_from = 0;
+      thisNode.lot.strengthWithChilds = 0;
+      thisNode.lot.placed = false;
+    });
+    devLog('groupNodes:2:', groupNodes.length, groupNodes.map(n => n.text).join(','));
     groupNodes = [];
     analyticResult = {
       max_deep: 1,
       max_length: 1,
       max_strength: 1
     };
-    this.analysisNodes4Didirectional(groupNodes, [this.rootNode], 0, analyticResult, -1);
-    this.placeNodesPosition(this.rootNode, groupNodes, analyticResult);
-    groupNodes = [];
-    analyticResult = {
-      max_deep: 1,
-      max_length: 1,
-      max_strength: 1
-    };
+    if (this.layoutOptions.simpleTree !== true) {
+      this.analysisNodes4Didirectional(groupNodes, [this.rootNode], 0, analyticResult, -1);
+      devLog('groupNodes:L:', groupNodes.length);
+      this.placeNodesPosition(this.rootNode, groupNodes, analyticResult);
+      groupNodes = [];
+      analyticResult = {
+        max_deep: 1,
+        max_length: 1,
+        max_strength: 1
+      };
+    }
     this.analysisNodes4Didirectional(groupNodes, [this.rootNode], 0, analyticResult, 1);
+    devLog('groupNodes:R:', groupNodes.length);
     this.placeNodesPosition(this.rootNode, groupNodes, analyticResult);
-    devLog('allNodes:', groupNodes.length);
     if (!this.graphOptions.useAnimationWhenExpanded) {
       this.allNodes.forEach(thisNode => {
         if (thisNode.fixed === true) {
@@ -216,10 +244,14 @@ export class SeeksBidirectionalTreeLayouter extends SeeksBaseLayouter {
   placeRelativePosition(rootNode:RGNode, groupNodes:RGNode[], analyticResult:NodesAnalyticResult) {
     const viewSize = this.graphOptions.viewSize;
     if (this.layoutOptions.from === 'left' || this.layoutOptions.from === 'right') {
-      const __min_per_height = getNumberOption(this.layoutOptions.min_per_height) || 80;
-      const __max_per_height = getNumberOption(this.layoutOptions.max_per_height) || 400;
-      const __min_per_width = getNumberOption(this.layoutOptions.min_per_width) || 430;
-      const __max_per_width = getNumberOption(this.layoutOptions.max_per_width) || 650;
+      const __min_per_height_value = getNumberOption(this.layoutOptions.min_per_height) || 80;
+      const __max_per_height_value = getNumberOption(this.layoutOptions.max_per_height) || 400;
+      const __min_per_width_value = getNumberOption(this.layoutOptions.min_per_width) || 430;
+      const __max_per_width_value = getNumberOption(this.layoutOptions.max_per_width) || 650;
+      const __min_per_height = __min_per_height_value || Math.min(80, __max_per_height_value || 80);
+      const __max_per_height = __max_per_height_value || Math.min(400, __min_per_height_value || 400);
+      const __min_per_width = __min_per_width_value || Math.min(430, __max_per_width_value || 430);
+      const __max_per_width = __max_per_width_value || Math.min(650, __min_per_width_value || 650);
       let __per_width = Math.round((viewSize.width - 10) / (analyticResult.max_deep + 2));
       if (__per_width < __min_per_width)__per_width = __min_per_width;
       if (__per_width > __max_per_width)__per_width = __max_per_width;
@@ -253,10 +285,14 @@ export class SeeksBidirectionalTreeLayouter extends SeeksBaseLayouter {
       });
       this.gatherNodes(groupNodes, 'h', __per_height);
     } else {
-      const __min_per_height = getNumberOption(this.layoutOptions.min_per_height) || 350;
-      const __max_per_height = getNumberOption(this.layoutOptions.max_per_height) || 400;
-      const __min_per_width = getNumberOption(this.layoutOptions.min_per_width) || 250;
-      const __max_per_width = getNumberOption(this.layoutOptions.max_per_width) || 500;
+      const __min_per_height_value = getNumberOption(this.layoutOptions.min_per_height) || 350;
+      const __max_per_height_value = getNumberOption(this.layoutOptions.max_per_height) || 400;
+      const __min_per_width_value = getNumberOption(this.layoutOptions.min_per_width) || 250;
+      const __max_per_width_value = getNumberOption(this.layoutOptions.max_per_width) || 500;
+      const __min_per_height = __min_per_height_value || Math.min(350, __max_per_height_value || 350);
+      const __max_per_height = __max_per_height_value || Math.min(400, __min_per_height_value || 400);
+      const __min_per_width = __min_per_width_value || Math.min(250, __max_per_width_value || 250);
+      const __max_per_width = __max_per_width_value || Math.min(500, __min_per_width_value || 500);
       let __per_width = Math.round((viewSize.width - 10) / (analyticResult.max_strength + 2));
       if (__per_width < __min_per_width)__per_width = __min_per_width;
       if (__per_width > __max_per_width)__per_width = __max_per_width;

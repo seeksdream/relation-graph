@@ -6,7 +6,17 @@ export type NodesAnalyticResult = {
   max_strength: number
 };
 export type RGLevelDirection = -1|0|1;
+
 export const RGNodesAnalytic = {
+  getDescendantNodes(node:RGNode, collectList: RGNode[] = []) {
+    if (node.lot && node.lot.childs) {
+      node.lot.childs.forEach(thisNode => {
+        collectList.push(thisNode);
+        RGNodesAnalytic.getDescendantNodes(thisNode, collectList);
+      });
+    }
+    return collectList;
+  },
   analysisNodes(eachedNodes:RGNode[], thisLevelNodes:RGNode[], thisDeep:number, analyticResult:NodesAnalyticResult) {
     if (thisLevelNodes.length > analyticResult.max_length) {
       analyticResult.max_length = thisLevelNodes.length;
@@ -25,24 +35,65 @@ export const RGNodesAnalytic = {
       });
     }
     const newLevelNodes:RGNode[] = [];
-    thisLevelNodes.forEach(thisNode => {
-      eachedNodes.push(thisNode);
-      if (thisNode.targetNodes) {
-        thisNode.targetNodes.forEach((thisTarget) => {
-          if (!eachedNodes.includes(thisTarget)) {
-            eachedNodes.push(thisTarget);
-            thisTarget.lot.parent = thisNode;
-            // thisNode.lot.childs.push(thisTarget);
-            newLevelNodes.push(thisTarget);
-          }
-        });
+    for (const thisNode of thisLevelNodes) {
+      if (!eachedNodes.includes(thisNode)) {
+        thisNode.lot.level = thisDeep;
+        eachedNodes.push(thisNode);
       }
-    });
+      if (thisNode.targetNodes) {
+        for (const thisNextLevelNode of thisNode.targetNodes) {
+          if (!eachedNodes.includes(thisNextLevelNode)) {
+            eachedNodes.push(thisNextLevelNode);
+            thisNextLevelNode.lot.parent = thisNode;
+            thisNode.lot.childs.push(thisNextLevelNode);
+            newLevelNodes.push(thisNextLevelNode);
+          }
+        }
+      }
+    }
     if (__thisLOT_subling.all_strength > analyticResult.max_strength) {
       analyticResult.max_strength = __thisLOT_subling.all_strength;
     }
     if (newLevelNodes.length > 0) {
       RGNodesAnalytic.analysisNodes(eachedNodes, newLevelNodes, thisDeep + 1, analyticResult);
+    }
+  },
+  analysisNodesForFolder(eachedNodes:RGNode[], thisLevelNodes:RGNode[], thisDeep:number, analyticResult:NodesAnalyticResult) {
+    if (thisLevelNodes.length > analyticResult.max_length) {
+      analyticResult.max_length = thisLevelNodes.length;
+    }
+    if (thisDeep > analyticResult.max_deep) {
+      analyticResult.max_deep = thisDeep;
+    }
+    const __thisLOT_subling = {
+      level: thisDeep,
+      all_size: thisLevelNodes.length,
+      all_strength: 0
+    };
+    if (thisDeep === 0) {
+      thisLevelNodes.forEach(thisNode => {
+        thisNode.lot.parent = undefined;
+      });
+    }
+    const newLevelNodes:RGNode[] = [];
+    for (const thisNode of thisLevelNodes) {
+      eachedNodes.push(thisNode);
+      if (thisNode.targetNodes) {
+        for (const thisNextLevelNode of thisNode.targetNodes) {
+          if (!eachedNodes.includes(thisNextLevelNode)) {
+            eachedNodes.push(thisNextLevelNode);
+            thisNextLevelNode.lot.parent = thisNode;
+            // thisNode.lot.childs.push(thisTarget);
+            newLevelNodes.push(thisNextLevelNode);
+          }
+        }
+      }
+    }
+    if (__thisLOT_subling.all_strength > analyticResult.max_strength) {
+      analyticResult.max_strength = __thisLOT_subling.all_strength;
+    }
+    if (newLevelNodes.length > 0) {
+      RGNodesAnalytic.analysisNodesForFolder(eachedNodes, newLevelNodes, thisDeep + 1, analyticResult);
     }
   },
   analysisNodes4Didirectional(willLayoutNodes:RGNode[], thisLevelNodes:RGNode[], thisDeep:number, analyticResult:NodesAnalyticResult, levelDirect:RGLevelDirection) {
@@ -200,25 +251,27 @@ export const RGNodesAnalytic = {
   analysisDataFolder(thisLevelNodes:RGNode[], thisDeep:number, levelDirect:RGLevelDirection) {
     const newLevelNodes:RGNode[] = [];
     let currentLevelStrengthWidthChilds = 0;
-    let parent = null;
+    let parent: RGNode|undefined;
     thisLevelNodes.forEach(thisNode => {
       if (thisNode.lot.level === 0 || levelDirect === (thisNode.lot.level! < 0 ? -1 : 1)) {
-        if (thisNode.lot.childs_size > 0) {
+        if (thisNode.lot.childs_size! > 0) {
           thisNode.lot.childs.forEach((thisTarget) => {
             newLevelNodes.push(thisTarget);
           });
         }
-        let parentY = 0;
         if (thisNode.lot.parent) {
           if (!parent) {
-            parentY = thisNode.lot.parent.lot.strengthWithChilds_from!;
-            currentLevelStrengthWidthChilds = parentY;
             parent = thisNode.lot.parent;
+            currentLevelStrengthWidthChilds = parent.lot.strengthWithChilds_from!;
+            // console.log('xxxxxxxxxx:set:parent:', parent.text, currentLevelStrengthWidthChilds);
           } else if (parent !== thisNode.lot.parent) {
-            currentLevelStrengthWidthChilds += 1;
             parent = thisNode.lot.parent;
+            // currentLevelStrengthWidthChilds += 1;
+            currentLevelStrengthWidthChilds = parent.lot.strengthWithChilds_from!;
+            // console.log('xxxxxxxxxx:chg:parent:', parent.text, currentLevelStrengthWidthChilds);
           }
         }
+        // console.log('xxxxxxxxxx:', parent && parent.text, ' ---> ', thisNode.text, 1 + currentLevelStrengthWidthChilds);
         thisNode.lot.strengthWithChilds_from = 1 + currentLevelStrengthWidthChilds;
         currentLevelStrengthWidthChilds += thisNode.lot.strengthWithChilds!;
       }
@@ -228,9 +281,20 @@ export const RGNodesAnalytic = {
     }
   },
   isAllowShowNode(thisNode:RGNode, deep = 0):boolean {
+    // if (thisNode.lot && thisNode.lot.level === 3) console.log('isAllowShowNodes:', thisNode.text, deep, thisNode.isShow, thisNode.isHide, thisNode.lot, thisNode.lot.parent);
     if (deep > 15) return true;
-    const parentShow = !thisNode.lot || !thisNode.lot.parent || (RGNodesAnalytic.isAllowShowNode(thisNode.lot.parent, deep + 1) && thisNode.lot.parent.expanded !== false);
-    return parentShow && thisNode.isShow && thisNode.isHide !== true;
+    if (thisNode.isShow === false) return false;
+    if (thisNode.isHide === true) return false;
+    if (thisNode.lot) {
+      if (thisNode.lot.parent) {
+        if (thisNode.lot.parent.expanded === false) {
+          return false;
+        } else {
+          return RGNodesAnalytic.isAllowShowNode(thisNode.lot.parent, deep + 1);
+        }
+      }
+    }
+    return true;
   },
   getNodeWidth(thisNode:RGNode, graphOptions?:RGOptionsFull):number {
     return thisNode.el.offsetWidth || thisNode.width || (graphOptions && graphOptions.defaultNodeWidth) || 50;
@@ -279,14 +343,14 @@ export const RGNodesAnalytic = {
     return this.getCenterYByNodeY(graphOptions, thisNode, thisNode.y || 0) - __offsetY;
   },
   isRectangleOverlap(rectA, rectB) {
-    const aX = rectA.x + NodePeelPadding;
-    const bX = rectB.x + NodePeelPadding;
-    const a_W = rectA.el.offsetWidth - NodePeelPadding * 2;
-    const b_W = rectB.el.offsetWidth - NodePeelPadding * 2;
-    const aY = rectA.y + NodePeelPadding;
-    const bY = rectB.y + NodePeelPadding;
-    const a_H = rectA.el.offsetHeight - NodePeelPadding * 2;
-    const b_H = rectB.el.offsetHeight - NodePeelPadding * 2;
+    const aX = rectA.x;
+    const bX = rectB.x;
+    const a_W = rectA.el.offsetWidth;
+    const b_W = rectB.el.offsetWidth;
+    const aY = rectA.y;
+    const bY = rectB.y;
+    const a_H = rectA.el.offsetHeight;
+    const b_H = rectB.el.offsetHeight;
     return !(bX >= aX + a_W || bX + b_W <= aX || bY >= aY + a_H || bY + b_H <= aY);
   },
   isXOverlap(aX:number,bX:number,a_W:number,b_W:number) {
@@ -300,16 +364,16 @@ export const RGNodesAnalytic = {
     return this.isRectangleOverlap(nodeA, nodeB);
   },
   getNoOverlapLimitedPosition(rectA, newX, newY, rectB) {
-    const old_aX = rectA.x + NodePeelPadding;
-    const old_aY = rectA.y + NodePeelPadding;
-    const aX = newX + NodePeelPadding;
-    const bX = rectB.x + NodePeelPadding;
-    const a_W = rectA.el.offsetWidth - NodePeelPadding * 2;
-    const b_W = rectB.el.offsetWidth - NodePeelPadding * 2;
-    const aY = newY + NodePeelPadding;
-    const bY = rectB.y + NodePeelPadding;
-    const a_H = rectA.el.offsetHeight - NodePeelPadding * 2;
-    const b_H = rectB.el.offsetHeight - NodePeelPadding * 2;
+    const old_aX = rectA.x;
+    const old_aY = rectA.y;
+    const aX = newX;
+    const bX = rectB.x;
+    const a_W = rectA.el.offsetWidth;
+    const b_W = rectB.el.offsetWidth;
+    const aY = newY;
+    const bY = rectB.y;
+    const a_H = rectA.el.offsetHeight;
+    const b_H = rectB.el.offsetHeight;
     let x = rectA.x;
     let y = rectA.y;
     const oX = this.isXOverlap(old_aX, bX, a_W, b_W);
@@ -317,17 +381,17 @@ export const RGNodesAnalytic = {
     if (oX) {
       if (aY < bY) {
         x = newX;
-        y = bY - a_H - NodePeelPadding;
+        y = bY - a_H;
       } else if (aY > bY) {
         x = newX;
-        y = bY + b_H - NodePeelPadding;
+        y = bY + b_H;
       }
     } else if (oY) {
       if (aX < bX) {
-        x = bX - a_W - NodePeelPadding;
+        x = bX - a_W;
         y = newY;
       } else if (aX > bX) {
-        x = bX + b_W - NodePeelPadding;
+        x = bX + b_W;
         y = newY;
       }
     }
@@ -351,5 +415,4 @@ export const RGNodesAnalytic = {
   }
 };
 
-const NodePeelPadding = 8;
 export default RGNodesAnalytic;

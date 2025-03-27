@@ -6,7 +6,7 @@ import { createVuePlugin as vue } from 'vite-plugin-vue2';
 import VitePluginStyleInject from 'vite-plugin-style-inject';
 import ts from 'typescript';
 
-const input = resolve(__dirname, "src/index.ts");
+const input = resolve(__dirname, 'src/index.ts');
 
 
 // https://vitejs.dev/config/
@@ -15,7 +15,7 @@ export default defineConfig({
     vue(),
     VitePluginStyleInject(),
     {
-      name: "emit-dts",
+      name: 'emit-dts',
       buildEnd() {
         const program = ts.createProgram([input], {
           target: ts.ScriptTarget.ESNext,
@@ -23,13 +23,13 @@ export default defineConfig({
           moduleResolution: ts.ModuleResolutionKind.NodeJs,
           // jsx实现 根据自己的需求改
           jsx: ts.JsxEmit.Preserve,
-          jsxImportSource: "solid-js",
+          jsxImportSource: 'solid-js',
           allowSyntheticDefaultImports: true,
           esModuleInterop: true,
           // js 源码输出的文件夹
-          outDir: `dist/source`,
+          outDir: 'dist/source',
           // d.ts 输出的文件夹
-          declarationDir: `../types/types`,
+          declarationDir: '../../../types/types',
           declaration: true,
           // true 只输出 dts 到 declarationDir,
           // false 同时输出js源码到 outDir
@@ -40,14 +40,14 @@ export default defineConfig({
       },
     },
     {
-      name: "seeks-copy-types",
+      name: 'seeks-copy-types',
       writeBundle() {
         setTimeout(() => {
           console.log('[relation-graph]seeks-copy-types.....');
           // console.log('[relation-graph]copy types.ts to types/types/');
-          const typesTsFile = resolve(__dirname, "../lib/vue2/relation-graph.js");
+          const typesTsFile = resolve(__dirname, '../../../lib/vue2/relation-graph.js');
           if (fs.existsSync(typesTsFile)) {
-            const typesTsFileInLib = resolve(__dirname, "../lib/vue2/relation-graph.common.js");
+            const typesTsFileInLib = resolve(__dirname, '../../../lib/vue2/relation-graph.common.js');
             fs.renameSync(typesTsFile, typesTsFileInLib);
             console.log('[relation-graph]seeks-copy-types done!');
           }
@@ -73,7 +73,7 @@ export default defineConfig({
       // the proper extensions will be added
       fileName: 'relation-graph'
     },
-    outDir: resolve(__dirname, '../lib/vue2'),
+    outDir: resolve(__dirname, '../../../lib/vue2'),
     emptyOutDir: false,
     rollupOptions: {
       // 确保外部化处理那些你不想打包进库的依赖

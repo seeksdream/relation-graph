@@ -9,7 +9,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "relation-graph": "^2.1.42",
     "vue": "2.6.10",
     "vue-template-compiler": "2.6.10"
   },

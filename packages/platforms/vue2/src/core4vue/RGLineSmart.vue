@@ -1,5 +1,5 @@
 <template>
-  <g :class="[relation.className]">
+  <g :class="[relation.className]" :data-id="relation.id">
     <path
       :d="pathData.path"
       class="c-rg-line-bg"
@@ -67,7 +67,7 @@
 import {devLog} from "../../../../relation-graph-models/utils/RGCommon";
 
 export default {
-  name: 'SeeksRGLine',
+  name: 'RGLineSmart',
   props: {
     link: {
       mustUseProp: true,
@@ -152,7 +152,6 @@ export default {
   watch: {},
   methods: {
     onClick(line, e) {
-      // RGStore.commit('setCurrentLineId', this.lineProps.id)
       this.relationGraph.onLineClick(line, this.link, e);
     }
   }

@@ -1,4 +1,4 @@
-import React, {MutableRefObject, useCallback, useContext, useEffect, useRef} from 'react';
+import React, {MutableRefObject, useContext, useEffect, useRef} from 'react';
 import RGNodesAnalytic from '../../../../../../relation-graph-models/utils/RGNodesAnalytic';
 import { RGUpdateContext, RelationGraphStoreContext } from './store/reducers/StockStore';
 import RGNodeExpandHolder from './RGNodeExpandHolder';
@@ -74,11 +74,11 @@ const SeeksRGNode: React.FC<RGNodeProps> = ({nodeProps, NodeSlot, ExpandHolderSl
   const height = nodeProps.height || options.defaultNodeHeight;
   // const borderStyle = `${nodeProps.borderColor || options.defaultNodeBorderColor} solid ${nodeProps.borderWidth === undefined ? options.defaultNodeBorderWidth : nodeProps.borderWidth}px`;
   const _bw = nodeProps.borderWidth === undefined ? options.defaultNodeBorderWidth : nodeProps.borderWidth;
-  const borderWidth = _bw === 0 ? undefined : _bw;
+  const borderWidth = !_bw ? undefined : (_bw + 'px');
   const borderColor = nodeProps.borderColor || options.defaultNodeBorderColor;
   const hideNodeContent = !(
     options.hideNodeContentByZoom === true &&
-    options.canvasZoom < 40
+    options.canvasZoom! < 40
   );
   const opacity = nodeProps.opacity === undefined ? 1 : (nodeProps.opacity > 1 ? nodeProps.opacity / 100 : nodeProps.opacity);
   const showNode = RGNodesAnalytic.isAllowShowNode(nodeProps);
@@ -93,9 +93,11 @@ const SeeksRGNode: React.FC<RGNodeProps> = ({nodeProps, NodeSlot, ExpandHolderSl
       ref={seeksRGNodeRef}
       style={{
         display: showNode ? undefined : 'none',
+        zIndex:nodeProps.zIndex ? nodeProps.zIndex : undefined,
         left: nodeProps.x + 'px',
         top: nodeProps.y + 'px',
-        opacity: opacity
+        opacity: opacity,
+        pointerEvents: opacity === 0 ? 'none' : undefined
       }}
       className={`rel-node-peel ${nodeProps.selected ? 'rel-node-selected' : ''} ${nodeProps.dragging ? 'rel-node-dragging' : ''} ${nodeProps.id===options.checkedNodeId ? 'rel-node-peel-checked' : ''} ${nodeProps.className ?? nodeProps.className}`}
       data-id={nodeProps.id}
@@ -105,13 +107,13 @@ const SeeksRGNode: React.FC<RGNodeProps> = ({nodeProps, NodeSlot, ExpandHolderSl
           ExpandHolderSlot ?
             (
               typeof ExpandHolderSlot === 'function' ?
-              <ExpandHolderSlot
-                nodeProps={nodeProps}
-                expandButtonClass={expandButtonClass}
-                expandOrCollapseNode={($event: React.MouseEvent|React.TouchEvent) => {expandOrCollapseNode($event);}}
-                expandHolderPosition={nodeProps.expandHolderPosition||options.defaultExpandHolderPosition}
-                color={options.defaultExpandHolderColor||nodeProps.color||options.defaultNodeColor}
-              />
+                <ExpandHolderSlot
+                  nodeProps={nodeProps}
+                  expandButtonClass={expandButtonClass}
+                  expandOrCollapseNode={($event: React.MouseEvent|React.TouchEvent) => {expandOrCollapseNode($event);}}
+                  expandHolderPosition={nodeProps.expandHolderPosition||options.defaultExpandHolderPosition}
+                  color={options.defaultExpandHolderColor||nodeProps.color||options.defaultNodeColor}
+                />
                 : ExpandHolderSlot
             )
             :

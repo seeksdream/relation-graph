@@ -6,14 +6,14 @@ import RGNodesAnalytic from "../utils/RGNodesAnalytic";
 export class RelationGraphWith9EasyView extends RelationGraphWith8Update {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  $easyViewCanvas:HTMLCanvasElement;
-  $canvasCtx:CanvasRenderingContext2D;
+  protected $easyViewCanvas:HTMLCanvasElement;
+  protected $evCanvasCtx:CanvasRenderingContext2D;
   constructor(options: RGOptions, listeners: RGListeners) {
     super(options, listeners);
   }
   setEasyViewCanvas(canvas:HTMLCanvasElement) {
     this.$easyViewCanvas = canvas;
-    this.$canvasCtx = this.$easyViewCanvas.getContext('2d');
+    this.$evCanvasCtx = this.$easyViewCanvas.getContext('2d');
     // setInterval(() => {
     //   this.updateEasyView();
     // }, 2000);
@@ -24,6 +24,7 @@ export class RelationGraphWith9EasyView extends RelationGraphWith8Update {
   }
   updateEasyView() {
     // devLog('updateEasyView:', this.options.canvasZoom);
+    this.updateMiniView();
     if (!this.options.performanceMode) {
       return;
     }
@@ -38,18 +39,18 @@ export class RelationGraphWith9EasyView extends RelationGraphWith8Update {
     requestAnimationFrame(this._updateEasyView.bind(this));
   }
   easyViewUpdating = false;
-  private easyViewUpdateHasNext = false;
-  private easyViewUpdateTimer;
-  private _updateEasyView() {
+  protected easyViewUpdateHasNext = false;
+  protected easyViewUpdateTimer;
+  protected _updateEasyView() {
     // if (this.easyViewUpdating) {
     //   this.easyViewUpdateHasNext = true;
     //   return;
     // }
     try {
       this.easyViewUpdating = true;
-      this.dosomethingBeforeDraw();
-      this.drawAllNodes();
-      this.drawAllLines();
+      this.evDosomethingBeforeDraw();
+      this.evDrawAllNodes();
+      this.evDrawAllLines();
     } catch (e) {
       console.error(e);
     }
@@ -59,47 +60,49 @@ export class RelationGraphWith9EasyView extends RelationGraphWith8Update {
       this._updateEasyView();
     }
   }
-  private dosomethingBeforeDraw() {
+  protected evDosomethingBeforeDraw() {
     const canvasWidth = this.$easyViewCanvas.getBoundingClientRect().width;
     const canvasHeight = this.$easyViewCanvas.getBoundingClientRect().height;
     this.$easyViewCanvas.width = canvasWidth; // 更新 Canvas 元素的宽度
     this.$easyViewCanvas.height = canvasHeight; // 更新 Canvas 元素的高度
-    this.$canvasCtx.canvas.width = canvasWidth; // 更新 Canvas 绘图区域的宽度
-    this.$canvasCtx.canvas.height = canvasHeight; // 更新 Canvas 绘图区域的高度
+    this.$evCanvasCtx.canvas.width = canvasWidth; // 更新 Canvas 绘图区域的宽度
+    this.$evCanvasCtx.canvas.height = canvasHeight; // 更新 Canvas 绘图区域的高度
     devLog('updateEasyView', canvasWidth, canvasHeight);
-    this.$canvasCtx.scale(this.options.canvasZoom / 100, this.options.canvasZoom / 100);
+    this.$evCanvasCtx.scale(this.options.canvasZoom / 100, this.options.canvasZoom / 100);
     this.easyViewOffset.x = this.options.canvasOffset.x / (this.options.canvasZoom / 100);
     this.easyViewOffset.y = this.options.canvasOffset.y / (this.options.canvasZoom / 100);
   }
   easyViewOffset = {x:0,y:0};
-  private drawAllNodes() {
+  protected evDrawAllNodes() {
     for (const node of this.getNodes()) {
       if (RGNodesAnalytic.isAllowShowNode(node) && (node.opacity && (node.opacity > 0))) {
-        this.drawNode(node);
+        this.evDrawNode(node);
       }
     }
   }
-  private drawNode(node: RGNode) {
+  protected evDrawNode(node: RGNode) {
     const nodeShape = node.nodeShape !== undefined && node.nodeShape !== null ? node.nodeShape : this.options.defaultNodeShape;
     if (nodeShape === 1) {
-      this.drawNode4Rect(node);
+      this.evDrawNode4Rect(node);
     } else {
-      this.drawNode4Circle(node);
+      this.evDrawNode4Circle(node);
     }
   }
-  private getNodeColor(node: RGNode) {
+  getNodeColor(node: RGNode) {
     const color = node.color || this.options.defaultNodeColor || 'red';
     if (color === 'transparent') {
       return 'rgba(204,204,204,0.55)';
     }
     return color;
   }
-  private drawNode4Rect(node: RGNode) {
-    const ctx = this.$canvasCtx;
-    const nodeWidth = node.el.offsetWidth - 16;
-    const nodeHeight = node.el.offsetHeight - 16;
-    const x = this.easyViewOffset.x + node.x + 8;
-    const y = this.easyViewOffset.y + node.y + 8;
+  setNodePeelPadding(nodePeelPadding:number) {
+  }
+  protected evDrawNode4Rect(node: RGNode) {
+    const ctx = this.$evCanvasCtx;
+    const nodeWidth = node.el.offsetWidth;
+    const nodeHeight = node.el.offsetHeight;
+    const x = this.easyViewOffset.x + node.x;
+    const y = this.easyViewOffset.y + node.y;
     // console.log('drawNode', x, y);
     ctx.beginPath();
     ctx.globalAlpha = node.opacity || 1;
@@ -108,12 +111,12 @@ export class RelationGraphWith9EasyView extends RelationGraphWith8Update {
     ctx.fill(); // 填充圆形
     ctx.globalAlpha = 1;
   }
-  private drawNode4Circle(node: RGNode) {
-    const ctx = this.$canvasCtx;
-    const nodeWidth = node.el.offsetWidth - 16;
-    const nodeHeight = node.el.offsetHeight - 16;
-    const x = this.easyViewOffset.x + node.x + nodeWidth / 2 + 8;
-    const y = this.easyViewOffset.y + node.y + nodeHeight / 2 + 8;
+  protected evDrawNode4Circle(node: RGNode) {
+    const ctx = this.$evCanvasCtx;
+    const nodeWidth = node.el.offsetWidth;
+    const nodeHeight = node.el.offsetHeight;
+    const x = this.easyViewOffset.x + node.x + nodeWidth / 2;
+    const y = this.easyViewOffset.y + node.y + nodeHeight / 2;
     // console.log('drawNode', x, y);
     const radius = nodeWidth / 2;
     ctx.beginPath();
@@ -124,17 +127,17 @@ export class RelationGraphWith9EasyView extends RelationGraphWith8Update {
     ctx.fill(); // 填充圆形
     ctx.globalAlpha = 1;
   }
-  private drawAllLines() {
+  protected evDrawAllLines() {
     for (const link of this.getLinks()) {
       if (RGNodesAnalytic.isAllowShowNode(link.fromNode) && RGNodesAnalytic.isAllowShowNode(link.toNode)) {
         for (let lineIndex = 0; lineIndex < link.relations.length; lineIndex++) {
-          this.drawLine(link, link.relations[lineIndex], lineIndex);
+          this.evDrawLine(link, link.relations[lineIndex], lineIndex);
         }
       }
     }
   }
-  private drawLine(link: RGLink, line: RGLine, lineIndex: number) {
-    const ctx = this.$canvasCtx;
+  protected evDrawLine(link: RGLink, line: RGLine, lineIndex: number) {
+    const ctx = this.$evCanvasCtx;
     const startX = this.easyViewOffset.x + link.fromNode.x;
     const startY = this.easyViewOffset.y + link.fromNode.y;
     const endX = this.easyViewOffset.x + link.toNode.x;
@@ -147,16 +150,16 @@ export class RelationGraphWith9EasyView extends RelationGraphWith8Update {
     // console.log('!!lineTo', endX, endY);
     // ctx.moveTo(startX, startY);
     // ctx.lineTo(endX, endY); // 绘制直线到终点坐标
-    this.drawSvgPathOnCanvas(ctx, pathData.path);
+    this.evDrawSvgPathOnCanvas(ctx, pathData.path);
     ctx.strokeStyle = line.color || this.options.defaultLineColor || 'red'; // 设置填充颜色
     ctx.lineWidth = line.lineWidth || this.options.defaultLineWidth || 1; // 设置线条宽度
     ctx.stroke(); // 绘制三次贝塞尔曲线
     ctx.globalAlpha = 1;
   }
-  private getPointValue(currentX:number, xOrBuffX:string, isRelative) {
+  protected getPointValue(currentX:number, xOrBuffX:string, isRelative: boolean) {
     return isRelative ? (currentX + parseFloat(xOrBuffX)) : parseFloat(xOrBuffX);
   }
-  private drawSvgPathOnCanvas(ctx, svgPath) {
+  protected evDrawSvgPathOnCanvas(ctx, svgPath) {
     const commands = svgPath.match(/[a-zA-Z][^a-zA-Z]*/g);
     let currentX = 0;
     let currentY = 0;

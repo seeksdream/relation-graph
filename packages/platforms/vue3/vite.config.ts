@@ -1,7 +1,7 @@
-import { resolve } from 'path'
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import VitePluginStyleInject from 'vite-plugin-style-inject'
+import { resolve } from 'path';
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import VitePluginStyleInject from 'vite-plugin-style-inject';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -15,13 +15,14 @@ export default defineConfig({
   },
   build: {
     lib: {
+      formats: ['es', 'umd', 'cjs'],
       // Could also be a dictionary or array of multiple entry points
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'RelationGraph',
       // the proper extensions will be added
       fileName: 'relation-graph'
     },
-    outDir: resolve(__dirname, '../lib/vue3'),
+    outDir: resolve(__dirname, '../../../lib/vue3'),
     emptyOutDir: false,
     rollupOptions: {
       // 确保外部化处理那些你不想打包进库的依赖
@@ -36,4 +37,4 @@ export default defineConfig({
       },
     },
   },
-})
+});

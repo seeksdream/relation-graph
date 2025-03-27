@@ -95,8 +95,14 @@ export default {
       is_flashing: false,
     };
   },
-  inject: ['graph'],
+  inject: ['graph', 'graphInstance'],
   computed: {
+    options() {
+      return this.graph.options;
+    },
+    relationGraph() {
+      return this.graphInstance();
+    },
     checked() {
       return this.relation.id === this.options.checkedLineId;
     },
@@ -130,12 +136,6 @@ export default {
       } catch (e) {
       }
       return {path:null, textTransform: null};
-    },
-    options() {
-      return this.graph.options;
-    },
-    relationGraph() {
-      return this.graph.instance;
     }
   },
   show() {

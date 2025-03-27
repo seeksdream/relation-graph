@@ -41,7 +41,7 @@ const doFullscreen = () => {
     <div v-if="options.allowShowZoomMenu" title="放大" class="c-mb-button" @click="addZoom(20)">
       <svg class="rg-icon" aria-hidden="true"><use xlink:href="#icon-fangda"></use></svg>
     </div>
-    <div v-if="options.allowShowZoomMenu" class="c-current-zoom" @dblclick="zoomToFit">{{ options.canvasZoom }}%</div>
+    <div v-if="options.allowShowZoomMenu" class="c-current-zoom" @click="zoomToFit">{{ options.canvasZoom }}%</div>
     <div v-if="options.allowShowZoomMenu" title="缩小" class="c-mb-button" style="margin-top:0px;" @click="addZoom(-20)">
       <svg class="rg-icon" aria-hidden="true"><use xlink:href="#icon-suoxiao"></use></svg>
     </div>

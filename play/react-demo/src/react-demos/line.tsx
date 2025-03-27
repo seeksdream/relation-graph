@@ -125,9 +125,9 @@ const MyComponent = () => {
   const graphOptions: RGOptions = {
     debug: true,
     defaultNodeBorderWidth: 0,
-    // disableDragCanvas: true,
-    // disableDragNode: true,
-    // disableZoom: true
+    disableDragCanvas: true,
+    disableDragNode: true,
+    disableZoom: true
     // 这里可以参考"Graph 图谱"中的参数进行设置
   }
   return (
@@ -142,6 +142,7 @@ const MyComponent = () => {
           nodeSlot={NodeSlot}
         />
       </div>
+      <div style={{height: '300px', backgroundColor: 'red' }}></div>
     </div>
   );
 };

@@ -1,14 +1,9 @@
 import RGGraphMath from '../utils/RGGraphMath';
-import { devLog } from '../utils/RGCommon';
-import { NodesAnalyticResult, RGNodesAnalytic } from '../utils/RGNodesAnalytic';
+import {devLog} from '../utils/RGCommon';
+import {NodesAnalyticResult, RGNodesAnalytic} from '../utils/RGNodesAnalytic';
 import SeeksBaseLayouter from './SeeksBaseLayouter';
-import {
-  RGForceLayoutOptions,
-  RGLayoutOptions,
-  RGNode,
-  RGOptionsFull
-} from '../types';
-import {RelationGraphFinal} from "../models/RelationGraphFinal";
+import {RGEventNames, RGForceLayoutOptions, RGLayoutOptions, RGNode, RGOptionsFull} from '../types';
+import {RelationGraphFinal} from '../models/RelationGraphFinal';
 
 type CalcNode = {
   rgNode: RGNode,
@@ -21,7 +16,7 @@ type CalcNode = {
   forceCenterOffset_X: number,
   forceCenterOffset_Y: number,
   fixed: boolean
-}
+};
 export class SeeksForceLayouter extends SeeksBaseLayouter {
   layoutOptions:RGForceLayoutOptions;
   fastStart = false;
@@ -33,6 +28,7 @@ export class SeeksForceLayouter extends SeeksBaseLayouter {
   force_node_repulsion = 1;
   force_line_elastic = 1;
   justLayoutSingleNode = false;
+  stopWhenBalanced = false;
   constructor(layoutOptions:RGLayoutOptions, graphOptions:RGOptionsFull, graphInstance: RelationGraphFinal) {
     super(layoutOptions, graphOptions, graphInstance);
     this.layoutOptions = layoutOptions as RGForceLayoutOptions;
@@ -45,8 +41,8 @@ export class SeeksForceLayouter extends SeeksBaseLayouter {
     if (this.layoutOptions.force_x_coefficient === undefined) this.layoutOptions.force_x_coefficient = 1;
     if (this.layoutOptions.force_y_coefficient === undefined) this.layoutOptions.force_y_coefficient = 1;
     if (this.layoutOptions.disableLiveChanges === undefined) this.layoutOptions.disableLiveChanges = false;
+    if (this.layoutOptions.stopWhenBalanced) this.stopWhenBalanced = true;
     this.requireLinks = true;
-    graphInstance && this.setGraphInstance(graphInstance);
   }
   refresh() {
     this.placeNodes(this.allNodes, this.rootNode);
@@ -62,7 +58,8 @@ export class SeeksForceLayouter extends SeeksBaseLayouter {
     this.allNodes = allNodes;
     this.rootNode = rootNode;
     if (this.layoutOptions.fixedRootNode) {
-      if (!Number.isNaN(rootNode.x) || rootNode.x === undefined) {
+      devLog('!!!initNodesPosition fixedRootNode:1:', rootNode.x, rootNode.y);
+      if (!Number.isNaN(rootNode.x) && rootNode.x !== undefined) {
         rootNode.lot.x = RGNodesAnalytic.getLotXByNodeX(this.graphOptions, rootNode);
         rootNode.lot.y = RGNodesAnalytic.getLotYByNodeY(this.graphOptions, rootNode);
       } else {
@@ -72,7 +69,14 @@ export class SeeksForceLayouter extends SeeksBaseLayouter {
         rootNode.lot.y = 0 + _center_offset_y;
       }
       const groupNodes = this.easyAnalysisNodes(rootNode);
-      this.easyPlaceRelativePosition(rootNode, groupNodes);
+      if (this.layoutOptions.skipInitLayout === true) {
+        this.allNodes.forEach(node => {
+          node.lot.x = node.x;
+          node.lot.y = node.y;
+        });
+      } else {
+        this.easyPlaceRelativePosition(rootNode, groupNodes);
+      }
       groupNodes.forEach(thisNode => {
         if (thisNode.fixed === true) return;
         if (!RGNodesAnalytic.isAllowShowNode(thisNode)) return;
@@ -82,13 +86,14 @@ export class SeeksForceLayouter extends SeeksBaseLayouter {
         thisNode.y = thisNode.lot.y! + __offsetY - RGNodesAnalytic.getNodeHeight(thisNode, this.graphOptions) / 2;
         thisNode.lot.placed = true;
       });
+      devLog('!!!initNodesPosition fixedRootNode:2:', rootNode.x, rootNode.y);
     } else if (this.fastStart) {
       devLog('!!!initNodesPosition fastStart');
       this.allNodes.forEach(thisNode => {
         if (thisNode.fixed === true) return;
         if (!thisNode.lot.placed) {
           if (!thisNode.x) thisNode.x = Math.floor(Math.random() * 200) - 100;
-          if (!thisNode.x) thisNode.y = Math.floor(Math.random() * 200) - 100;
+          if (!thisNode.y) thisNode.y = Math.floor(Math.random() * 200) - 100;
           thisNode.lot.placed = true;
         }
       });
@@ -210,30 +215,39 @@ export class SeeksForceLayouter extends SeeksBaseLayouter {
       }
     });
     this.resetCalcNodes();
+    this.connectToGraphInstance();
     devLog('visibleNodes:', this.visibleNodes.length);
   }
-  viewUpdate: (() => void)|undefined|false;
+  viewUpdate() {
+    if (this.graphInstance) {
+      this.graphInstance.dataUpdated();
+    }
+  }
   autoLayout(forceLayout = false) {
     this.layoutTimes = 0;
     this.updateVisibleNodes();
     devLog('Layout set viewUpdate:', this.viewUpdate);
     this.doForceLayout(0);
   }
-  private layoutFinished() {
+  protected layoutFinished() {
     this.isMainLayouer && (this.graphOptions.autoLayouting = false);
     devLog('Layout finished');
     if (this.layoutOptions.disableLiveChanges) {
       this.visibleNodes.forEach(thisNode => {
+        if (thisNode.fixed) return;
         const calcNode = this.calcNodeMap.get(thisNode);
-        thisNode.x = calcNode.x;
-        thisNode.y = calcNode.y;
+        if (calcNode) {
+          thisNode.x = calcNode.x;
+          thisNode.y = calcNode.y;
+        }
       });
-      this.viewUpdate && this.viewUpdate();
+      this.viewUpdate();
       devLog('Layout apply finished');
     }
+    this.disConnectToGraphInstance();
   }
   protected resetCalcNodes() {
-    devLog('resetCalcNodes:', this.visibleNodes.length)
+    devLog('resetCalcNodes:', this.visibleNodes.length);
     this.forCalcNodes = [];
     this.calcNodeMap = new WeakMap();
     this.visibleNodes.forEach(thisNode => {
@@ -253,11 +267,14 @@ export class SeeksForceLayouter extends SeeksBaseLayouter {
       this.calcNodeMap.set(thisNode, calcNode);
     });
   }
-  private calcNodeMap = new WeakMap<RGNode, CalcNode>();
-  private forCalcNodes: CalcNode[] = [];
+  protected calcNodeMap = new WeakMap<RGNode, CalcNode>();
+  protected forCalcNodes: CalcNode[] = [];
+  protected recentGraphVelocity: number[] = [];
+  protected graphVelocityBalancedValue = 0.1;
   doForceLayout(useTime:number) {
     if (this.graphOptions.instanceDestroyed) {
       devLog('stop layout:instanceDestroyed');
+      this.layoutFinished();
       return;
     }
     let layoutHz = '0';
@@ -273,7 +290,6 @@ export class SeeksForceLayouter extends SeeksBaseLayouter {
         this.updateVisibleNodes();
       }
     }
-    devLog('this.layoutTimes:', this.layoutTimes, 'of',this.maxLayoutTimes, 'Current refresh rate:', layoutHz, 'Hz', this.visibleNodes.length);
     if (this.layoutTimes > this.maxLayoutTimes) {
       this.layoutFinished();
       return;
@@ -282,9 +298,20 @@ export class SeeksForceLayouter extends SeeksBaseLayouter {
     this.layoutTimes++;
     this.calcNodesPosition();
     // const apply = this.layoutTimes % 2 === 0;
+    // let sumAllVelocity = 0;
     for (const node of this.forCalcNodes) {
       this.applyToNodePosition(node);
     }
+    // this.recentGraphVelocity.push(Math.abs(sumAllVelocity));
+    // if (this.recentGraphVelocity.length > 5) {
+    //   this.recentGraphVelocity.splice(0, 1);
+    // }
+    devLog('this.layoutTimes:', this.layoutTimes, 'of',this.maxLayoutTimes, 'Current refresh rate:', layoutHz, 'Hz', this.visibleNodes.length);
+    // if (this.stopWhenBalanced && this.layoutTimes > 10 && (this.recentGraphVelocity.reduce((sum, current) => sum + current, 0) < this.graphVelocityBalancedValue)) {
+    //   devLog('Stop When Balanced:', sumAllVelocity);
+    //   this.layoutFinished();
+    //   return;
+    // }
     if (this.layoutOptions.disableLiveChanges) {
       // this.visibleNodes.forEach((thisNode, _xxxx) => {
       //   if (_xxxx % 10 === 0) {
@@ -293,34 +320,46 @@ export class SeeksForceLayouter extends SeeksBaseLayouter {
       //     thisNode.y = calcNode.y;
       //   }
       // });
-      // this.viewUpdate && this.viewUpdate();
+      // this.viewUpdate();
       requestAnimationFrame(this.doForceLayout.bind(this));
     } else {
-      this.viewUpdate && this.viewUpdate();
+      this.viewUpdate();
       requestAnimationFrame(this.doForceLayout.bind(this));
     }
   }
-  setGraphInstance(graphInstance: RelationGraphFinal) {
-    this.viewUpdate = () => {graphInstance._dataUpdated();};
-    graphInstance.addEventListener((eventName, object) => {
-      if (eventName === 'node-drag-start') {
-        const calcNode = this.calcNodeMap.get(object.node);
-        if (calcNode) {
-          calcNode.ignoreForce = true;
-        }
-      } else if (eventName === 'node-dragging') {
-        const calcNode = this.calcNodeMap.get(object.node);
-        if (calcNode) {
-          calcNode.x = object.x;
-          calcNode.y = object.y;
-        }
-      } else if (eventName === 'node-drag-end') {
-        const calcNode = this.calcNodeMap.get(object.node);
-        if (calcNode) {
-          calcNode.ignoreForce = false;
-        }
+  protected graphEventHandle(eventName: RGEventNames, ...args: any[]) {
+  // console.log('xxxxxxxxxxxxx:force:', eventName, eventName === RGEventNames.nodeDragging);
+    if (eventName === RGEventNames.nodeDragStart) {
+      const node = args[0];
+      const calcNode = this.calcNodeMap.get(node);
+      if (calcNode) {
+        calcNode.ignoreForce = true;
       }
-    });
+    } else if (eventName === RGEventNames.nodeDragging) {
+      const node = args[0];
+      const x = args[1];
+      const y = args[2];
+      const calcNode = this.calcNodeMap.get(node);
+      if (calcNode) {
+        calcNode.x = x;
+        calcNode.y = y;
+      }
+    } else if (eventName === RGEventNames.nodeDragEnd) {
+      const node = args[0];
+      const calcNode = this.calcNodeMap.get(node);
+      if (calcNode) {
+        calcNode.ignoreForce = false;
+      }
+    }
+  }
+  protected _graphEventHandler;
+  protected connectToGraphInstance() {
+    // console.log('xxxxxxxxxxxxx:setGraphInstance');
+    this._graphEventHandler = this.graphEventHandle.bind(this);
+    this.graphInstance.addEventListener(this._graphEventHandler);
+  }
+  protected disConnectToGraphInstance() {
+    this.graphInstance.removeEventListener(this._graphEventHandler);
   }
   // calc4Parents(node: CalcNode, parentNode: RGNode | undefined) {
   //   if (!parentNode) return;
@@ -442,7 +481,7 @@ export class SeeksForceLayouter extends SeeksBaseLayouter {
   zeroEffectNodeDistance = 400;
   minNodeDistance = 30;
   maxMoveSpeed = 100;
-  addGravityByNode(node1:CalcNode, node2:CalcNode) {
+  addGravityByNode(node1:CalcNode, node2:CalcNode, coefficient = 1) {
     const x1 = node1.x;
     const y1 = node1.y;
     const x2 = node2.x;
@@ -452,14 +491,16 @@ export class SeeksForceLayouter extends SeeksBaseLayouter {
     // const x2 = this.getX(node2);
     // const y2 = this.getY(node2);
     // const length = (Math.abs(y1 - y2) + Math.abs(x1 - x2)) / 1.5;
-    if (Math.abs(x1 - x2) > this.zeroEffectNodeDistance || Math.abs(y1 - y2) > this.zeroEffectNodeDistance) {
-      return;
+    if (coefficient === 1) {
+      if (Math.abs(x1 - x2) > this.zeroEffectNodeDistance || Math.abs(y1 - y2) > this.zeroEffectNodeDistance) {
+        return;
+      }
     }
     const length = Math.sqrt((y1 - y2) ** 2 + (x1 - x2) ** 2);
-    if (length > this.zeroEffectNodeDistance) {
+    if (coefficient === 1 && length > this.zeroEffectNodeDistance) {
       return;
     }
-    let Kf = (this.zeroEffectNodeDistance - length) * 0.05 * this.force_node_repulsion;
+    let Kf = (this.zeroEffectNodeDistance - length) * 0.05 * this.force_node_repulsion * coefficient;
     if (length < this.minNodeDistance) { // 如果离得太近，把斥力加倍
       Kf = Kf * 2;
     }
@@ -472,6 +513,7 @@ export class SeeksForceLayouter extends SeeksBaseLayouter {
     // this.addFtoNode(node2, _buff_x * Kf * -1, _buff_y * Kf * -1);
   }
   addFtoNode(node:CalcNode, x:number, y:number) {
+    if (node.fixed) return;
     if (node.ignoreForce) return;
     if (Number.isNaN(x) || Number.isNaN(y)) {
       return;
@@ -485,7 +527,7 @@ export class SeeksForceLayouter extends SeeksBaseLayouter {
     if (!this.lockY) node.Fy += (y * (1 / weight));
   }
   applyToNodePosition(node: CalcNode) {
-    if (node.fixed) return;
+    if (node.fixed) return 0;
     let __buff_x = node.Fx;
     let __buff_y = node.Fy;
     if (__buff_x > this.maxMoveSpeed)__buff_x = this.maxMoveSpeed;
@@ -504,8 +546,10 @@ export class SeeksForceLayouter extends SeeksBaseLayouter {
     // const rgNode:RGNode = node.rgNode;
     // rgNode.x = node.x;
     // rgNode.y = node.y;
-    node.Fx = node.Fx * 0.7;
-    node.Fy = node.Fy * 0.7;
+    // node.Fx = node.Fx * 0.7;
+    // node.Fy = node.Fy * 0.7;
+    node.Fx = 0;
+    node.Fy = 0;
   }
 }
 

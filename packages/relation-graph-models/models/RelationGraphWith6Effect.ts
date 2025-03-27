@@ -1,21 +1,32 @@
 import {devLog, sleep} from '../utils/RGCommon';
 import SeeksForceLayouter from '../layouters/SeeksForceLayouter';
-import { createLayout } from './RGLayouter';
-import { RGListeners, RGNode, RGOptions } from '../types';
+import {appendDefaultOptions4Layout, createLayout} from './RGLayouter';
+import {RGLayouter, RGLayoutOptions, RGListeners, RGNode, RGOptions, RGOptionsFull} from '../types';
 import { RelationGraphWith5Zoom } from './RelationGraphWith5Zoom';
+import {RelationGraphFinal} from "./RelationGraphFinal";
+import SeeksBidirectionalTreeLayouter from "../layouters/SeeksBidirectionalTreeLayouter";
+import SeeksCenterLayouter from "../layouters/SeeksCenterLayouter";
+import SeeksCircleLayouter from "../layouters/SeeksCircleLayouter";
+import SeeksFixedLayouter from "../layouters/SeeksFixedLayouter";
+import SeeksSmartTreeLayouter from "../layouters/SeeksSmartTreeLayouter";
+import SeeksFolderLayouter from "../layouters/SeeksFolderLayouter";
 export class RelationGraphWith6Effect extends RelationGraphWith5Zoom {
   constructor(options: RGOptions, listeners: RGListeners) {
     super(options, listeners);
   }
+
+  /**
+    * Assign positions to the nodes in the current graph based on the layout configuration set in the options
+    */
   async doLayout() {
     if (!this.layouter) {
       devLog('no layouter');
       return;
     }
-    if (!this.graphData.rootNode) {
-      devLog('Cant find rootNode!');
-      return;
-    }
+    // if (!this.graphData.rootNode) {
+    //   devLog('Cant find rootNode!');
+    //   return;
+    // }
     if (this.options.showMaskWhenLayouting) this.loading();
     await sleep(300); // 有些节点是自适应宽度的，需要等一会儿才能获取节点真实宽高，这个机制对于alignItems非常重要
     this.options.canvasOpacity = 1;
@@ -23,27 +34,42 @@ export class RelationGraphWith6Effect extends RelationGraphWith5Zoom {
     if (this.options.showMaskWhenLayouting) this.clearLoading();
     devLog('node size：', this.graphData.nodes.length);
     const _useAnimationWhenExpanded = this.options.useAnimationWhenExpanded;
-    if (this.disableNextLayoutAnimation) {
-      this.options.useAnimationWhenExpanded = false;
+    if (this.graphData.rootNode) {
+      if (this.disableNextLayoutAnimation) {
+        this.options.useAnimationWhenExpanded = false;
+      }
+      if (this.layouter.requireLinks) {
+        this.layouter.setLinks(this.getLinks());
+      }
+      // this.layouter.viewUpdate = () => {this._dataUpdated();};
+
+      this._mainGroupNodes = [];
+      if (this.graphData.rootNode) this.findGroupNodes(this.graphData.rootNode, this._mainGroupNodes);
+      if (this.layouter.layoutOptions.layoutName === 'force') {
+        devLog('doLayout:placeOtherNodes');
+        await this.placeOtherNodes();
+        devLog('doLayout:placeOtherNodes ok!');
+        setTimeout(() => {
+          this.layouter.placeNodes(this.graphData.nodes, this.graphData.rootNode);
+        }, 100);
+        // this.startAutoLayout();
+      } else {
+        this.layouter.placeNodes(this._mainGroupNodes, this.graphData.rootNode);
+      }
     }
-    if (this.layouter.requireLinks) {
-      this.layouter.setLinks(this.getLinks());
-    }
-    this.layouter.viewUpdate = () => {this._dataUpdated();}
-    await this.layouter.placeNodes(this.graphData.nodes, this.graphData.rootNode);
+    devLog('doLayout:placeOtherNodes');
+    await this.placeOtherNodes();
+    devLog('doLayout:placeOtherNodes ok!');
     this.options.useAnimationWhenExpanded = _useAnimationWhenExpanded;
     this.disableNextLayoutAnimation = false;
     this.updateElementLines();
     this._dataUpdated();
   }
   async refresh(doLayout = true) {
-    this.resetViewSize();
+    this.resetViewSize(true);
     this.disableNextLayoutAnimation = true;
     this._dataUpdated();
     if (doLayout) await this.doLayout();
-    devLog('placeOtherNodes');
-    await this.placeOtherNodes();
-    devLog('placeOtherNodes ok!');
     await this.playShowEffect();
     this.updateElementLines();
     this._dataUpdated();
@@ -61,37 +87,48 @@ export class RelationGraphWith6Effect extends RelationGraphWith5Zoom {
     if (this.options.moveToCenterWhenRefresh) {
       await this.moveToCenter();
     } else {
+      devLog('center:0,0');
       this.setCanvasCenter(0, 0);
       this._dataUpdated();
     }
     await this.zoomToFitWhenRefresh();
   }
-  async moveToCenter() {
-    if (this.options.useAnimationWhenRefresh) {
-      const center = this.getNodesCenter();
-      devLog('center:', center.x, center.y);
-      const centerOffset = this.getGraphOffet();
-      devLog('centerOffset:', centerOffset.offset_x, centerOffset.offset_y);
-      const x = this.options.viewSize.width / 2 - (center.x) + centerOffset.offset_x;
-      const y = this.options.viewSize.height / 2 - (center.y) + centerOffset.offset_y;
-      await this.animateGoto(x, y, 500);
-      this._dataUpdated();
-    } else {
-      const center = this.getNodesCenter();
-      devLog('center:', center.x, center.y);
-      this.setCanvasCenter(center.x, center.y);
-      this._dataUpdated();
-    }
+
+  /**
+   * Move the center of the canvas to the center of the viewport. Note: The center of the canvas refers to the center calculated based on the distribution of nodes, not the center point of the canvas.
+   */
+  moveToCenter() {
+    const center = this.getNodesCenter();
+    devLog('center:', center.x, center.y);
+    this.setCanvasCenter(center.x, center.y);
+    this._dataUpdated();
+    // if (this.options.useAnimationWhenRefresh) {
+    //   const center = this.getNodesCenter();
+    //   devLog('center:', center.x, center.y);
+    //   const centerOffset = this.getGraphOffet();
+    //   devLog('centerOffset:', centerOffset.offset_x, centerOffset.offset_y);
+    //   const x = this.options.viewSize.width / 2 - (center.x) + centerOffset.offset_x;
+    //   const y = this.options.viewSize.height / 2 - (center.y) + centerOffset.offset_y;
+    //   await this.animateGoto(x, y, 500);
+    //   this._dataUpdated();
+    // } else {
+    //   const center = this.getNodesCenter();
+    //   devLog('center:', center.x, center.y);
+    //   this.setCanvasCenter(center.x, center.y);
+    //   this._dataUpdated();
+    // }
   }
   async zoomToFitWhenRefresh() {
     if (this.options.zoomToFitWhenRefresh) {
       await this.zoomToFit();
     }
   }
+  private _mainGroupNodes:RGNode[] = [];
   async placeOtherNodes() {
+    const placeSingleNode = this.options.placeSingleNode && this.layouter.layoutOptions.layoutName !== 'fixed';
     // let singleNodeSize = 0;
-    const defaultGroupNodes:RGNode[] = [];
-    if (this.graphData.rootNode) this.findGroupNodes(this.graphData.rootNode, defaultGroupNodes);
+    const defaultGroupNodes:RGNode[] = [...this._mainGroupNodes];
+    // if (this.graphData.rootNode) this.findGroupNodes(this.graphData.rootNode, defaultGroupNodes);
     const notInMainGroupNodes:RGNode[] = [];
     const singleNodes:RGNode[] = [];
     this.graphData.nodes.forEach((thisNode) => {
@@ -100,11 +137,13 @@ export class RelationGraphWith6Effect extends RelationGraphWith5Zoom {
       }
       if (this.options.placeSingleNode && (!thisNode.targetNodes || thisNode.targetNodes.length === 0) && thisNode.fixed !== true) {
       // if (thisNode.fixed !== true) {
-        thisNode.x = Math.floor(Math.random() * 200) - 100;
-        thisNode.y = Math.floor(Math.random() * 200) - 100;
-        // thisNode.singleNode = true
-        if (!thisNode.lot) {
-          thisNode.lot = { childs: [] };
+        if (placeSingleNode) {
+          thisNode.x = Math.floor(Math.random() * 200) - 100;
+          thisNode.y = Math.floor(Math.random() * 200) - 100;
+          // thisNode.singleNode = true
+          if (!thisNode.lot) {
+            thisNode.lot = { childs: [] };
+          }
         }
         thisNode.lot.placed = true;
         thisNode.singleNode = true;
@@ -113,11 +152,11 @@ export class RelationGraphWith6Effect extends RelationGraphWith5Zoom {
         notInMainGroupNodes.push(thisNode);
       }
     });
-    if (this.options.placeSingleNode && this.layouter.layoutOptions.layoutName !== 'fixed') {
+    if (placeSingleNode) {
       this.placeSingleNodes(singleNodes);
     }
-    if (this.options.placeOtherGroup && this.layouter.layoutOptions.layoutName !== 'fixed') {
-      await this.placeOtherGroup(notInMainGroupNodes, defaultGroupNodes);
+    if (placeSingleNode) {
+      if (this.options.placeOtherGroup) await this.placeOtherGroup(notInMainGroupNodes, defaultGroupNodes);
       this._dataUpdated();
       if (this.layouter.layoutOptions.layoutName === 'force') {
         this.stopAutoLayout();
@@ -159,8 +198,13 @@ export class RelationGraphWith6Effect extends RelationGraphWith5Zoom {
         forceLayout.maxLayoutTimes = 0;
         marginLeft = 100;
       }
-      newRootNode.x = stuffSize.maxX + marginLeft;
-      newRootNode.y = 0;
+      if (!newRootNode.fixed) {
+        newRootNode.x = stuffSize.maxX + marginLeft;
+        newRootNode.y = 0;
+        devLog('[placeOtherGroup]set root x,y:', newRootNode.x, newRootNode.y, newRootNode.text);
+      } else {
+        devLog('[placeOtherGroup]fixed root x,y:', newRootNode.x, newRootNode.y, newRootNode.text);
+      }
       // currentLayoutClone.layoutOptions.centerOffset_x = stuffSize.maxX + marginLeft;
       // currentLayoutClone.layoutOptions.centerOffset_y = 0;
       currentLayoutClone.layoutOptions.fixedRootNode = true;
@@ -179,28 +223,42 @@ export class RelationGraphWith6Effect extends RelationGraphWith5Zoom {
         }
         nextGroup.push(thisNode);
       });
-      await this.placeOtherGroup(nextGroup, placedNodes);
+      if (this.options.placeOtherGroup) await this.placeOtherGroup(nextGroup, placedNodes);
       this._dataUpdated();
     } else {
       devLog('[placeOtherGroup]thisGroupNodes:all is OK!');
     }
   }
-  async zoomToFit(callback?:()=>void) {
-    const stuffSize = this.getStuffSize();
+
+  /**
+   * Zoom to fit the appropriate size, which means making the specified nodes visible in the view and occupying the view as much as possible.
+   * @param nodes Optional, defaults to all nodes in the graph
+   */
+  zoomToFit(nodes?:RGNode[]) {
+    const stuffSize = this.getStuffSize(nodes);
     const zoomPercentX = this.options.viewSize.width / stuffSize.width;
     const zoomPercentY = this.options.viewSize.height / stuffSize.height;
     const zoomPercent = Math.min(zoomPercentX, zoomPercentY, 1);
     devLog('zoomToFit:', { stuffSize, zoomPercent, zoomPercentX, zoomPercentY, viewSize: this.options.viewSize });
-    if (this.options.useAnimationWhenRefresh) {
-      await this.animateToZoom(zoomPercent * 100, 300);
-      this._dataUpdated();
-      if (callback) callback();
-    } else {
-      this.setZoom(zoomPercent * 100);
-      this._dataUpdated();
-      if (callback) callback();
-    }
+    // if (this.options.useAnimationWhenRefresh) {
+    //   await this.animateToZoom(zoomPercent * 100, 300);
+    //   this._dataUpdated();
+    //   if (callback) callback();
+    // } else {
+    //   this.setZoom(zoomPercent * 100);
+    //   this._dataUpdated();
+    //   if (callback) callback();
+    // }
+    this.setZoom(zoomPercent * 100);
+    this._dataUpdated();
   }
+
+  /**
+  * This is a deprecated method, please do not use it
+  * @param x
+  * @param y
+  * @param time
+  */
   async animateGoto(x:number, y:number, time:number) {
     return new Promise<void>((resolve, reject) => {
       devLog('animateGoto:', x, y);
@@ -221,6 +279,11 @@ export class RelationGraphWith6Effect extends RelationGraphWith5Zoom {
       });
     });
   }
+  /**
+   * This is a deprecated method, please do not use it
+   * @param finalZoom
+   * @param time
+   */
   async animateToZoom(finalZoom:number, time:number) {
     return new Promise<void>((resolve, reject) => {
       const _zoom_distance = finalZoom - this.options.canvasZoom;
@@ -240,6 +303,15 @@ export class RelationGraphWith6Effect extends RelationGraphWith5Zoom {
       });
     });
   }
+
+  /**
+   * This is a deprecated method, please do not use it
+   * @param stepIndex
+   * @param delay
+   * @param allStepNum
+   * @param stepCallback
+   * @param finalCallback
+   */
   animateStepAction(stepIndex:number, delay:number, allStepNum:number, stepCallback:(stepIndex:number, allStepNum:number)=>void, finalCallback:()=>void) {
     // devLog(Date.now() + '步骤[' + stepIndex + ']')
     if (stepIndex < allStepNum) {
@@ -251,6 +323,10 @@ export class RelationGraphWith6Effect extends RelationGraphWith5Zoom {
       finalCallback();
     }
   }
+
+  /**
+   * If the current layout is force, you can call this method to start or stop the real-time force-directed calculation
+   */
   toggleAutoLayout() {
     this.options.autoLayouting = !this.options.autoLayouting;
     devLog('toggleAutoLayout:to:', this.options.autoLayouting);
@@ -260,6 +336,10 @@ export class RelationGraphWith6Effect extends RelationGraphWith5Zoom {
       this.stopAutoLayout();
     }
   }
+
+  /**
+   * If the current layout is force, you can call this method to start the force-directed calculation
+   */
   startAutoLayout() {
     this.options.autoLayouting = true;
     if (!this.layouter.autoLayout) {
@@ -270,6 +350,9 @@ export class RelationGraphWith6Effect extends RelationGraphWith5Zoom {
       this.layouter.autoLayout(true);
     }
   }
+  /**
+   * If the current layout is force, you can call this method to stop the force-directed calculation
+   */
   stopAutoLayout() {
     this.options.autoLayouting = false;
     if (!this.layouter.stop) {
@@ -286,4 +369,34 @@ export class RelationGraphWith6Effect extends RelationGraphWith5Zoom {
   //   layoutEffectInstance.allNodes = this.graphData.nodes;
   //   layoutEffectInstance.snapshotBeforeAnimation();
   // }
+  /**
+  * Create a layouter
+  * @param layoutOptions
+  */
+  createLayout(layoutOptions: RGLayoutOptions):RGLayouter {
+    const _options = this.options;
+    const graphInstance = this;
+    let layouter:RGLayouter|null = null;
+    if (layoutOptions.layoutName === 'tree') {
+      layouter = new SeeksBidirectionalTreeLayouter(layoutOptions, _options, graphInstance);
+    } else if (layoutOptions.layoutName === 'center') {
+      layouter = new SeeksCenterLayouter(layoutOptions, _options, graphInstance);
+    } else if (layoutOptions.layoutName === 'circle') {
+      layouter = new SeeksCircleLayouter(layoutOptions, _options, graphInstance);
+    } else if (layoutOptions.layoutName === 'force') {
+      layouter = new SeeksForceLayouter(layoutOptions, _options, graphInstance);
+    } else if (layoutOptions.layoutName === 'fixed') {
+      layouter = new SeeksFixedLayouter(layoutOptions, _options, graphInstance);
+    } else if (layoutOptions.layoutName === 'smart-tree') {
+      layouter = new SeeksSmartTreeLayouter(layoutOptions, _options, graphInstance);
+    } else if (layoutOptions.layoutName === 'folder') {
+      layouter = new SeeksFolderLayouter(layoutOptions, _options, graphInstance);
+    }
+    if (!layouter) {
+      throw new Error('unknown layout: ' + layoutOptions.layoutName);
+    }
+    layouter.isMainLayouer = false;
+    layouter.layoutOptions.fixedRootNode = true;
+    return layouter;
+  };
 }

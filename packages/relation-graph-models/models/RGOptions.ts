@@ -2,7 +2,7 @@ import { devLog } from '../utils/RGCommon';
 import { json2Line } from './RGLink';
 import { appendDefaultOptions4Layout } from './RGLayouter';
 import { json2Node } from './RGNode';
-import {RGLayoutOptions, RGOptions, RGOptionsFull, RGV2Options} from '../types';
+import {RGLayoutOptions, RGLine, RGLink, RGOptions, RGOptionsFull, RGPosition, RGV2Options} from '../types';
 
 export const newNodeTemplate = {
   id: 'rg-newNodeTemplate',
@@ -97,7 +97,7 @@ export const createDefaultConfig = (userOptions:RGV2Options):RGOptionsFull => {
     defaultPolyLineRadius: undefined, // UI
     disableDragCanvas: false, // UI
     placeSingleNode: true,
-    placeOtherGroup: false,
+    placeOtherGroup: true,
     lineUseTextPath: false, // UI
     lineTextMaxLength: 66,
     multiLineDistance: 14,
@@ -117,7 +117,6 @@ export const createDefaultConfig = (userOptions:RGV2Options):RGOptionsFull => {
       color: undefined,
       data: 'M2,2 L10,6 L2,10 L6,6 L2,2'
     },
-    allowShowMiniView: false, // private
     allowShowSettingPanel: false, // private
     allowShowMiniNameFilter: true, // private
     fullscreen: false, // private
@@ -135,6 +134,8 @@ export const createDefaultConfig = (userOptions:RGV2Options):RGOptionsFull => {
     layouter: undefined, // private
     isNeedShowAutoLayoutButton: false, // private
     canvasZoom: 100, // private
+    mouseWheelSpeed: 10, // private
+    minCanvasZoom: 5, // private
     showEasyView: false, // private
     performanceMode: false, // private
     canvasOpacity: 1, // private
@@ -200,7 +201,65 @@ export const createDefaultConfig = (userOptions:RGV2Options):RGOptionsFull => {
     },
     data: {
 
-    }
+    },
+    editingLineController: {
+      show: false,
+      link: null,
+      line: null,
+      startPoint: {x:0,y:0},
+      endPoint: {x:0,y:0},
+      text: {
+        show: true,
+        x: 0,
+        y: 0,
+        width: 10,
+        height: 10
+      },
+      ctrlPoints: [],
+      selectedLines: [],
+      line44Splits: [],
+      line49Points: [],
+      ctrlPoint1: {x:0,y:0},
+      ctrlPoint2: {x:0,y:0},
+      toolbar: {x:0,y:0},
+    }, // UI
+    editingController: {
+      show: false,
+      nodes: [],
+      x: 0,
+      y: 0,
+      width: 100,
+      height: 100
+    }, // UI
+    nodeConnectController: {
+      show: false,
+      node: null,
+      x: 0,
+      y: 0,
+      width: 100,
+      height: 100
+    }, // UI
+    showReferenceLine: true,
+    editingReferenceLine: {
+      show: false,
+      directionV: false,
+      directionH: false,
+      v_x: 0,
+      v_y: 0,
+      v_height: 0,
+      h_x: 0,
+      h_y: 0,
+      h_width: 0
+    }, // UI
+    showMiniView: false,
+    miniViewVisibleHandle: {
+      x: 0,
+      y: 0,
+      width: 100,
+      height: 100,
+      emptyContent: false
+    },
+    snapshotting: false
   };
   _options.newLineTemplate = json2Line(_options.newLineTemplate);
   if (userOptions.layout && userOptions.layouts) {
@@ -320,7 +379,7 @@ export const applyDefaultOptionsByLayout = (thisLayout:RGLayoutOptions, _options
       }
     }
   } else if (thisLayout.layoutName === 'fixed') {
-    _options.moveToCenterWhenRefresh = false;
+    // _options.moveToCenterWhenRefresh = false;
     _options.zoomToFitWhenRefresh = false;
   } else if (thisLayout.layoutName === 'force') {
     _options.moveToCenterWhenRefresh = false;

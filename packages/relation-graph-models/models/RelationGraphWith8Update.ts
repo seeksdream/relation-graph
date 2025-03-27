@@ -1,7 +1,8 @@
-import { RGJsonData, RGLayouter, RGLayoutOptions, RGListeners, RGOptions } from '../types';
-import { RelationGraphWith7Event } from './RelationGraphWith7Event';
-import { devLog, sleep } from '../utils/RGCommon';
-import { applyDefaultOptionsByLayout } from './RGOptions';
+import {RGEventNames, RGJsonData, RGLayouter, RGLayoutOptions, RGListeners, RGOptions} from '../types';
+import {RelationGraphWith7Event} from './RelationGraphWith7Event';
+import {devLog} from '../utils/RGCommon';
+import {applyDefaultOptionsByLayout} from './RGOptions';
+
 export class RelationGraphWith8Update extends RelationGraphWith7Event {
   constructor(options: RGOptions, listeners: RGListeners) {
     super(options, listeners);
@@ -10,8 +11,8 @@ export class RelationGraphWith8Update extends RelationGraphWith7Event {
     if (this.isReact || this.options.canvasZoom <= 40) {
       this._dataUpdated();
     } else {
-      this.zoom(1);
-      this.zoom(-1);
+      // this.zoom(1);
+      // this.zoom(-1);
     }
   }
   async setOptions(options:RGOptions, justUpdateOptionsValue = false) {
@@ -24,7 +25,7 @@ export class RelationGraphWith8Update extends RelationGraphWith7Event {
     this.initLayouter();
     this.resetViewSize();
     await this.doLayout();
-    this.resetViewSize();
+    // this.resetViewSize();
   }
   setLayouter(userLayouerInstance:RGLayouter) {
     devLog('setLayouterClass::', userLayouerInstance);
@@ -32,10 +33,8 @@ export class RelationGraphWith8Update extends RelationGraphWith7Event {
     this.layouter = this.userLayouerClass;
   }
   async switchLayout(newLayoutOptions:RGLayoutOptions, refreshGraph = true, useAnimation = false) {
-    if (this.listeners.beforeChangeLayout) {
-      const refresh = this.listeners.beforeChangeLayout(newLayoutOptions);
-      if (refresh === false) refreshGraph = false;
-    }
+    const refresh = this.emitEvent(RGEventNames.beforeChangeLayout, newLayoutOptions);
+    if (refresh === false) refreshGraph = false;
     const __origin_nodes = this.layouter ? this.layouter.allNodes : [];
     const __rootNode = this.layouter && this.layouter.rootNode;
     devLog('[change layout]switchLayout');
@@ -51,6 +50,12 @@ export class RelationGraphWith8Update extends RelationGraphWith7Event {
       await this.doLayout();
     }
   }
+  setRootNodeId(rootNodeId: string) {
+    this.graphData.rootNode = this.graphData.nodes.find(n => n.id === rootNodeId);
+    if (this.graphData.rootNode) {
+      throw new Error('The root node [rootId] is not set! Or cannot get the root node:' + rootNodeId + ', If you don\'t have any nodes to display, you can simply set an invisible node: {id:\'root\', opacity:0}');
+    }
+  }
   async setJsonData(jsonData:RGJsonData, resetViewSize = false) {
     this.options.canvasOpacity = 0.01;
     this._dataUpdated();
@@ -64,11 +69,13 @@ export class RelationGraphWith8Update extends RelationGraphWith7Event {
     }
     if (this.graphData.rootNode) {
       if (this.options.defaultFocusRootNode) {
-        this.setCheckedNode(this.graphData.rootNode.id);
+        if (this.options.layouter?.layoutOptions.layoutName !== 'force') {
+          this.setCheckedNode(this.graphData.rootNode.id);
+        }
         // this.options.checkedNodeId = this.graphData.rootNode.id;
       }
     } else {
-      throw new Error('The root node [rootId] is not set! Or cannot get the root node:' + jsonData.rootId + ', If you don\'t have any nodes to display, you can simply set an invisible node: {id:\'root\', opacity:0}');
+      // throw new Error('The root node [rootId] is not set! Or cannot get the root node:' + jsonData.rootId + ', If you don\'t have any nodes to display, you can simply set an invisible node: {id:\'root\', opacity:0}');
     }
     if (resetViewSize) {
       devLog('resetViewSize:', resetViewSize);
@@ -77,6 +84,12 @@ export class RelationGraphWith8Update extends RelationGraphWith7Event {
     this.disableNextLayoutAnimation = true;
     await this.doLayout();
   }
+
+/**
+* Append data to the graph
+* @param jsonData
+* @param isRelayout Whether to re-layout after appending data
+*/
   async appendJsonData(jsonData:RGJsonData, isRelayout = true) {
     devLog('appendData:', jsonData);
     this.options.canvasOpacity = 0.01;

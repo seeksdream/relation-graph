@@ -1,6 +1,6 @@
 import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
 import type { MutableRefObject} from 'react';
-import { RGUpdateProvider, RelationGraphProvider } from './src/core4react/store';
+import {RGUpdateProvider, RelationGraphProvider, RGUpdateSingalProvider} from './src/core4react/store';
 import { RelationGraphFinal } from '../../../../relation-graph-models/models/RelationGraphFinal';
 import type {
   RGJsonData, RGLayouter,
@@ -8,48 +8,23 @@ import type {
   RGRefreshCallback,
   RelationGraphExpose, RelationGraphInstance
 } from '../../../../relation-graph-models/types';
-import '../../../../relation-graph-models/utils/RGGraphIconfont.ts';
-import '../../../vue2/src/core4vue/relation-graph.scss';
-import '../../../vue2/src/core4vue/relation-graph-toolbar.scss';
 import {RelationGraphJsxProps} from '../types-react';
-import { devLog, relationGraphVersionInfo } from '../../../../relation-graph-models/utils/RGCommon';
+import {deprecatedWaring, devLog, relationGraphVersionInfo} from '../../../../relation-graph-models/utils/RGCommon';
 import { getEventListeners } from '../../../../relation-graph-models/utils/RGIntergration';
-import GraphDebugPanel from './src/core4react/widgets/GraphDebugPanel';
-import GraphMiniToolBar from './src/core4react/widgets/GraphMiniToolBar';
-import GraphMiniView from './src/core4react/widgets/GraphMiniView';
-import RGCanvas from './src/core4react/RGCanvas';
-import screenfull from 'screenfull';
-import GraphOperateStuff from "./src/core4react/widgets/GraphOperateStuff";
-import GraphLoading from "./src/core4react/widgets/GraphLoading";
+import RelationGraph from './RelationGraph';
+import RGSlotOnGraph from './src/core4react/slots/RGSlotOnGraph';
+import RGSlotOnCanvasAbove from './src/core4react/slots/RGSlotOnCanvasAbove';
 
 
 const Index: React.ForwardRefRenderFunction<RelationGraphExpose, RelationGraphJsxProps> = (props, ref) => {
   // const [rgInstanceState, rgInstanceDispatch] = useReducer(relationGraphReducer, rgInstance);
   // const rgInstance = useRef() as MutableRefObject<RelationGraph>;
-  const [_rgInstance, setRgInstance] = useState<{instance:RelationGraphInstance|null}>({instance: null});
-  const seeksRelationGraph$ = useRef() as MutableRefObject<HTMLDivElement>;
+  const [updateSingal, setUpdateSingal] = useState(false);
+  // const [_rgInstance, setRgInstance] = useState<{instance:RelationGraphInstance|null}>({instance: null});
+  const updateSingalValue = useRef(false);
   const theInstance = useRef() as MutableRefObject<RelationGraphInstance>;
   useEffect(() => {
     devLog('[RelationGraph] start init...');
-
-    // 注意：
-    // 根据MIT许可证的规定，允许您自由地使用、修改和分发源代码。您可以根据自己的需求对源代码进行更改。
-    // 然而，您仍然需要遵守MIT许可证的其他规定，如保留版权声明和免责声明等
-    // relation-graph是relation-graph的网址是它的版权声明，请勿注释掉以下版权声明信息
-    relationGraphVersionInfo('react');
-    const newInstance = props.relationGraphCore ? new props.relationGraphCore(props.options, getEventListeners(props)) : new RelationGraphFinal(props.options, getEventListeners(props));
-    theInstance.current = newInstance;
-    newInstance.setUpdateViewHook(updateView);
-    devLog('setDom:', seeksRelationGraph$.current);
-    newInstance.setDom(seeksRelationGraph$.current);
-    newInstance.ready();
-    updateView();
-    screenfull && screenfull.on && screenfull.on('change', onFullscreen);
-    seeksRelationGraph$.current && seeksRelationGraph$.current.addEventListener('wheel', mouseListener, { passive: false, capture: true });
-    return () => {
-      seeksRelationGraph$.current && seeksRelationGraph$.current.removeEventListener('wheel', mouseListener);
-      screenfull && screenfull.off && screenfull.off('change', onFullscreen);
-    };
   }, []);
   useImperativeHandle(ref, ():RelationGraphExpose => {
     return {
@@ -60,6 +35,7 @@ const Index: React.ForwardRefRenderFunction<RelationGraphExpose, RelationGraphJs
         options: RGOptions,
         callback?: (graphInstance: RelationGraphInstance) => void
       ) {
+        deprecatedWaring('Method [$graphRef.onFullscreen()] has been deprecated. Please use: $graphRef.getInstance().onFullscreen()');
         await theInstance.current.setOptions(options);
         updateView();
         callback && callback(theInstance.current);
@@ -96,91 +72,138 @@ const Index: React.ForwardRefRenderFunction<RelationGraphExpose, RelationGraphJs
         if (callback) callback(theInstance.current);
       },
       setLayouter(layouterInstance: RGLayouter) {
+        deprecatedWaring('Method [$graphRef.setLayouter()] has been deprecated. Please use: $graphRef.getInstance().setLayouter()');
         theInstance.current.setLayouter(layouterInstance);
         updateView();
       },
       onGraphResize() {
+        deprecatedWaring('Method [$graphRef.onGraphResize()] has been deprecated. Please use: $graphRef.getInstance().resetViewSize()');
         theInstance.current.refreshNVAnalysisInfo();
         updateView();
       },
       refresh() {
+        deprecatedWaring('Method [$graphRef.refresh()] has been deprecated. Please use: $graphRef.getInstance().refresh()');
         theInstance.current.refresh();
       },
       focusRootNode() {
+        deprecatedWaring('Method [$graphRef.focusRootNode()] has been deprecated. Please use: $graphRef.getInstance().focusRootNode()');
         theInstance.current.focusRootNode();
         updateView();
       },
       focusNodeById(nodeId: string) {
+        deprecatedWaring('Method [$graphRef.focusNodeById()] has been deprecated. Please use: $graphRef.getInstance().focusNodeById()');
         theInstance.current.focusNodeById(nodeId);
         updateView();
       },
       getNodeById(nodeId: string) {
+        deprecatedWaring('Method [$graphRef.getNodeById()] has been deprecated. Please use: $graphRef.getInstance().getNodeById()');
         return theInstance.current.getNodeById(nodeId);
       },
       removeNodeById(nodeId: string) {
+        deprecatedWaring('Method [$graphRef.removeNodeById()] has been deprecated. Please use: $graphRef.getInstance().removeNodeById()');
         return theInstance.current.removeNodeById(nodeId);
       },
       getNodes() {
+        deprecatedWaring('Method [$graphRef.getNodes()] has been deprecated. Please use: $graphRef.getInstance().getNodes()');
         return theInstance.current.getNodes();
       },
       getLinks() {
+        deprecatedWaring('Method [$graphRef.getLinks()] has been deprecated. Please use: $graphRef.getInstance().getLinks()');
         return theInstance.current.getLinks();
       },
       getGraphJsonData() {
+        deprecatedWaring('Method [$graphRef.getGraphJsonData()] has been deprecated. Please use: $graphRef.getInstance().getGraphJsonData()');
         return theInstance.current.getGraphJsonData();
       },
       getGraphJsonOptions() {
+        deprecatedWaring('Method [$graphRef.getGraphJsonOptions()] has been deprecated. Please use: $graphRef.getInstance().getGraphJsonOptions()');
         return theInstance.current.getGraphJsonOptions();
       },
       updateView() {
+        deprecatedWaring('Method [$graphRef.updateView()] has been deprecated. Please use: $graphRef.getInstance().dataUpdated()');
         updateView();
       }
     };
   }, [theInstance.current]);
-  const updateView = (v?: RelationGraphInstance) => {
-    // console.log('================== Index:update instance:')
-    setRgInstance({instance:v||theInstance.current});
+  const updateView = (_v?: RelationGraphInstance) => {
+    // console.log('================== [relation-graph]:update instance:');
+    // setRgInstance({instance:v||theInstance.current});
+    updateSingalValue.current = !updateSingalValue.current;
+    setUpdateSingal(updateSingalValue.current);
   };
-  theInstance.current && theInstance.current.setUpdateViewHook(updateView);
-  const onFullscreen = () => {
-    theInstance.current.fullscreen(screenfull.isFullscreen);
-  };
-  const mouseListener = (e:WheelEvent) => {
-    theInstance.current.onMouseWheel(e);
-    updateView();
-  };
-  const options = _rgInstance && _rgInstance.instance && _rgInstance.instance.options;
+  if (!theInstance.current) {
+    // 注意：
+    // 根据MIT许可证的规定，允许您自由地使用、修改和分发源代码。您可以根据自己的需求对源代码进行更改。
+    // 然而，您仍然需要遵守MIT许可证的其他规定，如保留版权声明和免责声明等
+    // relation-graph是relation-graph的网址是它的版权声明，请勿注释掉以下版权声明信息
+    relationGraphVersionInfo('React');
+    const newInstance = props.relationGraphCore ? new props.relationGraphCore(props.options, getEventListeners(props)) : new RelationGraphFinal(props.options, getEventListeners(props));
+    theInstance.current = newInstance;
+    newInstance.setUpdateViewHook(updateView);
+  }
+  const slotsOnGraph: React.ReactNode[] = [];
+  const slotsOnCanvasAbove: React.ReactNode[] = [];
+  const slotsOnLine: React.ReactNode[] = [];
+  const slotsOnNode: React.ReactNode[] = [];
+  const slotOnNodeExpandHandle: React.ReactNode[] = [];
+  const slotOnToolbar: React.ReactNode[] = [];
+  const slotsOnCanvasBehind = React.Children.toArray(props.children).filter((child: React.ReactNode) => {
+    if (child) {
+      if (child.type === RGSlotOnGraph) {
+        slotsOnGraph.push(child);
+        return false;
+      } else if (child.type === RGSlotOnCanvasAbove) {
+        slotsOnCanvasAbove.push(child);
+        return false;
+        // } else if (child.type === RGSlotOnLine) {
+        //   console.log('xxxxx3333:push:', child);
+        //   slotsOnLine.push(child);
+        //   return false;
+        // } else if (child.type === RGSlotOnNode) {
+        //   console.log('xxxxxNode:push:', child);
+        //   slotsOnNode.push(child);
+        //   return false;
+        // } else if (child.type === RGSlotOnNodeExpandHandle) {
+        //   console.log('xxxxx3333:push:', child);
+        //   slotOnNodeExpandHandle.push(child);
+        //   return false;
+        // } else if (child.type === RGSlotOnToolbar) {
+        //   console.log('xxxxx3333:push:', child);
+        //   slotOnToolbar.push(child);
+        //   return false;
+      }
+    }
+    return true;
+  });
+  const graphPlugSlot = slotsOnGraph.length > 0 ? slotsOnGraph : props.graphPlugSlot;
+  const canvasPlugAbove = slotsOnCanvasAbove.length > 0 ? slotsOnCanvasAbove : props.canvasAboveSlot;
+  const canvasPlugBehind = slotsOnCanvasBehind.length > 0 ? slotsOnCanvasBehind : props.canvasPlugSlot;
+  // const graphPlugSlot = slotsOnGraph.length > 0 ? (() => {
+  //   return slotsOnGraph;
+  // }) : props.graphPlugSlot;
+  // const canvasPlugAbove = slotsOnCanvasAbove.length > 0 ? (() => {
+  //   return slotsOnCanvasAbove;
+  // }) : props.canvasAboveSlot;
+  // const canvasPlugBehind = slotsOnCanvasAbove.length > 0 ? (() => {
+  //   return slotsOnCanvasBehind;
+  // }) : null;
   return (
     <>
       <RelationGraphProvider value={theInstance.current}>
         <RGUpdateProvider value={updateView}>
-          <div
-            ref={seeksRelationGraph$}
-            className={'relation-graph'}
-            style={{ width: '100%', height: '100%' } }
-          >
-            {options &&(options.showDebugPanel && <GraphDebugPanel />)}
-            {options &&(options.allowShowMiniToolBar === true && (
-              props.toolBarSlot ? (typeof props.toolBarSlot === 'function' ? <props.toolBarSlot relationGraph={_rgInstance.instance} /> : props.toolBarSlot) : <GraphMiniToolBar />)
-            )}
-            {options &&(options.allowShowMiniView === true && (
-              props.miniViewSlot ? (typeof props.miniViewSlot === 'function' ? <props.miniViewSlot relationGraph={_rgInstance.instance} /> : props.miniViewSlot) : <GraphMiniView />)
-            )}
-            {options &&(props.graphPlugSlot ? (
-              typeof props.graphPlugSlot === 'function' ? <props.graphPlugSlot relationGraph={_rgInstance.instance} /> : props.graphPlugSlot
-            ) : <div className="rel-graph-plug"></div>)}
-            {options &&
-                <RGCanvas
-                  nodeSlot={props.nodeSlot}
-                  lineSlot={props.lineSlot}
-                  canvasPlugSlot={props.children}
-                  canvasPlugAboveSlot={props.canvasPlugSlot}
-                  expandHolderSlot={props.expandHolderSlot}
-                />
-            }
-            <GraphOperateStuff nodeSlot={props.nodeSlot} />
-            <GraphLoading />
-          </div>
+          <RGUpdateSingalProvider value={updateSingal}>
+            {theInstance.current && <RelationGraph
+              toolBarSlot={props.toolBarSlot}
+              miniViewSlot={props.miniViewSlot}
+              graphPlugSlot={graphPlugSlot}
+              nodeSlot={props.nodeSlot}
+              lineSlot={props.lineSlot}
+              canvasPlugSlot={canvasPlugBehind}
+              canvasAboveSlot={canvasPlugAbove}
+              expandHolderSlot={props.expandHolderSlot}
+            >
+            </RelationGraph>}
+          </RGUpdateSingalProvider>
         </RGUpdateProvider>
       </RelationGraphProvider>
     </>
