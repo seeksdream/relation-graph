@@ -114,6 +114,19 @@ export default {
 ### Sample code effects
 ![简单示例效果图](doc/images/relation-graph-simple.png)
 
+Build an income and expenditure chart using relation-graph：
+
+![Build incomestatement](doc/demo-images/demo-for-google-income-statement.png)
+
+Step-by-step construction using relation-graph:
+
+![Build incomestatement](doc/demo-images/how-to-build-income-statement-graph.png)
+
+Preview steps and source code online:
+https://relation-graph.com/demos4vue3/?demoId=demo-for-google-income-statement&t=20240405
+
+
+
 ### Example Projects
 
 - The complete Vue2 sample project:
