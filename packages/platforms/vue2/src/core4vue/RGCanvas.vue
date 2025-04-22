@@ -68,10 +68,10 @@ export default {
       return {
         'width': `${this.options.canvasSize.width  }px`,
         'height': `${this.options.canvasSize.height  }px`,
-        'margin-left': `${this.options.canvasOffset.x  }px`,
-        'margin-top': `${this.options.canvasOffset.y  }px`,
+        // 'margin-left': `${this.options.canvasOffset.x  }px`,
+        // 'margin-top': `${this.options.canvasOffset.y  }px`,
         'background-color': 'transparent',
-        'transform': `scale(${  this.options.canvasZoom / 100  },${  this.options.canvasZoom / 100  })`
+        'transform': `translate(${this.options.canvasOffset.x  }px, ${this.options.canvasOffset.y  }px) scale(${  this.options.canvasZoom / 100  },${  this.options.canvasZoom / 100  })`
         // 'transform-origin': (this.options.canvasOffset.zoom_buff_x * 100).toFixed(2) + '% ' + (this.options.canvasOffset.zoom_buff_y * 100).toFixed(2) + '%'
       };
     }
