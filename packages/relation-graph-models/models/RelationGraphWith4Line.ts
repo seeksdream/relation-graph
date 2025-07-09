@@ -166,8 +166,8 @@ export class RelationGraphWith4Line extends RelationGraphWith3Image {
     let toJuctionPointOffsetY = relationData.toJuctionPointOffsetY || 0;
     if (relationData.isReverse) {
       [fromJunctionPoint, toJunctionPoint] = [toJunctionPoint, fromJunctionPoint];
-      [fromJuctionPointOffsetX, fromJuctionPointOffsetY] = [fromJuctionPointOffsetY, fromJuctionPointOffsetX];
-      [toJuctionPointOffsetX, toJuctionPointOffsetY] = [toJuctionPointOffsetY, toJuctionPointOffsetX];
+      [fromJuctionPointOffsetX, toJuctionPointOffsetX] = [toJuctionPointOffsetX, fromJuctionPointOffsetX];
+      [fromJuctionPointOffsetY, toJuctionPointOffsetY] = [toJuctionPointOffsetY, fromJuctionPointOffsetY];
     }
     if (_from === _to) {
       if (fromJuctionPointOffsetX === 0 && fromJuctionPointOffsetY === 0 && toJuctionPointOffsetX === 0 && toJuctionPointOffsetY === 0) {
